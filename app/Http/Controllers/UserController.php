@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Friend;
-use App\Models\User;
 
-class FriendController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,9 +13,7 @@ class FriendController extends Controller
      */
     public function index()
     {
-        $friends = Friend::where('follow_id', auth()->user()->id)->get();
-        // dd($friends);
-        return view('friend.index', compact('friends'));
+        //
     }
 
     /**
