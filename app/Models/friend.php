@@ -11,6 +11,6 @@ class friend extends Model
 
     // conversationテーブルと結合.
     public function conversation() {
-        return $this->belongsTo('App/Models/conversation');
+        return $this->belongsTo('App\Models\Conversation');
     }
 }

@@ -11,6 +11,6 @@ class conversation extends Model
 
     // groupテーブルと結合.
     public function group() {
-        $this->belongsTo('App/Models/group');
+        $this->belongsTo('App\Models\Group');
     }
 }

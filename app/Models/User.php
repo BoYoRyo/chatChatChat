@@ -44,11 +44,11 @@ class User extends Authenticatable
 
     // Userテーブルと結合.
     public function group() {
-        return $this->belongsTo('App/Models/group');
+        return $this->belongsTo('App\Models\Group');
     }
 
     // friendsテーブルと結合.
     public function friends() {
-        $this->hasMany('App/Models/friend');
+        $this->hasMany('App\Models\Friend');
     }
 }

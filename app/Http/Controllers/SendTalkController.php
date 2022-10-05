@@ -14,7 +14,7 @@ class SendTalkController extends Controller
      */
     public function index()
     {
-        //
+        // 会話を表示
     }
 
     /**
@@ -36,14 +36,14 @@ class SendTalkController extends Controller
      */
     public function store(Request $request)
     {
-        // 会話を投稿する
+        // 会話を始める
         $group = new group;
         $group->id = $request->id;
         $group->group_id = $request->group_id;
         $group->user_id = $request->user_id;
         $group->invisible = $request->invisible;
         $group->invisible_date = $request->invisible_date;
-
+        $group->save();
     }
 
     /**
