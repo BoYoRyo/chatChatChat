@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->integer('group_id');
             $table->integer('user_id');
-            $table->boolean('invisible');
+            $table->boolean('invisible')->dafault('false');
             $table->datetime('invisible_date')->nullable();
             $table->timestamps();
             $table->primary('group_id','user_id');

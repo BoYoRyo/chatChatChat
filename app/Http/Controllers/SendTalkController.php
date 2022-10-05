@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\conversation;
 use Illuminate\Http\Request;
 use App\Models\group;
 
@@ -14,7 +15,7 @@ class SendTalkController extends Controller
      */
     public function index()
     {
-        // 会話を表示
+        // 
     }
 
     /**
@@ -36,14 +37,22 @@ class SendTalkController extends Controller
      */
     public function store(Request $request)
     {
-        // 会話を始める
+        // グループを生成
         $group = new group;
         $group->id = $request->id;
         $group->group_id = $request->group_id;
         $group->user_id = $request->user_id;
-        $group->invisible = $request->invisible;
         $group->invisible_date = $request->invisible_date;
         $group->save();
+
+        // 会話を生成
+        $conversation = new conversation;
+        $conversation->sending_user_id = $request->user_id;
+        $conversation->group_id = $request->group_id;
+        $conversation->comment = $request->omment;
+        $conversation->save();
+
+        return redirect()->view('index');
     }
 
     /**

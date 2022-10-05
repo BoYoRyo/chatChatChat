@@ -11,11 +11,11 @@ class group extends Model
 
     // groupテーブルと結合.
     public function user() {
-        return $this->hasMany('App\Models\User');
+        return $this->hasMany(User::class);
     }
 
     // conversationテーブルと結合.
     public function conversation() {
-        return $this->hasMany('App\Models\Conversation');
+        return $this->hasMany(Conversation::class);
     }
 }

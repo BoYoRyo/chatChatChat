@@ -1,28 +1,19 @@
 <x-app-layout>
-        <x-slot-name="header">
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width,initial-scale=1">
-            <title>chat!chat!chat!</title>
-            {{-- <link rel="stylesheet" href="style.css" type="text/css"> --}}
-        </x-slot>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('トーク画面') }} 
+        </h2>
+    </x-slot>
         <form method="POST" action={{ route('sendtalk.store') }}>
             <div id="container">
-                <h1>トークする相手の名前</h1>
+                <h2>トークする相手の名前</h2>
                 <div class="content">
                     <div class="message-area you">
                         <div class="user-image" style="background-image: url(img.jpg);"></div>
-                        <div class="message">いまヒマ？<span class="date">2020.12.12 21:10</span></div>
                     </div>
                 </div>
+            </div>
         </form>
-        {{-- <body>
-            <div id="container">
-                <h1>トークする相手の名前</h1>
-                <div class="content">
-                    <div class="message-area you">
-                        <div class="user-image" style="background-image: url(img.jpg);"></div>
-                        <div class="message">いまヒマ？<span class="date">2020.12.12 21:10</span></div>
-                    </div>
-                </div>
-        </body> --}}
+        <textarea maxlength="30"></textarea>
+        <button name="btn">送信</button>
 </x-app-layout>
