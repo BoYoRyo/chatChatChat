@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\group;
 
 class SendTalkController extends Controller
 {
@@ -35,7 +36,14 @@ class SendTalkController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // 会話を投稿する
+        $group = new group;
+        $group->id = $request->id;
+        $group->group_id = $request->group_id;
+        $group->user_id = $request->user_id;
+        $group->invisible = $request->invisible;
+        $group->invisible_date = $request->invisible_date;
+
     }
 
     /**
