@@ -23,6 +23,8 @@ return new class extends Migration
             $table->string('introduction');
             $table->rememberToken();
             $table->timestamps();
+
+            $table->foreign('id')->references('user_id')->on('friends');
         });
     }
 

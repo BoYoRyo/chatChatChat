@@ -13,9 +13,4 @@ class conversation extends Model
     public function group() {
         $this->belongsTo('App/Models/group');
     }
-
-    // friendsテーブルと結合.
-    public function friends() {
-        $this->hasMany('App/Models/friend');
-    }
 }

@@ -20,6 +20,10 @@ return new class extends Migration
             $table->boolean('invisible');
             $table->datetime('invisible_date')->nullable();
             $table->timestamps();
+            $table->primary('group_id','user_id');
+
+            $table->foreign('group_id')->references('group_id')->on('conversations');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
