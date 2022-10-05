@@ -12,7 +12,7 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    <x-nav-link :href="route('user.edit')" :active="request()->routeIs('user.edit')">
                         {{ __('プロフィール') }}
                     </x-nav-link>
                     <x-nav-link :href="route('friend.index')" :active="request()->routeIs('friend.index')">
