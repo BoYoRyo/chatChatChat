@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class friend extends Model
 {
     use HasFactory;
+
+    // conversationテーブルと結合.
+    public function conversation() {
+        return $this->belongsTo('App/Models/conversation');
+    }
 }

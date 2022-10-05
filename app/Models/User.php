@@ -41,4 +41,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    // Userテーブルと結合.
+    public function group() {
+        return $this->belongsTo('App/Models/group');
+    }
 }

@@ -29,3 +29,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 require __DIR__.'/auth.php';
+
+// トークを開始する
+Route::post('/sendtalk/create', [App\Http\Controllers\SendTalkController::class, "create"])->name('sendtalk.create');
+Route::post('/sendtalk/store', [App\Http\Controllers\SendTalkController::class, "store"])->name('sendtalk.store');

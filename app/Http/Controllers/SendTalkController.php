@@ -23,7 +23,8 @@ class SendTalkController extends Controller
      */
     public function create()
     {
-        //
+        // トーク開始画面を表示
+        return view('sendtalk.create');
     }
 
     /**
