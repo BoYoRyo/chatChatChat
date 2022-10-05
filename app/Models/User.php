@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\friend;
 
 class User extends Authenticatable
 {
@@ -50,5 +51,9 @@ class User extends Authenticatable
     // friendsテーブルと結合.
     public function friends() {
         $this->hasMany('App\Models\Friend');
+    }
+
+    public function friends() {
+        return $this->hasMany(Friend::class);
     }
 }

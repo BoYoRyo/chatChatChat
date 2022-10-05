@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class friend extends Model
 {
@@ -12,5 +13,9 @@ class friend extends Model
     // conversationテーブルと結合.
     public function conversation() {
         return $this->belongsTo('App\Models\Conversation');
+    }
+    
+    public function user() {
+        return $this->belongsTo(User::class);
     }
 }

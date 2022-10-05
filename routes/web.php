@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\FriendController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,8 +29,15 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+<<<<<<< HEAD
 require __DIR__.'/auth.php';
 
 // トークを開始する
 Route::post('/sendtalk/create', [App\Http\Controllers\SendTalkController::class, "create"])->name('sendtalk.create');
 Route::post('/sendtalk/store', [App\Http\Controllers\SendTalkController::class, "store"])->name('sendtalk.store');
+=======
+require __DIR__ . '/auth.php';
+
+Route::get('/friend/index', [App\Http\Controllers\FriendController::class, 'index'])->name('friend.index');
+// Route::resource('friend', FriendController::class);
+>>>>>>> develop
