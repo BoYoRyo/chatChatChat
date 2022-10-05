@@ -48,11 +48,6 @@ class User extends Authenticatable
         return $this->belongsTo('App\Models\Group');
     }
 
-    // friendsテーブルと結合.
-    public function friends() {
-        $this->hasMany('App\Models\Friend');
-    }
-
     public function friends() {
         return $this->hasMany(Friend::class);
     }
