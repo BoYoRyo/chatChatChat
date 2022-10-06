@@ -68,7 +68,34 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $Validator = Validator::make($request->all(), [
+            'name' => ['required','string','max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore(Auth::id())],
+            'acount_id' => ['required', 'string'],
+        ]);
+
+        if ($Validator->fails()) {
+            return redirect()->route('user.index')
+                ->withInput()
+                ->withErrors($Validator);
+        }
+
+        $user = Auth::user();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->acount_id = $request->acountId;
+        $user->introduction = $request->introduction;
+        // $user->icon = $request->icon;
+        if(request('icon')){
+            $original = request()->file('icon')->getClientOriginalName();
+            $name = date('Ymd_His').'_'.$original;
+            request()->file('icon')->move('storage/images', $name);
+            $user->icon = $name;
+        }
+
+        $user->save();
+
+        return redirect()->route('user.edit')->with('message', 'プロフィールを更新しました');
     }
 
     /**

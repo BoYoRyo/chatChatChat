@@ -38,4 +38,6 @@ Route::group(['middleware' => 'auth'], function () {
 
     // プロフィール画面に遷移
     Route::get('/user/edit', [App\Http\Controllers\UserController::class, 'edit'])->name('user.edit');
+    // プロフィール更新
+    Route::get('/user/update', [App\Http\Controllers\UserController::class, 'update'])->name('user.update');
 });
