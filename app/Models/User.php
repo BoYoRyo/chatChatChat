@@ -46,7 +46,7 @@ class User extends Authenticatable
 
     // Userテーブルと結合.
     public function group() {
-        return $this->belongsTo(Group::class);
+        return $this->belongsToMany(Group::class);
     }
 
     public function friends() {
