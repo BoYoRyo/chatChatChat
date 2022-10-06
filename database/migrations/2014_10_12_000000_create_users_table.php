@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('icon')->default('default_icon.png');
             $table->string('introduction')->nullable();
+            $table->string('account_id');
             $table->rememberToken();
             $table->timestamps();
         });
