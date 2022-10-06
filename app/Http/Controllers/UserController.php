@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+
 
 class UserController extends Controller
 {
@@ -66,36 +71,36 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         $Validator = Validator::make($request->all(), [
-            'name' => ['required','string','max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore(Auth::id())],
-            'acount_id' => ['required', 'string'],
+            'name' => ['required','max:255'],
+            'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore(Auth::id())],
+            'accountId' => ['required'],
         ]);
 
         if ($Validator->fails()) {
-            return redirect()->route('user.index')
+            return redirect()->route('user.edit')
                 ->withInput()
                 ->withErrors($Validator);
         }
 
-        $user = Auth::user();
+        $user = User::find(auth()->id());
+        $user->id = auth()->id();
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->acount_id = $request->acountId;
+        $user->account_id = $request->accountId;
         $user->introduction = $request->introduction;
-        // $user->icon = $request->icon;
         if(request('icon')){
             $original = request()->file('icon')->getClientOriginalName();
             $name = date('Ymd_His').'_'.$original;
-            request()->file('icon')->move('storage/images', $name);
+            request()->file('icon')->move('icon', $name);
             $user->icon = $name;
         }
 
         $user->save();
 
-        return redirect()->route('user.edit')->with('message', 'プロフィールを更新しました');
+        return redirect()->route('user.edit');
     }
 
     /**

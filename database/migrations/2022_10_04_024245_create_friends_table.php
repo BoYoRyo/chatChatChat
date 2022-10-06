@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('friends', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->references('id')->on('users');
-            $table->foreignId('follow_id');
+            $table->foreignId('follow_id')->references('id')->on('users');
             $table->boolean('blocked')->default(false);
             $table->timestamps();
         });
