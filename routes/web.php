@@ -31,8 +31,11 @@ Route::get('/dashboard', function () {
 
 require __DIR__ . '/auth.php';
 
-// 友達一覧画面に遷移
-Route::get('/friend/index', [App\Http\Controllers\FriendController::class, 'index'])->name('friend.index');
+// ログイン時のみ実行できるルーティング
+Route::group(['middleware' => 'auth'], function () {
+    // 友達一覧画面に遷移
+    Route::get('/friend/index', [App\Http\Controllers\FriendController::class, 'index'])->name('friend.index');
 
-// プロフィール画面に遷移
-Route::get('/user/{user}/edit', [App\Http\Controllers\UserController::class, 'edit'])->name('user.edit');
+    // プロフィール画面に遷移
+    Route::get('/user/edit', [App\Http\Controllers\UserController::class, 'edit'])->name('user.edit');
+});

@@ -49,14 +49,14 @@ class UserController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * 自分のプロフィール画面表示＆編集画面
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit()
     {
-        return view('/user/edit')->with('id', $id);
+        return view('/user/edit')->with('user', auth()->user());
     }
 
     /**
