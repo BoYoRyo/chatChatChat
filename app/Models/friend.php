@@ -10,11 +10,6 @@ class friend extends Model
 {
     use HasFactory;
 
-    // conversationテーブルと結合.
-    public function conversation() {
-        return $this->belongsTo(Conversation::class);
-    }
-
     public function user() {
         return $this->belongsTo(User::class);
     }

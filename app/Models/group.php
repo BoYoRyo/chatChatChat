@@ -9,13 +9,13 @@ class group extends Model
 {
     use HasFactory;
 
-    // groupテーブルと結合.
+    // userテーブルと結合.
     public function user() {
         return $this->hasMany(User::class);
     }
 
     // conversationテーブルと結合.
     public function conversation() {
-        return $this->hasMany(Conversation::class);
+        return $this->hasMany(Conversation::class,'id');
     }
 }
