@@ -31,6 +31,10 @@ Route::get('/dashboard', function () {
 
 require __DIR__ . '/auth.php';
 
+// トーク画面を表示する
+Route::get('/sendtalk/index', [App\Http\Controllers\SendTalkController::class, "index"])->name('sendtalk.index');
+Route::get('/sendtalk/show', [App\Http\Controllers\SendTalkController::class, "show"])->name('sendtalk.show');
+
 // トークを開始する
 Route::get('/sendtalk/create', [App\Http\Controllers\SendTalkController::class, "create"])->name('sendtalk.create');
 Route::post('/sendtalk/store', [App\Http\Controllers\SendTalkController::class, "store"])->name('sendtalk.store');

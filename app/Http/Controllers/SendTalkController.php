@@ -48,7 +48,7 @@ class SendTalkController extends Controller
         // 会話を生成
         $conversation = new conversation;
         $conversation->sending_user_id = $request->user_id;
-        $conversation->group_id = $request->group_id;
+        $conversation->group_id = $group->group_id;
         $conversation->comment = $request->omment;
         $conversation->save();
 
@@ -63,7 +63,9 @@ class SendTalkController extends Controller
      */
     public function show($id)
     {
-        //
+        // group_idが存在していれば過去のトーク履歴を表示
+
+        // group_idが存在していなければ初期のトーク画面を表示
     }
 
     /**
