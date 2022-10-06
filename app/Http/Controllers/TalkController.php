@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\conversation;
 use Illuminate\Http\Request;
 use App\Models\group;
+use App\Models\friend;
 
-class SendTalkController extends Controller
+class TalkController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +16,9 @@ class SendTalkController extends Controller
      */
     public function index()
     {
-        // 
+        // トーク一覧を表示
+        $friends = Friend::where('follow_id', auth()->user()->id)->get();
+        return view('talk.index', compact('friends'));
     }
 
     /**
@@ -26,7 +29,7 @@ class SendTalkController extends Controller
     public function create()
     {
         // トーク開始画面を表示
-        return view('sendtalk.create');
+        return view('talk.create');
     }
 
     /**
@@ -37,22 +40,24 @@ class SendTalkController extends Controller
      */
     public function store(Request $request)
     {
-        // グループを生成
-        $group = new group;
-        $group->id = $request->id;
-        $group->group_id = $request->group_id;
-        $group->user_id = $request->user_id;
-        $group->invisible_date = $request->invisible_date;
-        $group->save();
+        if(!$request->group_id) {
+            // グループを生成
+            $group = new group;
+            $group->id = $request->id;
+            $group->group_id = $request->group_id;
+            $group->user_id = $request->user_id;
+            $group->invisible_date = $request->invisible_date;
+            $group->save();
+        }
 
         // 会話を生成
         $conversation = new conversation;
         $conversation->sending_user_id = $request->user_id;
-        $conversation->group_id = $group->group_id;
-        $conversation->comment = $request->omment;
+        $conversation->group_id = $request->group_id;
+        $conversation->comment = $request->comment;
         $conversation->save();
 
-        return redirect()->view('index');
+        return redirect()->view('talk.show');
     }
 
     /**
@@ -63,9 +68,7 @@ class SendTalkController extends Controller
      */
     public function show($id)
     {
-        // group_idが存在していれば過去のトーク履歴を表示
-
-        // group_idが存在していなければ初期のトーク画面を表示
+        // 
     }
 
     /**

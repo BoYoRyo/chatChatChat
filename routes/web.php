@@ -31,13 +31,15 @@ Route::get('/dashboard', function () {
 
 require __DIR__ . '/auth.php';
 
-// トーク画面を表示する
-Route::get('/sendtalk/index', [App\Http\Controllers\SendTalkController::class, "index"])->name('sendtalk.index');
-Route::get('/sendtalk/show', [App\Http\Controllers\SendTalkController::class, "show"])->name('sendtalk.show');
+// トーク一覧を表示する
+Route::get('/talk/index', [App\Http\Controllers\TalkController::class, "index"])->name('talk.index');
 
 // トークを開始する
-Route::get('/sendtalk/create', [App\Http\Controllers\SendTalkController::class, "create"])->name('sendtalk.create');
-Route::post('/sendtalk/store', [App\Http\Controllers\SendTalkController::class, "store"])->name('sendtalk.store');
+Route::get('/talk/create', [App\Http\Controllers\talkController::class, "create"])->name('talk.create');
+Route::post('/talk/store', [App\Http\Controllers\TalkController::class, "store"])->name('talk.store');
+
+// トーク画面を表示する
+Route::get('/talk/show', [App\Http\Controllers\TalkController::class, "show"])->name('talk.show');
 
 Route::get('/friend/index', [App\Http\Controllers\FriendController::class, 'index'])->name('friend.index');
 // Route::resource('friend', FriendController::class);

@@ -21,8 +21,8 @@ return new class extends Migration
             $table->datetime('invisible_date')->nullable();
             $table->timestamps();
 
-            $table->foreign('group_id')->references('group_id')->on('conversations');
-            $table->foreign('user_id')->references('id')->on('users');
+            // $table->foreign('group_id')->references('group_id')->on('conversations');
+            // $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
