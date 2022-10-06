@@ -9,14 +9,13 @@ use App\Models\User;
 class FriendController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * 友達一覧を表示する
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $friends = Friend::where('follow_id', auth()->user()->id)->get();
-        // dd($friends);
+        $friends = Friend::where('user_id', auth()->user()->id)->get();
         return view('friend.index', compact('friends'));
     }
 
