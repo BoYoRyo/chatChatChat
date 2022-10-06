@@ -39,6 +39,10 @@ class RegisteredUserController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
+        
+        //アイコン登録用
+        // $iconName=$request->icon->file('icon')->getClientOriginalname();
+        // $request->icon->file('icon')->move('storage/image',$iconName);
 
         $user = User::create([
             'name' => $request->name,
@@ -46,6 +50,7 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
             'account_id'=>$request->account_id,
         ]);
+
         
 
         event(new Registered($user));
