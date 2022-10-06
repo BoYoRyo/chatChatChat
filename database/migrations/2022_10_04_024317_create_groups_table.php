@@ -15,14 +15,11 @@ return new class extends Migration
     {
         Schema::create('groups', function (Blueprint $table) {
             $table->id();
-            $table->integer('group_id');
-            $table->integer('user_id');
+            $table->foreignId('group_id')->references('group_id')->on('conversations');
+            $table->foreignId('user_id')->references('id')->on('users');
             $table->boolean('invisible')->dafault('false');
             $table->datetime('invisible_date')->nullable();
             $table->timestamps();
-
-            // $table->foreign('group_id')->references('group_id')->on('conversations');
-            // $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
