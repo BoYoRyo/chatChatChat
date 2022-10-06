@@ -4,7 +4,7 @@
             {{ __('トーク画面(送信先の友達の名前)') }} 
         </h2>
     </x-slot>
-    <form method="POST" action={{ route('talk.store') }}>
+    <form method="GET" action={{ route('talk.store') }}>
         <div id="container">
             <div class="content">
                 <div class="message-area you">

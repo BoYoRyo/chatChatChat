@@ -17,7 +17,7 @@ class TalkController extends Controller
     public function index()
     {
         // トーク一覧を表示
-        $friends = Friend::where('follow_id', auth()->user()->id)->get();
+        $friends = Friend::where('user_id', auth()->user()->id)->get();
         return view('talk.index', compact('friends'));
     }
 
@@ -29,7 +29,8 @@ class TalkController extends Controller
     public function create()
     {
         // トーク開始画面を表示
-        return view('talk.create');
+        $friends = Friend::where('user_id', auth()->user()->id)->get();
+        return view('talk.create',compact('friends'));
     }
 
     /**
@@ -40,6 +41,8 @@ class TalkController extends Controller
      */
     public function store(Request $request)
     {
+
+        dd($request);
         if(!$request->group_id) {
             // グループを生成
             $group = new group;
@@ -57,7 +60,7 @@ class TalkController extends Controller
         $conversation->comment = $request->comment;
         $conversation->save();
 
-        return redirect()->view('talk.show');
+        return view('talk.create');
     }
 
     /**
@@ -68,7 +71,8 @@ class TalkController extends Controller
      */
     public function show($id)
     {
-        // 
+        // 過去のトークがあれば表示
+        
     }
 
     /**
