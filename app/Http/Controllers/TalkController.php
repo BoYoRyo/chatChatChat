@@ -43,24 +43,16 @@ class TalkController extends Controller
      */
     public function store(Request $request)
     {
+        // グループを生成
+        // トークを開始した側
+        $group = new group;
+        $group->group_id = Group::max('group_id')+1;
+        $group->user_id = auth()->user()->id;
+        $group->save();
 
-        dd($request);
-        if(!$request->group_id) {
-            // グループを生成
-            $group = new group;
-            $group->id = $request->id;
-            $group->group_id = $request->group_id;
-            $group->user_id = $request->user_id;
-            $group->invisible_date = $request->invisible_date;
-            $group->save();
-        }
-
-        // 会話を生成
-        $conversation = new conversation;
-        $conversation->sending_user_id = auth()->user()->id;
-        $conversation->group_id = $request->group_id;
-        $conversation->comment = $request->comment;
-        $conversation->save();
+        // トークを開始された側
+        $group->user_id = auth()->user()->id;
+        $group->save();
 
         return view('talk.create');
     }
@@ -115,7 +107,7 @@ class TalkController extends Controller
     {
         // トークを保存
         $conversation = new conversation;
-        $conversation->sending_user_id = auth()->user()->id;
+        $conversation->user_id = auth()->user()->id;
         $conversation->group_id = $request->group_id;
         $conversation->comment = $request->comment;
         $conversation->save();
