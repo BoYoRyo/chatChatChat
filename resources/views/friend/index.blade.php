@@ -42,7 +42,7 @@
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg flex">
                     {{-- 画像 --}}
                     <div class="p-6 bg-white border-b border-gray-200">
-                        <a href=""><img src="{{ asset('icon/' . $friend->user->icon) }}"
+                        <a href="/friend/show/{{ $friend->follow_id }}"><img src="{{ asset('icon/' . $friend->user->icon) }}"
                                 style="max-height:70px;"></a>
                     </div>
                     {{-- 名前 --}}
