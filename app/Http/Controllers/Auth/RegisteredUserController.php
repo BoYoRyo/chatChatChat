@@ -33,13 +33,13 @@ class RegisteredUserController extends Controller
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request)
-    {   
+    {
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
-        
+
         //アイコン登録用
         // $iconName=$request->icon->file('icon')->getClientOriginalname();
         // $request->icon->file('icon')->move('storage/image',$iconName);
@@ -48,10 +48,11 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'account_id'=>$request->account_id,
+            'account_id' =>$request->account_id,
+            'icon' => 'default_icon' . random_int(1, 5) . '.png',
         ]);
 
-        
+
 
         event(new Registered($user));
 
