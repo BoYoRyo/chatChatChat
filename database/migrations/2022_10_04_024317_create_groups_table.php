@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('groups', function (Blueprint $table) {
             $table->id();
-            $table->integer('group_id');
-            $table->foreignId('user_id')->references('id')->on('users');
-            $table->boolean('invisible')->dafault('false');
-            $table->datetime('invisible_date')->nullable();
+            $table->integer('group_id')->references('id')->on('groups');
+            $table->integer('user_id')->references('id')->on('users');
+            $table->boolean('invisible')->default(false);
+            $table->date('invisible_date')->nullable();
             $table->timestamps();
         });
     }
