@@ -6,6 +6,8 @@ use App\Models\conversation;
 use Illuminate\Http\Request;
 use App\Models\group;
 use App\Models\friend;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\CreateRequest;
 
 class TalkController extends Controller
 {
@@ -55,7 +57,7 @@ class TalkController extends Controller
 
         // 会話を生成
         $conversation = new conversation;
-        $conversation->sending_user_id = $request->user_id;
+        $conversation->sending_user_id = auth()->user()->id;
         $conversation->group_id = $request->group_id;
         $conversation->comment = $request->comment;
         $conversation->save();
@@ -107,5 +109,17 @@ class TalkController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function __invoke(CreateRequest $request) 
+    {
+        // トークを保存
+        $conversation = new conversation;
+        $conversation->sending_user_id = auth()->user()->id;
+        $conversation->group_id = $request->group_id;
+        $conversation->comment = $request->comment;
+        $conversation->save();
+        return redirect()->route('talk.index');
+
     }
 }
