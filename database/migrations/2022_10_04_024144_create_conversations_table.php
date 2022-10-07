@@ -15,11 +15,10 @@ return new class extends Migration
     {
         Schema::create('conversations', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->integer('sending_user_id');
-            $table->integer('group_id');
+            $table->integer('user_id')->references('id')->on('users');
+            $table->integer('group_id')->references('id')->on('groups');
             $table->string('comment');
-            $table->string('good');
+            $table->string('good')->nullable();
             $table->timestamps();
         });
     }
