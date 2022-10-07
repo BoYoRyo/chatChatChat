@@ -48,7 +48,10 @@ class FriendController extends Controller
      */
     public function show($id)
     {
-        //
+        // dd($id);
+        $friend = User::find($id);
+
+        return view('friend/show', compact('friend'));
     }
 
     /**
