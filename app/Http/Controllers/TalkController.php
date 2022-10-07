@@ -112,7 +112,7 @@ class TalkController extends Controller
         $conversation->group_id = $request->group_id;
         $conversation->comment = $request->comment;
         $conversation->save();
-        return redirect()->route('talk.index');
+        return redirect()->route('talk.show');
 
     }
 }
