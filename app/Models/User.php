@@ -45,7 +45,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    // Userテーブルと結合.
+    public function group() {
+        return $this->belongsToMany(Group::class);
+    }
+
     public function friends() {
-        return $this->hasMany(Friend::class);
+        return $this->hasMany(Friend::class,'follow_id');
     }
 }
