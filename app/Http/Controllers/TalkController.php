@@ -67,6 +67,7 @@ class TalkController extends Controller
     {
         // 過去のトークがあれば表示
         
+        
     }
 
     /**
@@ -103,7 +104,7 @@ class TalkController extends Controller
         //
     }
 
-    public function __invoke(CreateRequest $request) 
+    public function __invoke(Request $request) 
     {
         // トークを保存
         $conversation = new conversation;
