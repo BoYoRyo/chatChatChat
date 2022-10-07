@@ -42,6 +42,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/user/edit', [UserController::class, 'edit'])->name('user.edit');
     // プロフィール更新
     Route::post('/user/update', [UserController::class, 'update'])->name('user.update');
-    //フレンド検索
+    //フレンド検索画面に遷移
     Route::get('add/index',[AddFriendsController::class,'index'])->name('add.index');
+    //フレンド検索
+    Route::post('add/show',[AddFriendsController::class,'show'])->name('add.show');
 });

@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
+//友達を追加するための処理をまとめたコントローラー
 class AddFriendsController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * 友達追加画面を表示
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        return view('addFriends.index');
+        $friends = null;
+        return view('addFriends.index',compact('friends'));
     }
 
     /**
@@ -38,14 +41,17 @@ class AddFriendsController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * 名前かIDで友達を検索し一覧表示する
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  int  $id 
+     * @return フレンド一覧
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        //
+        $friends = User::where('name','like','%'.$request->name.'%')->get();
+        
+        return view('addFriends.index',compact('friends'));
+        
     }
 
     /**
