@@ -54,11 +54,11 @@
                         {{ $friend->user->introduction }}
                     </div>
                     {{-- トークする --}}
-                    <form method="POST" action={{ route('talk.show') }}>
-                        <button class="my-10 ml-auto mr-10 bg-transparent hover:bg-slate-700 text-slate-500 font-semibold hover:text-slate-700 py-2 px-4 border border-slate-700 hover:border-transparent rounded">
-                            トークする
-                        </button>
-                    </form>
+                        <form class="my-10 ml-auto mr-10" method="POST" action={{ route('talk.show') }}>
+                            <button class="bg-transparent hover:bg-slate-700 text-slate-500 font-semibold hover:text-slate-700 py-4 px-4 border border-slate-700 hover:border-transparent rounded">
+                                トークする
+                            </button>
+                        </form>
                 </div>
             </div>
         @endforeach
