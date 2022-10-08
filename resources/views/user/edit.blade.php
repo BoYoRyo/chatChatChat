@@ -19,7 +19,7 @@
                     <div class="flex">
                         {{-- 画像 --}}
                                         <script>
-                                            // document.getElementById('preview').style.display="none";
+                                            document.getElementById('preview').style.display="none";
                                             function previewImage(obj) {
                                                 var fileReader = new FileReader();
                                                 fileReader.onload = (function() {

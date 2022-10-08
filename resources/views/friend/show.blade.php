@@ -32,12 +32,15 @@
                         {{ $friend->introduction }}
                     </div>
                 </div>
+
+                {{-- トークボタン --}}
                 <div class="flex justify-center mb-2">
-                <form method="GET" action="{{ route('talk.show') }}">
-                    @csrf
-                    <button type="submit" class="bg-gray-700 hover:bg-gray-600 text-white rounded px-4 py-2">トーク</button>
-                </form>
-            </div>
+                    <form method="GET" action="{{ route('talk.show') }}">
+                        @csrf
+                        <button type="submit"
+                            class="bg-gray-700 hover:bg-gray-600 text-white rounded px-4 py-2 w-40">トーク</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

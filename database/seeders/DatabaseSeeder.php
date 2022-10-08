@@ -53,7 +53,31 @@ class DatabaseSeeder extends Seeder
             'user_id' => 2,
         ]);
 
+        Group::create([
+            'type' => 0,
+        ]);
 
+        Member::create([
+            'group_id' => 2,
+            'user_id' => 1,
+        ]);
+        Member::create([
+            'group_id' => 2,
+            'user_id' => 3,
+        ]);
+
+        Group::create([
+            'type' => 0,
+        ]);
+
+        Member::create([
+            'group_id' => 3,
+            'user_id' => 1,
+        ]);
+        Member::create([
+            'group_id' => 3,
+            'user_id' => 4,
+        ]);
 
         for ($i = 1; $i < 10; $i++) {
             Conversation::create([
