@@ -25,6 +25,8 @@ class TalkController extends Controller
         // SELECT * FROM members WHERE group_id IN (SELECT group_id FROM members WHERE user_id = 1) AND user_id != 1;
         $groups = Member::whereIn('group_id', Member::where('user_id', auth()->user()->id)->pluck('group_id'))->where('user_id', '!=', auth()->user()->id)->get();
         return view('talk.index', compact('groups'));
+
+        // こんばせーしょんも結合したい
     }
 
     /**

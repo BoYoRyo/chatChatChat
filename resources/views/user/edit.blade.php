@@ -12,6 +12,13 @@
 
     {{-- プロフィール --}}
     <div class="py-12">
+
+        @if (Session::has('message'))
+            <div class="max-w-6xl mx-auto border px-4 py-3 rounded relative bg-amber-100 border-amber-400 text-amber-700">
+                {{ session('message') }}
+            </div>
+        @endif
+
         <div class="max-w-6xl mx-auto sm:px-6 lg:px-8 py-1">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <form method="POST" action="{{ route('user.update') }}" enctype="multipart/form-data">
