@@ -4,6 +4,8 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\FriendController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\AddFriendsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,13 +36,24 @@ require __DIR__ . '/auth.php';
 // ログイン時のみ実行できるルーティング
 Route::group(['middleware' => 'auth'], function () {
     // 友達一覧画面に遷移
-    Route::get('/friend/index', [App\Http\Controllers\FriendController::class, 'index'])->name('friend.index');
+    Route::get('/friend/index', [FriendController::class, 'index'])->name('friend.index');
     // 友達詳細画面に遷移
     Route::get('/friend/show/{id}', [App\Http\Controllers\FriendController::class, 'show'])->name('friend.show');
 
+
     // プロフィール画面に遷移
-    Route::get('/user/edit', [App\Http\Controllers\UserController::class, 'edit'])->name('user.edit');
+    Route::get('/user/edit', [UserController::class, 'edit'])->name('user.edit');
     // プロフィール更新
+
+    Route::post('/user/update', [UserController::class, 'update'])->name('user.update');
+    //フレンド検索画面に遷移
+    Route::get('add/index',[AddFriendsController::class,'index'])->name('add.index');
+    //フレンド検索
+    Route::post('add/show',[AddFriendsController::class,'show'])->name('add.show');
+    //フレンド追加
+    Route::get('add/connect/{id}',[AddFriendsController::class,'connect'])->name('add.connect');
+    //フレンド登録完了画面に遷移
+    Route::get('add/finished',[AddFriendsController::class,'finished'])->name('add.finished');
     Route::post('/user/update', [App\Http\Controllers\UserController::class, 'update'])->name('user.update');
 
     // トーク一覧を表示する
