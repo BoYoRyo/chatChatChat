@@ -19,7 +19,7 @@ class AddFriendsController extends Controller
     public function index()
     {
         $friends = null;
-        return view('addFriends.index',compact('friends'));
+        return view('addFriends.index', compact('friends'));
     }
 
     /**
@@ -51,10 +51,12 @@ class AddFriendsController extends Controller
      */
     public function show(Request $request)
     {
-        $friends = User::where('name','like','%'.$request->name.'%')->get();
-        
-        return view('addFriends.index',compact('friends'));
-        
+        $friends = User::where('name', 'like', '%' . $request->name . '%')
+        // ->where('name', 'not like', '%' . Auth::name . '%')
+        // ->where('name', 'not like', '%' . Auth::user_id . '%')
+        ->get();
+
+        return view('addFriends.index', compact('friends'));
     }
 
     /**
@@ -97,28 +99,26 @@ class AddFriendsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function connect($id)
-    {   
+    {
         //ユーザー一覧から指定ID（今回友達にしたい人の名前を検索）
         $addFriendName = User::find($id)->name;
 
         //authのidと$idを使ってfriendテーブルを検索してなければ登録実行。
         //あればその友達の詳細画面に遷移
-        $friendOrNot = friend::where('user_id','=',Auth::id())->where('follow_id','=',$id)->get();
+        $friendOrNot = friend::where('user_id', '=', Auth::id())->where('follow_id', '=', $id)->get();
 
         //isEmpty()は空ならtrue
-        if($friendOrNot->isEmpty()){
+        if ($friendOrNot->isEmpty()) {
             $friend = new friend();
             $friend->create([
                 'user_id' => Auth::id(),
                 'follow_id' => $id,
             ]);
 
-            return view('addFriends.finished',compact('addFriendName'));
-            
-        }else{
+            return view('addFriends.finished', compact('addFriendName'));
+        } else {
 
-            return view('addFriends.connected',compact('addFriendName'));
+            return view('addFriends.connected', compact('addFriendName'));
         }
-        
     }
 }
