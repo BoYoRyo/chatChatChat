@@ -46,4 +46,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('add/index',[AddFriendsController::class,'index'])->name('add.index');
     //フレンド検索
     Route::post('add/show',[AddFriendsController::class,'show'])->name('add.show');
+    //フレンド追加
+    Route::get('add/connect/{id}',[AddFriendsController::class,'connect'])->name('add.connect');
+    //フレンド登録完了画面に遷移
+    Route::get('add/finished',[AddFriendsController::class,'finished'])->name('add.finished');
 });

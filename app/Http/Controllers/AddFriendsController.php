@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\friend;
+use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Auth;
 
 //友達を追加するための処理をまとめたコントローラー
 class AddFriendsController extends Controller
@@ -87,4 +90,33 @@ class AddFriendsController extends Controller
     {
         //
     }
+    /**
+     * 検索された友達を追加するメソッド
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function connect($id)
+    {   
+        //ユーザー一覧から指定ID（今回友達にしたい人の名前を検索）
+        $addFriendName = User::find($id)->name;
+
+        //authのidと$idを使ってfriendテーブルを検索してなければ登録実行。
+        //あればその友達の詳細画面に遷移
+        $friendOrNot = friend::where('user_id','=',Auth::id())->where('follow_id','=',$id);
+        if($friendOrNot != null){
+
+            return view('addFriends.connected',compact('addFriendName'));
+        }else{
+            $friend = new friend();
+            $friend->create([
+                'user_id' => Auth::id(),
+                'follow_id' => $id,
+             ]);
+            
+            return view('addFriends.finished',compact('addFriendName'));
+        }
+        
+    }
+
 }
