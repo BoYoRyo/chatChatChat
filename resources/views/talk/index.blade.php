@@ -35,10 +35,12 @@
                             </div>
                             {{-- 最新のトーク --}}
                             <div class="text: left; text-l text-gray-500">
+                                @if($group->conversation)
                                 {{-- 何分前のメッセージか表示 --}}
                                 {{ $group->conversation->created_at->diffForHumans() }}
                                 {{-- トーク内容 --}}
                                 {{ $group->conversation->comment }}
+                                @endif
                             </div>
                         </div>
                     </div>
