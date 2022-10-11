@@ -14,8 +14,8 @@
                     <form class="w-full max-w-sm" action="{{url('add/show')}}" method="POST">
                         @csrf
                         <div class="flex items-center border-b border-fuchsia-600 py-2">
-                            <input class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none placeholder-gray-400" type="text" placeholder="アカウントID  名前" aria-label="Full name" name="name">
-                            <button class="flex-shrink-0 bg-fuchsia-600 hover:bg-fuchsia-700 border-fuchsia-600 hover:border-fuchsia-700 text-sm border-4 text-white py-1 px-2 rounded" type="submit">
+                            <input type="text" placeholder="アカウントID  名前" aria-label="Full name" name="friendSerchWord" class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none placeholder-gray-400">
+                            <button type="submit" class="flex-shrink-0 bg-fuchsia-600 hover:bg-fuchsia-700 border-fuchsia-600 hover:border-fuchsia-700 text-sm border-4 text-white py-1 px-2 rounded">
                                 検索
                             </button>
                             <input type="reset" value="×" class="flex-shrink-0 border-transparent border-4 text-fuchsia-600 hover:text-fuchsia-800 text-sm py-1 px-2 rounded">
@@ -26,18 +26,21 @@
                     @else
                     @foreach($friends as $friend)
                         @if($friend->id == Auth::id())
-                            @continue
-                        @endif
-                        <div style="display:flex;" class="py-2 bg-gray-100 mt-4 rounded-lg">
-                            <img src="{{ asset('icon/default_icon2.png') }}" width="50">
-                            <span class="mt-4 ml-6">{{$friend->name}}</span>
-                            <a href="{{route('add.connect',$friend->id)}}" class="pt-4 pl-16">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 ">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
-                                </svg>
-                            </a>
-                        </div>
-                        @endforeach
+                        @continue
+                    @endif
+                    <div style="display:flex;" class="py-2 bg-gray-100 mt-4 rounded-lg">
+                        <img src="{{ asset('icon/default_icon2.png') }}" width="50">
+                        <span class="mt-6 ml-6 text-sm text-gray-400">アカウント名</span>
+                        <span class="mt-3 ml-2">{{$friend->name}}</span>
+                        <span class="mt-6 ml-6 text-sm text-gray-400">アカウントID</span>
+                        <span class="mt-3 ml-2">{{$friend->account_id}}</span>
+                        <a href="{{route('add.connect',$friend->id)}}" class="pt-4 pl-16">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 ">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
+                            </svg>
+                        </a>
+                    </div>
+                    @endforeach
                     @endif
                 </div>
             </div>

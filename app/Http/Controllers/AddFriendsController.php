@@ -51,11 +51,10 @@ class AddFriendsController extends Controller
      */
     public function show(Request $request)
     {
-        $friends = User::where('name', 'like', '%' . $request->name . '%')
-        // ->where('name', 'not like', '%' . Auth::name . '%')
-        // ->where('name', 'not like', '%' . Auth::user_id . '%')
+        $friends = User::where('name', 'like', '%' . $request->friendSerchWord . '%')
+        ->orWhere('account_id','like','%'.$request->friendSerchWord.'%')
         ->get();
-
+        
         return view('addFriends.index', compact('friends'));
     }
 
