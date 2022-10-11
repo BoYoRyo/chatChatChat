@@ -100,7 +100,7 @@ class UserController extends Controller
 
         $user->save();
 
-        return redirect()->route('user.edit');
+        return redirect()->route('user.edit')->with('message', 'プロフィールを更新しました。');
     }
 
     /**

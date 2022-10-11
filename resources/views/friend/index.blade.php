@@ -45,7 +45,7 @@
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg flex">
                     {{-- 画像 --}}
                     <div class="p-6 bg-white border-b border-gray-200">
-                        <a href=""><img src="{{ asset('icon/' . $friend->user->icon) }}"
+                        <a href="/friend/show/{{ $friend->follow_id }}"><img src="{{ asset('icon/' . $friend->user->icon) }}"
                                 style="max-height:70px;"></a>
                     </div>
                     {{-- 名前 --}}
@@ -56,6 +56,12 @@
                     <div class="ml-20 mt-11 bg-white flex-initial text: left; text-xl text-gray-500">
                         {{ $friend->user->introduction }}
                     </div>
+                    {{-- トークする --}}
+                        <form class="my-10 ml-auto mr-10" method="POST" action={{ route('talk.show') }}>
+                            <button class="bg-transparent hover:bg-slate-700 text-slate-500 font-semibold hover:text-slate-700 py-4 px-4 border border-slate-700 hover:border-transparent rounded">
+                                トークする
+                            </button>
+                        </form>
                 </div>
             </div>
         @endforeach

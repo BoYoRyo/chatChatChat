@@ -4,13 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
-class conversation extends Model
+class Member extends Model
 {
     use HasFactory;
-
-    // groupテーブルと結合.
-    public function group() {
-        return $this->belongsToMany(Group::class);
+    public function user() {
+        return $this->belongsTo(User::class);
     }
 }

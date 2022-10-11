@@ -8,6 +8,7 @@ use App\Models\Conversation;
 use App\Models\Friend;
 use App\Models\User;
 use App\Models\Group;
+use App\Models\Member;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
@@ -40,12 +41,42 @@ class DatabaseSeeder extends Seeder
         }
 
         Group::create([
+            'type' => 0,
+        ]);
+
+        Member::create([
             'group_id' => 1,
             'user_id' => 1,
         ]);
-        Group::create([
+        Member::create([
             'group_id' => 1,
             'user_id' => 2,
+        ]);
+
+        Group::create([
+            'type' => 0,
+        ]);
+
+        Member::create([
+            'group_id' => 2,
+            'user_id' => 1,
+        ]);
+        Member::create([
+            'group_id' => 2,
+            'user_id' => 3,
+        ]);
+
+        Group::create([
+            'type' => 0,
+        ]);
+
+        Member::create([
+            'group_id' => 3,
+            'user_id' => 1,
+        ]);
+        Member::create([
+            'group_id' => 3,
+            'user_id' => 4,
         ]);
 
         for ($i = 1; $i < 10; $i++) {

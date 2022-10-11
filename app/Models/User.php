@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\friend;
+use App\Models\Member;
 
 class User extends Authenticatable
 {
@@ -45,7 +46,16 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    // Userテーブルと結合.
+    public function group() {
+        return $this->belongsToMany(Group::class);
+    }
+
     public function friends() {
-        return $this->hasMany(Friend::class);
+        return $this->hasMany(Friend::class,'follow_id');
+    }
+
+    public function members() {
+        return $this->hasMany(Member::class);
     }
 }

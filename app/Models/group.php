@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class group extends Model
 {
     use HasFactory;
+
+    // userテーブルと結合.
+    public function user() {
+        return $this->hasMany(User::class);
+    }
+
+    // conversationテーブルと結合.
+    public function conversation() {
+        return $this->hasMany(Conversation::class,'id');
+    }
 }
