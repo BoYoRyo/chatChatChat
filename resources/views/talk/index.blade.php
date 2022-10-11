@@ -21,24 +21,28 @@
 
         @foreach ($groups as $group)
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-1">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg flex">
-                    {{-- 画像 --}}
-                    <div class="p-6 bg-white border-b border-gray-200">
-                        <a href="/friend/show/{{ $group->follow_id }}"><img
-                                src="{{ asset('icon/' . $group->user->icon) }}" style="max-height:70px;"></a>
-                    </div>
-                    {{-- 名前と最新のトーク --}}
-                    <div class="ml-1 m-4 bg-white flex-initial text: left; text-xl ">
-                        {{-- 名前 --}}
-                        <div class="text: left; text-xl ">
-                            {{ $group->user->name }}
+                <a href="/talk/show/{{ $group->group_id }}">
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg flex">
+                        {{-- 画像 --}}
+                        <div class="p-6 bg-white border-b border-gray-200">
+                            <img src="{{ asset('icon/' . $group->user->icon) }}" style="max-height:70px;">
                         </div>
-                        {{-- 最新のトーク --}}
-                        <div class="text: left; text-l text-gray-500">
-                            {{ $group->user->introduction }}
+                        {{-- 名前と最新のトーク --}}
+                        <div class="ml-1 m-4 bg-white flex-initial text: left; text-xl ">
+                            {{-- 名前 --}}
+                            <div class="text: left; text-xl ">
+                                {{ $group->user->name }}
+                            </div>
+                            {{-- 最新のトーク --}}
+                            <div class="text: left; text-l text-gray-500">
+                                {{-- 何分前のメッセージか表示 --}}
+                                {{-- {{$group->connersasion->created_at->diffForHumans()}} --}}
+                                
+                                {{-- {{ $group->conversation->comment }} --}}
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
         @endforeach
     </div>
