@@ -8,6 +8,7 @@ use App\Models\group;
 use App\Models\friend;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\CreateRequest;
+use App\Models\Member;
 
 class TalkController extends Controller
 {
@@ -19,8 +20,18 @@ class TalkController extends Controller
     public function index()
     {
         // トーク一覧を表示
-        $friends = Friend::where('user_id', auth()->user()->id)->get();
-        return view('talk.index', compact('friends'));
+        // userIDで絞って、相手のIDでiconを持ってくる
+        // ↓ログインユーザーのIDで絞ったグループIDだけでメンバーテーブルを検索（ログインユーザーIDを除外して）
+        // SELECT * FROM members WHERE group_id IN (SELECT group_id FROM members WHERE user_id = 1) AND user_id != 1;
+        $groups = Member::
+            whereIn('group_id',Member::where('user_id', auth()->user()->id)->pluck('group_id'))
+            ->where('user_id', '!=', auth()->user()->id)
+            ->get();
+        return view('talk.index', compact('groups'));
+
+            // こんばせーしょんも結合したい
+            // $latestComment = Conversation::where('group_id', $groups->group_id)->groupBy('group_id')->limit(1)->get();
+            // dd($latestComment);
     }
 
     /**
@@ -32,7 +43,7 @@ class TalkController extends Controller
     {
         // トーク開始画面を表示
         $friends = Friend::where('user_id', auth()->user()->id)->get();
-        return view('talk.create',compact('friends'));
+        return view('talk.create', compact('friends'));
     }
 
     /**
@@ -46,7 +57,7 @@ class TalkController extends Controller
         // グループを生成
         // トークを開始した側
         $group = new group;
-        $group->group_id = Group::max('group_id')+1;
+        $group->group_id = Group::max('group_id') + 1;
         $group->user_id = auth()->user()->id;
         $group->save();
 
@@ -66,8 +77,8 @@ class TalkController extends Controller
     public function show($id)
     {
         // 過去のトークがあれば表示
-        
-        
+
+
     }
 
     /**
@@ -104,7 +115,7 @@ class TalkController extends Controller
         //
     }
 
-    public function __invoke(Request $request) 
+    public function __invoke(Request $request)
     {
         // トークを保存
         $conversation = new conversation;

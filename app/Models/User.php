@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\friend;
+use App\Models\Member;
 
 class User extends Authenticatable
 {
@@ -52,5 +53,9 @@ class User extends Authenticatable
 
     public function friends() {
         return $this->hasMany(Friend::class,'follow_id');
+    }
+
+    public function members() {
+        return $this->hasMany(Member::class);
     }
 }
