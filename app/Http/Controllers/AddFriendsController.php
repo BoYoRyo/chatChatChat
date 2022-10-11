@@ -103,20 +103,22 @@ class AddFriendsController extends Controller
 
         //authのidと$idを使ってfriendテーブルを検索してなければ登録実行。
         //あればその友達の詳細画面に遷移
-        $friendOrNot = friend::where('user_id','=',Auth::id())->where('follow_id','=',$id);
-        if($friendOrNot != null){
+        $friendOrNot = friend::where('user_id','=',Auth::id())->where('follow_id','=',$id)->get();
 
-            return view('addFriends.connected',compact('addFriendName'));
-        }else{
+        //isEmpty()は空ならtrue
+        if($friendOrNot->isEmpty()){
             $friend = new friend();
             $friend->create([
                 'user_id' => Auth::id(),
                 'follow_id' => $id,
-             ]);
-            
+            ]);
+
             return view('addFriends.finished',compact('addFriendName'));
+            
+        }else{
+
+            return view('addFriends.connected',compact('addFriendName'));
         }
         
     }
-
 }
