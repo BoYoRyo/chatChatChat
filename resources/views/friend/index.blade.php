@@ -16,18 +16,21 @@
                     <form class="w-full max-w-sm">
                         <div class="flex items-center border-b border-fuchsia-600 py-2">
                             <input
-                                class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
+                                class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none  placeholder-gray-400"
                                 type="text" placeholder="アカウントID  名前" aria-label="Full name">
                             <button
                                 class="flex-shrink-0 bg-fuchsia-600 hover:bg-fuchsia-700 border-fuchsia-600 hover:border-fuchsia-700 text-sm border-4 text-white py-1 px-2 rounded"
                                 type="button">
                                 検索
                             </button>
-                            <button
+                            <input type="reset" value="キャンセル"
+                                class="flex-shrink-0 border-transparent border-4 text-fuchsia-600 hover:text-fuchsia-800 text-sm py-1 px-2 rounded"
+                            >
+                            <!-- <button
                                 class="flex-shrink-0 border-transparent border-4 text-fuchsia-600 hover:text-fuchsia-800 text-sm py-1 px-2 rounded"
                                 type="button">
-                                Cancel
-                            </button>
+                                キャンセル
+                            </button> -->
                         </div>
                     </form>
                 </div>

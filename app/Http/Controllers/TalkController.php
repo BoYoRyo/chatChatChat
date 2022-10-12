@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\conversation;
+use App\Models\Conversation;
 use Illuminate\Http\Request;
-use App\Models\group;
+use App\Models\Group;
 use App\Models\friend;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\CreateRequest;
 use App\Models\Member;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class TalkController extends Controller
 {
@@ -28,11 +29,8 @@ class TalkController extends Controller
             whereIn('group_id',Member::where('user_id', auth()->user()->id)->pluck('group_id'))
             ->where('user_id', '!=', auth()->user()->id)
             ->get();
-        return view('talk.index', compact('groups'));
 
-            // こんばせーしょんも結合したい
-            // $latestComment = Conversation::where('group_id', $groups->group_id)->groupBy('group_id')->limit(1)->get();
-            // dd($latestComment);
+            return view('talk.index', compact('groups'));
     }
 
     /**
@@ -97,13 +95,12 @@ class TalkController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($groupId)
-    {
-        
+    {   
         $group = Group::find($groupId);
         $dialogUser = User::whereIn('id',Member::where('group_id',$groupId)->where('user_id','!=',auth()->user()->id)->pluck('user_id'))->get();
-        // dd($dialogUser);
 
         return view('talk.show',compact('group','dialogUser'));
+
     }
 
     /**
