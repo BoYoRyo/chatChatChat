@@ -11,7 +11,7 @@
                 {{-- 相手側のコメント --}}
                 <div class="container mx-auto flex m-4 w-1/2 py-4 px-8 bg-white rounded dark:bg-gray-800">
                     <div class="bg-white">
-                        <a href="/friend/show/{{ $dialogUser->name }}">
+                        <a href="{{ route('friend.show', $dialogUser->id) }}">
                             <img src="{{ asset('icon/' . $dialogUser->icon) }}" style="max-height:40px;">
                         </a>
                     </div>
