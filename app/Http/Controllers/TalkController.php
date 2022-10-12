@@ -9,6 +9,7 @@ use App\Models\friend;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\CreateRequest;
 use App\Models\Member;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class TalkController extends Controller
@@ -39,9 +40,10 @@ class TalkController extends Controller
      */
     public function create()
     {
-        // トーク開始画面を表示
-        $friends = Friend::where('user_id', auth()->user()->id)->get();
-        return view('talk.create', compact('friends'));
+        // // トーク開始画面を表示
+        // $friends = Friend::where('user_id', auth()->user()->id)->get();
+        // return view('talk.create', compact('friends'));
+        // // ->with('group',$group)
     }
 
     /**
@@ -50,20 +52,40 @@ class TalkController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store($id)
     {
+        // 過去のトークがあるか検索
+        $group = Group::
+        whereIn('id',Member::whereIn('user_id', Member::where('user_id',auth()->user()->id)->pluck('group_id'))
+        ->where('user_id', $id)
+        ->pluck('group_id'))
+        ->where('type','0')
+        ->first();
+
+        if($group != null) {
+            return redirect()->route('talk.show',compact('group'));
+        }
+
+        $dialogUser = User::find($id);
+
         // グループを生成
+        $newGroup = new Group();
+        $newGroup->type = 0;
+        $newGroup->save();
+        
         // トークを開始した側
-        $group = new group;
-        $group->group_id = Group::max('group_id') + 1;
-        $group->user_id = auth()->user()->id;
-        $group->save();
+        $member = new Member();
+        $member->group_id = $newGroup->id;
+        $member->user_id = auth()->user()->id;
+        $member->save();
 
         // トークを開始された側
-        $group->user_id = auth()->user()->id;
-        $group->save();
+        $member2 = new Member();
+        $member2->group_id = $newGroup->id;
+        $member2->user_id = $id;
+        $member2->save();
 
-        return view('talk.create');
+        return view('talk.show',compact('dialogUser'))->with('group',$newGroup);
     }
 
     /**
@@ -72,9 +94,12 @@ class TalkController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        // 過去のトークがあれば表示
+    public function show($groupId)
+    {   
+        $group = Group::find($groupId);
+        $dialogUser = User::whereIn('id',Member::where('group_id',$groupId)->where('user_id','!=',auth()->user()->id)->pluck('user_id'))->get();
+
+        return view('talk.show',compact('group','dialogUser'));
 
     }
 
@@ -112,13 +137,18 @@ class TalkController extends Controller
         //
     }
 
-    public function __invoke(Request $request)
+    public function __invoke(Request $request,$id)
     {
         // トークを保存
         $conversation = new conversation;
         $conversation->user_id = auth()->user()->id;
-        $conversation->group_id = $request->group_id;
+        $conversation->group_id = Group::
+        whereIn('id',Member::whereIn('user_id', Member::where('user_id',auth()->user()->id)->pluck('group_id'))
+        ->where('user_id', $id)
+        ->pluck('group_id'))
+        ->where('type','0')->first();
         $conversation->comment = $request->comment;
+        dd($conversation);
         $conversation->save();
         return redirect()->route('talk.show');
 

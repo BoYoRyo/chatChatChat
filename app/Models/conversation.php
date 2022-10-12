@@ -14,6 +14,7 @@ class conversation extends Model
     public function group() {
         return $this->belongsTo(Group::class);
     }
+
     public function member() {
         return $this->belongsTo(Member::class,'group_id','id');
     }
