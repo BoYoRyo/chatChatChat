@@ -25,12 +25,11 @@ class TalkController extends Controller
         // userIDで絞って、相手のIDでiconを持ってくる
         // ↓ログインユーザーのIDで絞ったグループIDだけでメンバーテーブルを検索（ログインユーザーIDを除外して）
         // SELECT * FROM members WHERE group_id IN (SELECT group_id FROM members WHERE user_id = 1) AND user_id != 1;
-        $groups = Member::
-            whereIn('group_id',Member::where('user_id', auth()->user()->id)->pluck('group_id'))
+        $groups = Member::whereIn('group_id', Member::where('user_id', auth()->user()->id)->pluck('group_id'))
             ->where('user_id', '!=', auth()->user()->id)
             ->get();
 
-            return view('talk.index', compact('groups'));
+        return view('talk.index', compact('groups'));
     }
 
     /**
@@ -66,26 +65,24 @@ class TalkController extends Controller
             return redirect()->route('talk.show',$group->id);
         }
 
-        $dialogUser = User::find($id);
-
         // グループを生成
-        $newGroup = new Group();
-        $newGroup->type = 0;
-        $newGroup->save();
-        
+        $group = new Group();
+        $group->type = 0;
+        $group->save();
+
         // トークを開始した側
         $member = new Member();
-        $member->group_id = $newGroup->id;
+        $member->group_id = $group->id;
         $member->user_id = auth()->user()->id;
         $member->save();
 
         // トークを開始された側
-        $member2 = new Member();
-        $member2->group_id = $newGroup->id;
-        $member2->user_id = $id;
-        $member2->save();
+        $member = new Member();
+        $member->group_id = $group->id;
+        $member->user_id = $id;
+        $member->save();
 
-        return view('talk.show',compact('dialogUser'))->with('group',$newGroup);
+        return redirect()->route('talk.show', $group->id);
     }
 
     /**
@@ -98,10 +95,9 @@ class TalkController extends Controller
     {   
         $groupId = $id;
         $group = Group::find($groupId);
-        $dialogUser = User::whereIn('id',Member::where('group_id',$groupId)->where('user_id','!=',auth()->user()->id)->pluck('user_id'))->get();
+        $dialogUser = User::whereIn('id', Member::where('group_id', $groupId)->where('user_id', '!=', auth()->user()->id)->pluck('user_id'))->first();
 
-        return view('talk.show',compact('group','dialogUser'));
-
+        return view('talk.show', compact('group', 'dialogUser'));
     }
 
     /**
@@ -138,20 +134,18 @@ class TalkController extends Controller
         //
     }
 
-    public function __invoke(Request $request,$id)
+    public function __invoke(Request $request, $id)
     {
         // トークを保存
         $conversation = new conversation;
         $conversation->user_id = auth()->user()->id;
-        $conversation->group_id = Group::
-        whereIn('id',Member::whereIn('user_id', Member::where('user_id',auth()->user()->id)->pluck('group_id'))
-        ->where('user_id', $id)
-        ->pluck('group_id'))
-        ->where('type','0')->first();
+        $conversation->group_id = Group::whereIn('id', Member::whereIn('user_id', Member::where('user_id', auth()->user()->id)->pluck('group_id'))
+                ->where('user_id', $id)
+                ->pluck('group_id'))
+            ->where('type', '0')->first();
         $conversation->comment = $request->comment;
         dd($conversation);
         $conversation->save();
         return redirect()->route('talk.show');
-
     }
 }
