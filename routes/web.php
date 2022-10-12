@@ -47,13 +47,13 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('/user/update', [UserController::class, 'update'])->name('user.update');
     //フレンド検索画面に遷移
-    Route::get('add/index',[AddFriendsController::class,'index'])->name('add.index');
+    Route::get('add/index', [AddFriendsController::class, 'index'])->name('add.index');
     //フレンド検索
-    Route::post('add/show',[AddFriendsController::class,'show'])->name('add.show');
+    Route::post('add/show', [AddFriendsController::class, 'show'])->name('add.show');
     //フレンド追加
-    Route::get('add/connect/{id}',[AddFriendsController::class,'connect'])->name('add.connect');
+    Route::get('add/connect/{id}', [AddFriendsController::class, 'connect'])->name('add.connect');
     //フレンド登録完了画面に遷移
-    Route::get('add/finished',[AddFriendsController::class,'finished'])->name('add.finished');
+    Route::get('add/finished', [AddFriendsController::class, 'finished'])->name('add.finished');
     Route::post('/user/update', [App\Http\Controllers\UserController::class, 'update'])->name('user.update');
 
     // トーク一覧を表示する
@@ -69,5 +69,5 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/friend/index', [App\Http\Controllers\FriendController::class, 'index'])->name('friend.index');
     // Route::resource('friend', FriendController::class);
-    
+
 });
