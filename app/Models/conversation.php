@@ -11,6 +11,6 @@ class conversation extends Model
 
     // groupテーブルと結合.
     public function group() {
-        return $this->belongsToMany(Group::class);
+        return $this->belongsTo(Group::class);
     }
 }

@@ -16,6 +16,6 @@ class group extends Model
 
     // conversationテーブルと結合.
     public function conversation() {
-        return $this->hasMany(Conversation::class,'id');
+        return $this->hasMany(Conversation::class);
     }
 }
