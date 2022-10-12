@@ -63,7 +63,7 @@ class TalkController extends Controller
         ->first();
 
         if($group != null) {
-            return redirect()->route('talk.show',compact('group'));
+            return redirect()->route('talk.show',$group->id);
         }
 
         $dialogUser = User::find($id);
@@ -94,8 +94,9 @@ class TalkController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($groupId)
+    public function show($id)
     {   
+        $groupId = $id;
         $group = Group::find($groupId);
         $dialogUser = User::whereIn('id',Member::where('group_id',$groupId)->where('user_id','!=',auth()->user()->id)->pluck('user_id'))->get();
 
