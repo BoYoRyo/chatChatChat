@@ -34,7 +34,7 @@
                                 {{ $group->user->name }}
                             </div>
                             {{-- 最新のトーク --}}
-                            <div class="text: left; text-l text-gray-500">
+                            <div class="text: left; text-l text-gray-500 mt-2">
                                 @if($group->conversation)
                                 {{-- 何分前のメッセージか表示 --}}
                                 {{ $group->conversation->created_at->diffForHumans() }}
