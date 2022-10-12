@@ -1,15 +1,34 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ $dialogUser }} 
+            {{ $dialogUser->name }}
         </h2>
     </x-slot>
-    @if($group->conversation->isEmpty())
+    @if ($group->conversation->isEmpty())
     @else
-        @foreach($group->conversation as $conversation)
-            <div class="container mx-auto flex-center m-4 w-1/2 py-4 px-8 bg-white rounded dark:bg-gray-800">
-                <textarea name="comment" rows="4" class="px-0 w-full text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-black dark:placeholder-gray-400">{{ $conversation->comment }}</textarea>
-            </div>
+        @foreach ($group->conversation as $conversation)
+            @if ($conversation->user_id == $dialogUser->id)
+                {{-- 相手側のコメント --}}
+                <div class="container mx-auto flex m-4 w-1/2 py-4 px-8 bg-white rounded dark:bg-gray-800">
+                    <div class="bg-white">
+                        <a href="/friend/show/{{ $dialogUser->name }}">
+                            <img src="{{ asset('icon/' . $dialogUser->icon) }}" style="max-height:40px;">
+                        </a>
+                    </div>
+                    <span
+                        class="px-0 w-full text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-black dark:placeholder-gray-400">
+                        {{ $conversation->comment }}
+                    </span>
+                </div>
+            @else
+                {{-- ユーザー側のコメント --}}
+                <div class="container mx-auto m-4 w-1/2 py-4 px-8 text-right bg-white rounded dark:bg-gray-800">
+                    <span
+                        class="px-0 w-full text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-black dark:placeholder-gray-400">
+                        {{ $conversation->comment }}
+                    </span>
+                </div>
+            @endif
         @endforeach
     @endif
     <form method="POST" action={{ route('talk.invoke') }}>
@@ -21,10 +40,13 @@
                 </div>
             </div>
         </div>
-        <div class="container mx-auto flex-center m-4 w-1/2 py-4 px-8 bg-gray-50 rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600">
+        <div
+            class="container mx-auto flex-center m-4 w-1/2 py-4 px-8 bg-gray-50 rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600">
             <div class="py-4 px-8 bg-white rounded dark:bg-gray-800">
                 <label for="comment" class="sr-only">Your comment</label>
-                <textarea name="comment" rows="4" class="px-0 w-full text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-black dark:placeholder-gray-400" placeholder="Write a message"></textarea>
+                <textarea name="comment" rows="4"
+                    class="px-0 w-full text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-black dark:placeholder-gray-400"
+                    placeholder="Write a message"></textarea>
             </div>
             <button class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 my-2 rounded">送信</button>
         </div>
