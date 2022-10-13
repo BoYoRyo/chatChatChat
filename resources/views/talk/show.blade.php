@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ $dialogUser }} 
+            {{ $dialogUser->name }} 
         </h2>
     </x-slot>
     @if($group->conversation->isEmpty())
@@ -22,9 +22,9 @@
                 </div>
             @else
                 {{-- ユーザー側のコメント --}}
-                <div class="container mx-auto m-4 w-1/2 py-4 px-8 text-right bg-white rounded dark:bg-gray-800">
+                <div class="container mx-auto m-4 w-1/2 py-4 px-8 text-right bg-amber-300 rounded dark:bg-gray-800">
                     <span
-                        class="px-0 w-full text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-black dark:placeholder-gray-400">
+                        class="px-0 w-full text-sm text-gray-900 bg-amber-300 border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400">
                         {{ $conversation->comment }}
                     </span>
                 </div>
@@ -40,7 +40,7 @@
                 </div>
             </div>
         </div>
-        <div class="container mx-auto flex-center m-4 w-1/2 py-4 px-8 bg-gray-50 rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600">
+        <div class="container mx-auto flex-center m-4 w-1/2 py-4 px-8 bg-amber-300 rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600">
             <div class="py-4 px-8 bg-white rounded dark:bg-gray-800">
                 <textarea name="comment" rows="4" class="px-0 w-full text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-black dark:placeholder-gray-400" placeholder="Write a message"></textarea>
             </div>
