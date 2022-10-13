@@ -51,6 +51,7 @@
                     <div class="ml-1 mt-11 bg-white flex-initial text: left; text-xl ">
                         {{ $friend->user->name }}
                     </div>
+                    {{-- ひとこと --}}
                     <div class="ml-20 mt-11 bg-white flex-initial text: left; text-xl text-gray-500">
                         {{ $friend->user->introduction }}
                     </div>
