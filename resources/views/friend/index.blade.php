@@ -65,6 +65,7 @@
                             </button>
                         </form>
                     </div>
+                </div>
             </div>
         @endforeach
     </div>

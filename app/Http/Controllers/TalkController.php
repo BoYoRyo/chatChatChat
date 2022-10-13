@@ -92,12 +92,18 @@ class TalkController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {   
+    {
         $groupId = $id;
         $group = Group::find($groupId);
-        $dialogUser = User::whereIn('id', Member::where('group_id', $groupId)->where('user_id', '!=', auth()->user()->id)->pluck('user_id'))->first();
 
-        return view('talk.show', compact('group', 'dialogUser'));
+        if($group->type == 0){
+            $user = User::whereIn('id', Member::where('group_id', $groupId)->where('user_id', '!=', auth()->user()->id)->pluck('user_id'))->first();
+            $groupName = $user->name;
+        } else {
+            $groupName = $group->name;
+        }
+
+        return view('talk.show', compact('group', 'groupName'));
     }
 
     /**
