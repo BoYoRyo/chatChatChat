@@ -24,7 +24,8 @@
                                 検索
                             </button>
                             <input type="reset" value="キャンセル"
-                                class="flex-shrink-0 border-transparent border-4 text-fuchsia-600 hover:text-fuchsia-800 text-sm py-1 px-2 rounded">
+                                class="flex-shrink-0 border-transparent border-4 text-fuchsia-600 hover:text-fuchsia-800 text-sm py-1 px-2 rounded"
+                            >
                             <!-- <button
                                 class="flex-shrink-0 border-transparent border-4 text-fuchsia-600 hover:text-fuchsia-800 text-sm py-1 px-2 rounded"
                                 type="button">
@@ -64,7 +65,6 @@
                             </button>
                         </form>
                     </div>
-                </div>
             </div>
         @endforeach
     </div>

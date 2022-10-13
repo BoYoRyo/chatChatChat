@@ -54,14 +54,15 @@ class TalkController extends Controller
     public function store($id)
     {
         // 過去のトークがあるか検索
-        $group = Group::whereIn('id', Member::whereIn('user_id', Member::where('user_id', auth()->user()->id)->pluck('group_id'))
-                ->where('user_id', $id)
-                ->pluck('group_id'))
-            ->where('type', '0')
-            ->first();
+        $group = Group::
+        whereIn('id',Member::whereIn('user_id', Member::where('user_id',auth()->user()->id)->pluck('group_id'))
+        ->where('user_id', $id)
+        ->pluck('group_id'))
+        ->where('type','0')
+        ->first();
 
-        if ($group != null) {
-            return redirect()->route('talk.show', $group->id);
+        if($group != null) {
+            return redirect()->route('talk.show',$group->id);
         }
 
         // グループを生成
@@ -91,7 +92,7 @@ class TalkController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
+    {   
         $groupId = $id;
         $group = Group::find($groupId);
         $dialogUser = User::whereIn('id', Member::where('group_id', $groupId)->where('user_id', '!=', auth()->user()->id)->pluck('user_id'))->first();
@@ -133,18 +134,4 @@ class TalkController extends Controller
         //
     }
 
-    public function __invoke(Request $request, $id)
-    {
-        // トークを保存
-        $conversation = new conversation;
-        $conversation->user_id = auth()->user()->id;
-        $conversation->group_id = Group::whereIn('id', Member::whereIn('user_id', Member::where('user_id', auth()->user()->id)->pluck('group_id'))
-                ->where('user_id', $id)
-                ->pluck('group_id'))
-            ->where('type', '0')->first();
-        $conversation->comment = $request->comment;
-        dd($conversation);
-        $conversation->save();
-        return redirect()->route('talk.show');
-    }
 }
