@@ -31,7 +31,7 @@
             @endif
         @endforeach
     @endif
-    <form method="POST" action={{ route('talk.invoke') }}>
+    <form method="POST" action={{ route('conversation.store', ['group_id' => $group->id]) }}>
         @csrf
         <div id="container">
             <div class="content">
@@ -51,4 +51,10 @@
             <button class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 my-2 rounded">送信</button>
         </div>
     </form>
+    {{-- <script>
+        const timer = 5000 // ミリ秒で間隔の時間を指定
+        window.addEventListener('load', function() {
+            setInterval('location.reload()', timer);
+        });
+    </script> --}}
 </x-app-layout>
