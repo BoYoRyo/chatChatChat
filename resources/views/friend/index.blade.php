@@ -45,28 +45,27 @@
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg flex">
                     {{-- 画像 --}}
                     <div class="p-6 bg-white border-b border-gray-200">
-                        <a href="/friend/show/{{ $friend->follow_id }}"><img src="{{ asset('icon/' . $friend->user->icon) }}"
-                            style="max-height:70px;"></a>
-                        </div>
-                        {{-- 名前 --}}
-                        <div class="ml-1 mt-11 bg-white flex-initial text: left; text-xl ">
-                            {{ $friend->user->name }}
-                        </div>
-                        {{-- ひとこと --}}
-                        <div class="ml-20 mt-11 bg-white flex-initial text: left; text-xl text-gray-500">
-                            {{ $friend->user->introduction }}
-                        </div>
-                        {{-- トークする --}}
-                        <div class="my-10 ml-auto mr-10">
-                            <form method="GET" action="/talk/store/{{ $friend->follow_id }}" >
-                                <button class="bg-transparent hover:bg-slate-700 text-slate-500 font-semibold hover:text-slate-700 py-4 px-4 border border-slate-700 hover:border-transparent rounded">
-                                    トークする
-                                </button>
-                            </form>
-                        </div>
+                        <a href="{{ route('friend.show', $friend->follow_id) }}"><img
+                                src="{{ asset('icon/' . $friend->user->icon) }}" style="max-height:70px;"></a>
+                    </div>
+                    {{-- 名前 --}}
+                    <div class="ml-1 mt-11 bg-white flex-initial text: left; text-xl ">
+                        {{ $friend->user->name }}
+                    </div>
+                    {{-- ひとこと --}}
+                    <div class="ml-20 mt-11 bg-white flex-initial text: left; text-xl text-gray-500">
+                        {{ $friend->user->introduction }}
+                    </div>
+                    {{-- トークする --}}
+                    <div class="my-10 ml-auto mr-10">
+                        <form method="GET" action="{{ route('talk.store', $friend->follow_id) }}">
+                            <button
+                                class="bg-transparent hover:bg-slate-700 text-slate-500 font-semibold hover:text-slate-700 py-4 px-4 border border-slate-700 hover:border-transparent rounded">
+                                トークする
+                            </button>
+                        </form>
                     </div>
             </div>
         @endforeach
-
     </div>
 </x-app-layout>
