@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\conversation;
+use App\Models\Member;
+use App\Models\group;
 
 class ConversationController extends Controller
 {
@@ -34,7 +37,13 @@ class ConversationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // トークを保存
+        $conversation = new conversation;
+        $conversation->user_id = auth()->user()->id;
+        $conversation->group_id = $request->group_id;
+        $conversation->comment = $request->comment;
+        $conversation->save();
+        return redirect()->route('talk.show',$request->group_id);
     }
 
     /**

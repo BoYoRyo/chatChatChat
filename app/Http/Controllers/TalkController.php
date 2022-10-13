@@ -134,18 +134,4 @@ class TalkController extends Controller
         //
     }
 
-    public function __invoke(Request $request, $id)
-    {
-        // トークを保存
-        $conversation = new conversation;
-        $conversation->user_id = auth()->user()->id;
-        $conversation->group_id = Group::whereIn('id', Member::whereIn('user_id', Member::where('user_id', auth()->user()->id)->pluck('group_id'))
-                ->where('user_id', $id)
-                ->pluck('group_id'))
-            ->where('type', '0')->first();
-        $conversation->comment = $request->comment;
-        dd($conversation);
-        $conversation->save();
-        return redirect()->route('talk.show');
-    }
 }

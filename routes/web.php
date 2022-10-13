@@ -62,7 +62,7 @@ Route::group(['middleware' => 'auth'], function () {
     // トークを開始する
     // Route::get('/talk/create', [App\Http\Controllers\TalkController::class, "create"])->name('talk.create');
     Route::get('/talk/store/{id}', [App\Http\Controllers\TalkController::class, "store"])->name('talk.store');
-    Route::post('/talk/invoke', [App\Http\Controllers\TalkController::class, "__invoke"])->name('talk.invoke');
+    Route::post('/conversation/store', [App\Http\Controllers\ConversationController::class, "store"])->name('conversation.store');
 
     // トーク画面を表示する
     Route::get('/talk/show/{id}', [App\Http\Controllers\TalkController::class, "show"])->name('talk.show');
