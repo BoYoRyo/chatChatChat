@@ -24,7 +24,8 @@
                                 検索
                             </button>
                             <input type="reset" value="キャンセル"
-                                class="flex-shrink-0 border-transparent border-4 text-fuchsia-600 hover:text-fuchsia-800 text-sm py-1 px-2 rounded">
+                                class="flex-shrink-0 border-transparent border-4 text-fuchsia-600 hover:text-fuchsia-800 text-sm py-1 px-2 rounded"
+                            >
                             <!-- <button
                                 class="flex-shrink-0 border-transparent border-4 text-fuchsia-600 hover:text-fuchsia-800 text-sm py-1 px-2 rounded"
                                 type="button">
@@ -51,6 +52,7 @@
                     <div class="ml-1 mt-11 bg-white flex-initial text: left; text-xl ">
                         {{ $friend->user->name }}
                     </div>
+                    {{-- ひとこと --}}
                     <div class="ml-20 mt-11 bg-white flex-initial text: left; text-xl text-gray-500">
                         {{ $friend->user->introduction }}
                     </div>
@@ -63,7 +65,6 @@
                             </button>
                         </form>
                     </div>
-                </div>
             </div>
         @endforeach
     </div>
