@@ -23,6 +23,7 @@
     <div class="py-12">
 
         @foreach ($groups as $group)
+            @if($group->invisible == 0)
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-1">
                 <a href="/talk/show/{{ $group->group_id }}">
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg flex">
@@ -46,11 +47,18 @@
                                 @endif
                             </div>
                         </div>
+                        {{-- 非表示ボタン --}}
+                        <div class="my-10 ml-auto mr-10">
+                            <form action={{ route('talk.update',$group->id) }}>
+                                <button class="bg-transparent hover:bg-slate-700 text-slate-500 font-semibold hover:text-slate-700 py-4 px-4 border border-slate-700 hover:border-transparent rounded" name="invisible" type="submit">
+                                    非表示にする
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </a>
             </div>
+            @endif
         @endforeach
-    </div>
-
     </div>
 </x-app-layout>
