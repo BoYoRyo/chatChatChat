@@ -44,7 +44,6 @@ Route::group(['middleware' => 'auth'], function () {
     // プロフィール画面に遷移
     Route::get('/user/edit', [UserController::class, 'edit'])->name('user.edit');
     // プロフィール更新
-
     Route::post('/user/update', [UserController::class, 'update'])->name('user.update');
     //フレンド検索画面に遷移
     Route::get('add/index', [AddFriendsController::class, 'index'])->name('add.index');
@@ -70,4 +69,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/friend/index', [App\Http\Controllers\FriendController::class, 'index'])->name('friend.index');
     // Route::resource('friend', FriendController::class);
 
+    // グループ作成画面を表示する
+    Route::get('/group/create', [App\Http\Controllers\GroupController::class, 'create'])->name('group.create');
+    // グループ作成する
+    Route::get('/group/store', [App\Http\Controllers\GroupController::class, 'store'])->name('group.store');
 });

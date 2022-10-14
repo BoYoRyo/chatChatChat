@@ -13,7 +13,9 @@
                     </svg>
                 </div>
                 <div class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-1 px-2 border border-gray-400 rounded">
-                    <button>グループ作成</button>
+                    <a href="{{ route('group.create') }}">
+                        <button>グループ作成</button>
+                    </a>
                 </div>
             </div>
         </h2>
