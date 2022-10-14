@@ -39,10 +39,7 @@ class TalkController extends Controller
      */
     public function create()
     {
-        // // トーク開始画面を表示
-        // $friends = Friend::where('user_id', auth()->user()->id)->get();
-        // return view('talk.create', compact('friends'));
-        // // ->with('group',$group)
+        // 
     }
 
     /**
@@ -53,13 +50,17 @@ class TalkController extends Controller
      */
     public function store($id)
     {
-        // 過去のトークがあるか検索
-        $group = Group::
-        whereIn('id',Member::whereIn('user_id', Member::where('user_id',auth()->user()->id)->pluck('group_id'))
-        ->where('user_id', $id)
-        ->pluck('group_id'))
-        ->where('type','0')
-        ->first();
+        // 過去のトークがあるか検索(SQL発行回数一回ver.)
+        // $group = Group::whereIn('id',Member::whereIn('user_id', Member::where('user_id',auth()->user()->id)->pluck('group_id'))
+        // ->where('user_id', $id)
+        // ->pluck('group_id'))
+        // ->where('type','0')
+        // ->first();
+
+        // 過去のトークがあるか検索(SQL発行回数複数回ver.)
+        $userGroupId = Member::where('user_id',auth()->user()->id)->get(['group_id']);
+        $groupId = Member::whereIn('group_id', $userGroupId)->where('user_id', $id)->get(['group_id']);
+        $group = Group::whereIn('id', $groupId)->where('type','0')->first();
 
         if($group != null) {
             return redirect()->route('talk.show',$group->id);
@@ -95,6 +96,12 @@ class TalkController extends Controller
     {   
         $groupId = $id;
         $group = Group::find($groupId);
+
+        // 非表示フラグを0（表示）にする処理
+        $member = Member::where('group_id',$groupId)->whereNot('user_id',auth()->id())->first();
+        $member->invisible = 0;
+        $member->save();
+
         $dialogUser = User::whereIn('id', Member::where('group_id', $groupId)->where('user_id', '!=', auth()->user()->id)->pluck('user_id'))->first();
 
         return view('talk.show', compact('group', 'dialogUser'));
@@ -120,7 +127,12 @@ class TalkController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // トークを非表示にするよう表示フラグを変更
+        $member = Member::find($id);
+        $member->invisible = 1;
+        $member->save();
+
+        return redirect()->route('talk.index');
     }
 
     /**
