@@ -40,7 +40,7 @@
                     <form method="GET" action="{{ route('talk.store', $friend->id) }}">
                         @csrf
                         <button type="submit"
-                            class="bg-gray-700 hover:bg-gray-600 text-white rounded px-4 py-2 w-40">トーク
+                            class="bg-amber-300 hover:bg-amber-400 text-gray-500 hover:text-gray-700 font-semibold rounded px-4 py-2 w-40">トーク
                         </button>
                     </form>
                 </div>
