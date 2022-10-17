@@ -34,27 +34,33 @@
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg flex mb-2">
                     {{-- 画像 --}}
                     <div class="py-6 pl-6 bg-white border-b border-gray-200">
-                        <img src="{{ asset('icon/' . $member->user->icon) }}" style="max-height:70px;"
-                            class="rounded-full">
+                        <a href="{{ route('friend.show', $member->user->id) }}">
+                            <img src="{{ asset('icon/' . $member->user->icon) }}" style="max-height:70px;"
+                                class="rounded-full">
+                        </a>
                     </div>
 
                     {{-- 名前 --}}
                     <div class="ml-1 m-3 bg-white flex-initial text: left; text-xl my-auto">
                         <div class="text: left; text-xl ">
-                            {{ $member->user->name }}
+                            <a href="{{ route('friend.show', $member->user->id) }}">
+                                {{ $member->user->name }}
+                            </a>
                         </div>
                     </div>
 
-                    {{-- 友達追加 --}}
-                    <div class="my-auto flex-1">
-                        <a href="{{ route('add.connect', $member->user->id) }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke-width="1.5" stroke="currentColor" class="w-6 h-6 ">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
-                            </svg>
-                        </a>
-                    </div>
+                    {{-- 友達追加　自分以外 --}}
+                    @if ($member->user->id != Auth::id())
+                        <div class="my-auto flex-1">
+                            <a href="{{ route('add.connect', $member->user->id) }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="w-6 h-6 ">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
+                                </svg>
+                            </a>
+                        </div>
+                    @endif
                 </div>
             @endforeach
         </div>
