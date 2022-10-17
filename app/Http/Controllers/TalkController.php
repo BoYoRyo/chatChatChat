@@ -27,6 +27,10 @@ class TalkController extends Controller
         // SELECT * FROM members WHERE group_id IN (SELECT group_id FROM members WHERE user_id = 1) AND user_id != 1;
         $groups = Member::whereIn('group_id', Member::where('user_id', auth()->user()->id)->pluck('group_id'))
             ->where('user_id', '!=', auth()->user()->id)
+            ->selectRaw('group_id')
+            ->selectRaw('user_id')
+            ->selectRaw('invisible')
+            ->groupBy('group_id')
             ->get();
 
         return view('talk.index', compact('groups'));
@@ -54,12 +58,14 @@ class TalkController extends Controller
     public function store($id)
     {
         // 過去のトークがあるか検索
-        $group = Group::
-        whereIn('id',Member::whereIn('user_id', Member::where('user_id',auth()->user()->id)->pluck('group_id'))
-        ->where('user_id', $id)
-        ->pluck('group_id'))
-        ->where('type','0')
-        ->first();
+        // $group = Group::
+        // whereIn('id',Member::whereIn('user_id', Member::where('user_id',auth()->user()->id)->pluck('group_id'))->where('user_id', $id)->pluck('group_id'))
+        // ->where('type','0')
+        // ->first();
+
+        $userGroupId = Member::where('user_id',auth()->user()->id)->get(['group_id']);
+        $groupId = Member::whereIn('group_id', $userGroupId)->where('user_id', $id)->get(['group_id']);
+        $group = Group::whereIn('id', $groupId)->where('type','0')->first();
 
         if($group != null) {
             return redirect()->route('talk.show',$group->id);

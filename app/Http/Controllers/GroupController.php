@@ -74,6 +74,8 @@ class GroupController extends Controller
         $member[] = array(
             'group_id' => $id,
             'user_id' => Auth::id(),
+            'created_at' => now(),
+            'updated_at' => now(),
         );
 
         // 追加したいメンバーのidを配列に入れる
@@ -81,6 +83,8 @@ class GroupController extends Controller
             $member[] = array(
                 'group_id' => $id,
                 'user_id' => $memberId,
+                'created_at' => now(),
+                'updated_at' => now(),
             );
         }
 
