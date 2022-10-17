@@ -13,12 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('conversations', function (Blueprint $table) {
+        Schema::create('goods', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id')->references('id')->on('users');
-            $table->integer('group_id')->references('id')->on('groups');
-            $table->string('comment');
-            $table->string('good_id')->nullable();
+            $table->string('user_id');
             $table->timestamps();
         });
     }
@@ -30,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('conversations');
+        Schema::dropIfExists('goods');
     }
 };
