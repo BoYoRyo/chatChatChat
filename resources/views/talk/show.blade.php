@@ -31,7 +31,7 @@
             @endif
         @endforeach
     @endif
-    <form method="POST" action={{ route('conversation.store', ['group_id' => $group->id]) }}>
+    <form method="POST" action={{ route('conversation.store', ['group_id' => $group->id]) }} enctype="multipart/form-data">
         @csrf
         <div id="container">
             <div class="content">
@@ -42,15 +42,18 @@
         </div>
         <div class="container flex mx-auto m-4 w-1/2 py-4 px-8 bg-amber-300 rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600">
             <div class="py-4 px-8 bg-white rounded dark:bg-gray-800">
+                {{-- テキスト --}}
                 <textarea name="comment" rows="2" cols="100" class="px-0 w-full text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-black dark:placeholder-gray-400" placeholder="Write a message"></textarea>
-                <label class="cursor-pointer border-solid border-3 border-gray-100 rounded-full bg-gray-100">
+                {{-- 画像添付ボタン --}}
+                <label class="cursor-pointer border-solid border-3 border-gray-100 rounded-full bg-gray-100" for="image">
                     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-image" viewBox="0 0 16 16">
                         <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
                         <path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z"/>
                     </svg>
-                    <input type="file" name="icon" class="hidden" accept='image/*' onchange="previewImage(this);">
+                    <input type="file" name="image" id="image" class="hidden" accept='image/*' onchange="previewImage(this);">
                 </label>
             </div>
+            {{-- 送信ボタン --}}
             <button class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-0 px-4 my-0 mx-2 rounded">send</button>
         </div>
     </form>

@@ -42,6 +42,7 @@ class ConversationController extends Controller
         $conversation->user_id = auth()->user()->id;
         $conversation->group_id = $request->group_id;
         $conversation->comment = $request->comment;
+        $conversation->image = $request->image;
         $conversation->save();
         return redirect()->route('talk.show',$request->group_id);
     }
