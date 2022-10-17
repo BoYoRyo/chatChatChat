@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\friend;
 use App\Models\Member;
+use App\Models\conversation;
 
 class User extends Authenticatable
 {
@@ -48,7 +49,7 @@ class User extends Authenticatable
 
     // Userテーブルと結合.
     public function group() {
-        return $this->belongsToMany(Group::class);
+        return $this->belongsTo(Group::class);
     }
 
     public function friends() {
@@ -57,5 +58,9 @@ class User extends Authenticatable
 
     public function members() {
         return $this->hasMany(Member::class);
+    }
+
+    public function conversation() {
+        return $this->hasMany(conversation::class);
     }
 }

@@ -18,4 +18,8 @@ class group extends Model
     public function conversation() {
         return $this->hasMany(Conversation::class);
     }
+
+    public function member() {
+        return $this->belongsTo(Member::class);
+    }
 }
