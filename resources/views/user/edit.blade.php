@@ -124,8 +124,8 @@
 
 
                             {{-- 変更ボタン --}}
-                            <button type="submit" class="bg-amber-300 hover:bg-amber-500 text-gray-800 rounded px-4 py-2 w-40">変更</button>
-                            <button type="button" onclick="history.back()" class="bg-gray-500 hover:bg-gray-700 text-white rounded px-4 py-2 w-40">戻る</button>
+                            <button type="submit" class="bg-amber-300 hover:bg-amber-400 text-gray-800 font-semibold rounded px-4 py-2 w-40">変更</button>
+                            <button type="button" onclick="history.back()" class="bg-gray-500 hover:bg-gray-700 text-white font-semibold rounded px-4 py-2 w-40">戻る</button>
 
                         </div>
                     </div>
