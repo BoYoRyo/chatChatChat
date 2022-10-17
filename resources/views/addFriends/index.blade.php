@@ -25,20 +25,27 @@
                     <span>友達を検索する</span>
                     @else
                     @foreach($friends as $friend)
-                        @if($friend->id == Auth::id())
-                        @continue
+                    @if($friend->id == Auth::id())
+                    @continue
                     @endif
-                    <div style="display:flex;" class="py-2 bg-gray-100 mt-4 rounded-lg">
-                        <img src="{{ asset('icon/default_icon2.png') }}" width="50">
-                        <span class="mt-6 ml-6 text-sm text-gray-400">アカウント名</span>
-                        <span class="mt-3 ml-2">{{$friend->name}}</span>
-                        <span class="mt-6 ml-6 text-sm text-gray-400">アカウントID</span>
-                        <span class="mt-3 ml-2">{{$friend->account_id}}</span>
-                        <a href="{{route('add.connect',$friend->id)}}" class="pt-4 pl-16">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 ">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
-                            </svg>
-                        </a>
+                    <div class="">
+                        <div class="bg-gray-100 my-4 rounded-lg max-w-7xl mx-auto sm:px-6 lg:px-10 flex">
+                            {{-- <div class="bg-gray-100 my-4 rounded-lg max-w-7xl mx-auto sm:px-6 lg:px-10"> --}}
+                            {{-- style="display:flex;" --}}
+                            <div class="px-2 py-2"><img src="{{ asset('icon/default_icon2.png') }}" width="100"></div>
+                            {{-- <div class="px-2 py-2"> --}}
+                                <span class="mx-6 my-6 text-sm text-gray-400">アカウント名</span>
+                                <span class="mx-6 my-6">{{$friend->name}}</span>
+                                <span class="mx-6 my-6 text-sm text-gray-400">アカウントID</span>
+                                <span class="mx-6 my-6">{{$friend->account_id}}</span>
+                                <a href="{{route('add.connect',$friend->id)}}" class="my-6 ml-auto mr-2 flex">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 ">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
+                                    </svg>
+                                    &nbsp;追加する
+                                </a>
+                            {{-- </div> --}}
+                        </div>
                     </div>
                     @endforeach
                     @endif
