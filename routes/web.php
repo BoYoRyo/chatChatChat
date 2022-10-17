@@ -76,4 +76,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/group/create', [App\Http\Controllers\GroupController::class, 'create'])->name('group.create');
     // グループ作成する
     Route::get('/group/store', [App\Http\Controllers\GroupController::class, 'store'])->name('group.store');
+    // グループ詳細画面へ遷移
+    Route::get('/group/show/{id}', [App\Http\Controllers\GroupController::class, 'show'])->name('group.show');
 });
