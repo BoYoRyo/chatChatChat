@@ -16,4 +16,8 @@ class Member extends Model
     public function conversation() {
         return $this->hasOne(Conversation::class,'group_id','group_id')->latestOfMany('created_at');
     }
+
+    public function group() {
+        return $this->belongsTo(group::class);
+    }
 }

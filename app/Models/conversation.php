@@ -18,4 +18,8 @@ class conversation extends Model
     public function member() {
         return $this->belongsTo(Member::class,'group_id','id');
     }
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
 }
