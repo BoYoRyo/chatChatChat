@@ -11,20 +11,20 @@
             {{-- ユーザー側のコメント --}}
             <div class="container mx-auto m-4 w-1/2 py-4 px-8 text-right bg-white rounded dark:bg-gray-800">
                 <span
-                    class="px-0 w-full text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-black dark:placeholder-gray-400">
+                    class="px-0 w-full my-auto text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-black dark:placeholder-gray-400">
                     {{ $conversation->comment }}
                 </span>
             </div>
             @else
             {{-- 相手側のコメント --}}
             <div class="container mx-auto flex m-4 w-1/2 py-4 px-8 bg-white rounded dark:bg-gray-800">
-                <div class="bg-white">
+                <div class="bg-white px-2">
                     <a href="{{ route('friend.show', $conversation->user->id) }}">
                         <img src="{{ asset('icon/' . $conversation->user->icon) }}" style="max-height:40px;">
                     </a>
                 </div>
                 <span
-                class="px-0 w-full text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-black dark:placeholder-gray-400">
+                class="px-0 w-full text-sm my-auto text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-black dark:placeholder-gray-400">
                     {{ $conversation->comment }}
                 </span>
             </div>
