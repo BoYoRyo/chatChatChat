@@ -27,6 +27,7 @@ class TalkController extends Controller
         // SELECT * FROM members WHERE group_id IN (SELECT group_id FROM members WHERE user_id = 1) AND user_id != 1;
         $groups = Member::whereIn('group_id', Member::where('user_id', auth()->user()->id)->pluck('group_id'))
             ->where('user_id', '!=', auth()->user()->id)
+            ->selectRaw('id')
             ->selectRaw('group_id')
             ->selectRaw('user_id')
             ->selectRaw('invisible')
@@ -136,7 +137,7 @@ class TalkController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update($id)
     {
         // トークを非表示にするよう表示フラグを変更
         $member = Member::find($id);

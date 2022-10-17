@@ -1,11 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-<<<<<<< HEAD
             {{ $groupName }}
-=======
-            {{ $dialogUser->name }} 
->>>>>>> develop
         </h2>
     </x-slot>
     @if($group->conversation->isEmpty())
@@ -20,21 +16,12 @@
                 </span>
             </div>
             @else
-<<<<<<< HEAD
             {{-- 相手側のコメント --}}
             <div class="container mx-auto flex m-4 w-1/2 py-4 px-8 bg-white rounded dark:bg-gray-800">
                 <div class="bg-white">
                     <a href="{{ route('friend.show', $conversation->user->id) }}">
                         <img src="{{ asset('icon/' . $conversation->user->icon) }}" style="max-height:40px;">
                     </a>
-=======
-                {{-- ユーザー側のコメント --}}
-                <div class="container mx-auto m-4 w-1/2 py-4 px-8 text-right bg-amber-300 rounded dark:bg-gray-800">
-                    <span
-                        class="px-0 w-full text-sm text-gray-900 bg-amber-300 border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400">
-                        {{ $conversation->comment }}
-                    </span>
->>>>>>> develop
                 </div>
                 <span
                 class="px-0 w-full text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-black dark:placeholder-gray-400">

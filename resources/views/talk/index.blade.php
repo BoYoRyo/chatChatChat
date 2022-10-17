@@ -60,7 +60,7 @@
                         </div>
                         {{-- 非表示ボタン --}}
                         <div class="my-10 ml-auto mr-10">
-                            <form action={{ route('talk.update',$group->id) }}>
+                            <form action={{ route('talk.update',$group->id) }} type="get">
                                 <button class="bg-transparent hover:bg-slate-700 text-slate-500 font-semibold hover:text-slate-700 py-4 px-4 border border-slate-700 hover:border-transparent rounded" name="invisible" type="submit">
                                     非表示にする
                                 </button>
