@@ -43,6 +43,13 @@ class ConversationController extends Controller
         $conversation->group_id = $request->group_id;
         $conversation->comment = $request->comment;
         $conversation->save();
+
+        // グループのupdated_atを更新
+        $group = new Group();
+        $group = Group::find($request->group_id);
+        $group->updated_at = now();
+        $group->save();
+        
         return redirect()->route('talk.show',$request->group_id);
     }
 

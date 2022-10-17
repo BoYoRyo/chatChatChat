@@ -78,4 +78,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/group/store', [App\Http\Controllers\GroupController::class, 'store'])->name('group.store');
     // グループ詳細画面へ遷移
     Route::get('/group/show/{id}', [App\Http\Controllers\GroupController::class, 'show'])->name('group.show');
+    // グループ一覧画面に遷移
+    Route::get('/group/index', [App\Http\Controllers\GroupController::class, 'index'])->name('group.index');
 });
