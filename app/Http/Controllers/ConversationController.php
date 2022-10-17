@@ -44,6 +44,13 @@ class ConversationController extends Controller
         $conversation->comment = $request->comment;
         $conversation->image = $request->image;
         $conversation->save();
+
+        // グループのupdated_atを更新
+        $group = new Group();
+        $group = Group::find($request->group_id);
+        $group->updated_at = now();
+        $group->save();
+        
         return redirect()->route('talk.show',$request->group_id);
     }
 

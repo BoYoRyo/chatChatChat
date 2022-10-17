@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Member;
 
 class group extends Model
 {
@@ -20,6 +21,13 @@ class group extends Model
     }
 
     public function member() {
+        // グループテーブルが従
+        // メンバーテーブルが主
         return $this->belongsTo(Member::class);
+    }
+
+    public function members() {
+        // グループテーブルが主
+        return $this->hasMany(Member::class);
     }
 }
