@@ -58,9 +58,9 @@
                     </div>
                     {{-- トークする --}}
                     <div class="my-10 ml-auto mr-10">
-                        <form method="GET" action="{{ route('talk.store', $friend->follow_id) }}">
+                        <form method="GET" action={{ route('talk.store', $friend->follow_id) }} >
                             <button
-                                class="bg-transparent hover:bg-slate-700 text-slate-500 font-semibold hover:text-slate-700 py-4 px-4 border border-slate-700 hover:border-transparent rounded">
+                                class="bg-amber-300 hover:bg-amber-500 text-white font-semibold hover:text-slate-700 py-4 px-4 border border-slate-700 hover:border-transparent rounded">
                                 トークする
                             </button>
                         </form>
