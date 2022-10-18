@@ -32,6 +32,7 @@ class TalkController extends Controller
             ->selectRaw('user_id')
             ->selectRaw('invisible')
             ->groupBy('group_id')
+            ->orderBy('updated_at', 'DESC')
             ->get();
 
         return view('talk.index', compact('groups'));
