@@ -44,7 +44,7 @@
                 <div class="container mx-auto flex m-4 w-1/2 py-4 px-8 bg-white rounded dark:bg-gray-800">
                     <div class="bg-white">
                         <a href="{{ route('friend.show', $conversation->user->id) }}">
-                            <img src="{{ asset('storage/img/' . $conversation->user->image) }}" style="max-height:40px;">
+                            <img src="{{ asset('icon/' . $conversation->user->icon) }}" style="max-height:40px;">
                         </a>
                     </div>
                     <span
@@ -52,7 +52,7 @@
                         {{ $conversation->comment }}
                     </span>
                     @if($conversation->image != null)
-                        <img src={{ asset( 'storage/img/'.$conversation->image ) }} style="max-height:40px;" >
+                        <img src={{ asset( 'storage/img/'.$conversation->image ) }} style="width:150px;" >
                     @endif
                 <!-- いいねが既に押されていたら -->
                 @if(in_array($conversation->id,$gooded))
