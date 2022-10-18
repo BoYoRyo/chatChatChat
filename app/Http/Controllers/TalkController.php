@@ -34,6 +34,7 @@ class TalkController extends Controller
             ->selectRaw('user_id')
             ->selectRaw('invisible')
             ->groupBy('group_id')
+            ->orderBy('updated_at', 'DESC')
             ->get();
 
 
@@ -110,11 +111,10 @@ class TalkController extends Controller
         $member->invisible = 0;
         $member->save();
 
-        $dialogUser = User::whereIn('id', Member::where('group_id', $groupId)->where('user_id', '!=', auth()->user()->id)->pluck('user_id'))->first();
+        // $dialogUser = User::whereIn('id', Member::where('group_id', $groupId)->where('user_id', '!=', auth()->user()->id)->pluck('user_id'))->first();
 
         if($group->type == 0){
-            $user = User::whereIn('id', Member::where('group_id', $groupId)->where('user_id', '!=', auth()->user()->id)->pluck('user_id'))->first();
-            $groupName = $user->name;
+            $groupName = User::whereIn('id', Member::where('group_id', $groupId)->where('user_id', '!=', auth()->user()->id)->pluck('user_id'))->first();
         } else {
             $groupName = $group->name;
         }

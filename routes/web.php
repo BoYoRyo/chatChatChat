@@ -80,4 +80,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('good/create/{groupId}/{conversationId}',[App\Http\Controllers\GoodController::class, 'create'])->name('good.create');
     //いいねをはずす
     Route::post('good/destroy/{conversationId}/{groupId}',[App\Http\Controllers\GoodController::class, 'destroy'])->name('good.destroy');
+    // グループ詳細画面へ遷移
+    Route::get('/group/show/{id}', [App\Http\Controllers\GroupController::class, 'show'])->name('group.show');
+    // グループ一覧画面に遷移
+    Route::get('/group/index', [App\Http\Controllers\GroupController::class, 'index'])->name('group.index');
 });

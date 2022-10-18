@@ -1,8 +1,10 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            <div class="flex">
-                <img src="{{ asset('icon/' . $friend->icon) }}" style="max-height:25px;">&nbsp;&nbsp;
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight flex">
+            <div class="bg-white">
+                <img src="{{ asset('icon/' . $friend->icon) }}" style="max-height:50px;" class="rounded-full">
+            </div>
+            <div class="ml-3 my-auto">
                 {{ $friend->name }}
             </div>
 

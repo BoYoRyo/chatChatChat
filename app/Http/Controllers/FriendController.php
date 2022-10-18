@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Friend;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class FriendController extends Controller
 {
@@ -48,6 +49,9 @@ class FriendController extends Controller
      */
     public function show($id)
     {
+        if($id == Auth::id()){
+            return view('user/edit')->with('user', auth()->user());
+        }
         $friend = User::find($id);
 
         return view('friend/show', compact('friend'));

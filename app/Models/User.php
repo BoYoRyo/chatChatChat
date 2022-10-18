@@ -60,6 +60,10 @@ class User extends Authenticatable
         return $this->hasMany(Member::class);
     }
 
+    public function member() {
+        return $this->hasOne(Member::class);
+    }
+
     public function conversation() {
         return $this->hasMany(conversation::class);
     }
