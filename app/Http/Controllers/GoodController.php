@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\good;
+use App\Models\Good;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class GoodController extends Controller
 {
@@ -18,17 +19,26 @@ class GoodController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * いいねをつける
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        
+        $good = new Good();
+        $good->create([
+            'conversation_id' => $request->conversationId,
+            'user_id' => Auth::id(),
+        ]);
+
+        $id = $request->groupId;
+        return redirect()->route('talk.show',$id);
+        
     }
 
     /**
-     * トーク画面で押したいいね情報を反映させる
+
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -73,13 +83,18 @@ class GoodController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * いいねをはずす
      *
      * @param  \App\Models\good  $good
      * @return \Illuminate\Http\Response
      */
-    public function destroy(good $good)
-    {
-        //
+    public function destroy(Request $request)
+    {   
+        // dd($request->conversationId);
+        $good = Good::where('conversation_id',$request->conversationId)->where('user_id',Auth::id());
+        $good->delete();
+        
+        $id = $request->groupId;
+        return redirect()->route('talk.show',$id);
     }
 }

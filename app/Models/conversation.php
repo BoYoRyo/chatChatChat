@@ -24,7 +24,7 @@ class conversation extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function good(){
-        return $this->hasOne(Good::class);
+    public function goods(){
+        return $this->hasMany(Good::class);
     }
 }

@@ -11,7 +11,13 @@ class Good extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+       'conversation_id',
+       'user_id',
+    ];
+
+
     public function conversation(){
-        return $this->hasOne(conversation::class);
+        return $this->belongsTo(conversation::class);
     }
 }

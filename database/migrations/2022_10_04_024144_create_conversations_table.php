@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('user_id')->references('id')->on('users');
             $table->integer('group_id')->references('id')->on('groups');
             $table->string('comment');
-            $table->string('good_id')->nullable();
+            $table->integer('good_id')->default(0);
             $table->timestamps();
         });
     }
