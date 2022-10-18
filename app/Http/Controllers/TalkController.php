@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\CreateRequest;
 use App\Models\Member;
 use App\Models\User;
+use App\Models\Good;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 
 class TalkController extends Controller
@@ -34,6 +36,7 @@ class TalkController extends Controller
             ->groupBy('group_id')
             ->orderBy('updated_at', 'DESC')
             ->get();
+
 
         return view('talk.index', compact('groups'));
     }
@@ -116,7 +119,70 @@ class TalkController extends Controller
             $groupName = $group->name;
         }
 
-        return view('talk.show', compact('group', 'groupName'));
+        //グッドテーブルの該当ユーザーid
+        // dd($group->conversation[0]->goods[0]->user_id);
+        
+        //conversation配列のうち、goodsのuser_idで自分のuser_idが入っているものをピックアップ(good済み)
+        //該当グループのコメント一覧のうち、自分のコメント以外のcoversationのidを格納
+        $commentIds = Conversation::where('group_id',$groupId)->where('user_id', '!=', auth()->user()->id)->pluck('id');
+        // dd($commentIds);
+        //1,3,5,7,9→ユーザー2のコメント一覧
+
+        //コメント5番をいいねしたユーザーのid一覧が取れる（☆）
+        // $userIds = Good::where('conversation_id',5)->pluck('user_id');
+        // 変換前の方が綺麗に配列の形になっている気がする
+        // dd($userIds);
+        // $userIds = (array)$userIds;
+        //→arryの中で1,2がとれてて、あんまり綺麗な配列ではない？
+        // dd($userIds);
+
+            // in_arrayは正しく動作した(◆)
+            // $hello = "hello";
+            // $array = [1,2,3,4,5];
+            // dd($array);
+            // if(in_array(Auth::id(),$array,true)){
+            //     dd($hello);
+            // }
+
+        //コメント5にいいねしたユーザ一覧が配列にある時だけ$gooded配列に格納する処理の実験(※)
+        // $gooded = array();
+        // $userIds = Good::where('conversation_id',5)->pluck('user_id');
+        
+        // $userIdsArray = $userIds->toArray();
+        // dd($userIdsArray);
+        // $userIds = (array)$userIds;
+        // dd($userIds[0]);
+        // if(in_array(Auth::id(),$userIdsArray,true)){
+            // array_push($gooded,$commentId);
+        //     array_push($gooded,1);
+        // }
+        // dd($gooded);
+
+        //$goodedには自分がいいねをつけたconversationのidが格納→それをviewで条件分岐させて黄色くする
+        $gooded = array();
+        if(!$commentIds->isEmpty()){
+            foreach($commentIds as $commentId){
+                //$userIdsは値があれば既に配列→commentId5で実証済み
+                $userIds = Good::where('conversation_id',$commentId)->pluck('user_id');
+                
+                //$userIdsを配列に変換できることは上で実証できた（☆）
+                $userIds = $userIds->toArray();
+                // dd($userIds);
+                //→foreachの中だから確認できない
+                
+                //自分のidとusetIdsが一致した時だけgoodedに追加
+                //なぜかここが効かない、条件がfalseになる
+                //◆よりin_arrayが正しいことがわかる→$userIdsかforeachが悪い
+                if(in_array(Auth::id(),$userIds,true)){
+                    // array_push($gooded,$commentId);
+                    array_push($gooded,$commentId);
+                }
+               
+            }
+                
+        }
+       
+        return view('talk.show', compact('group', 'groupName','gooded'));
     }
 
     /**

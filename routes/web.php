@@ -76,6 +76,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/group/create', [App\Http\Controllers\GroupController::class, 'create'])->name('group.create');
     // グループ作成する
     Route::get('/group/store', [App\Http\Controllers\GroupController::class, 'store'])->name('group.store');
+    //いいねをつける
+    Route::post('good/create/{groupId}/{conversationId}',[App\Http\Controllers\GoodController::class, 'create'])->name('good.create');
+    //いいねをはずす
+    Route::post('good/destroy/{conversationId}/{groupId}',[App\Http\Controllers\GoodController::class, 'destroy'])->name('good.destroy');
     // グループ詳細画面へ遷移
     Route::get('/group/show/{id}', [App\Http\Controllers\GroupController::class, 'show'])->name('group.show');
     // グループ一覧画面に遷移
