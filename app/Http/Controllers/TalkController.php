@@ -68,7 +68,7 @@ class TalkController extends Controller
         $group = Group::whereIn('id', $groupId)->where('type','0')->first();
 
         if($group != null) {
-            return redirect()->route('talk.show',$group->id);
+            return redirect()->route('talk.show',$group->id,);
         }
 
         // グループを生成
@@ -88,7 +88,7 @@ class TalkController extends Controller
         $member->user_id = $id;
         $member->save();
 
-        return redirect()->route('talk.show', $group->id);
+        return redirect()->route('talk.show', $group->id,);
     }
 
     /**
@@ -99,16 +99,18 @@ class TalkController extends Controller
      */
     public function show($id)
     {
+        // 画像が添付された場合の処理
+        
         $groupId = $id;
         $group = Group::find($groupId);
-
+        
         // 非表示フラグを0（表示）にする処理
         $member = Member::where('group_id',$groupId)->whereNot('user_id',auth()->id())->first();
         $member->invisible = 0;
         $member->save();
-
+        
         // $dialogUser = User::whereIn('id', Member::where('group_id', $groupId)->where('user_id', '!=', auth()->user()->id)->pluck('user_id'))->first();
-
+        
         if($group->type == 0){
             $groupName = User::whereIn('id', Member::where('group_id', $groupId)->where('user_id', '!=', auth()->user()->id)->pluck('user_id'))->first();
         } else {
