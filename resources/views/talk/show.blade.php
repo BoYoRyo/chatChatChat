@@ -35,25 +35,31 @@
                         class="px-0 w-full my-auto mx-1 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-black dark:placeholder-gray-400">
                         {{ $conversation->comment }}
                     </span>
+                    @if($conversation->image != null)
+                        <img src={{ asset( 'storage/img/' . $conversation->image ) }} style="width:150px;" >
+                    @endif
                 </div>
             @else
                 {{-- 相手側のコメント --}}
                 <div class="container mx-auto flex m-4 w-1/2 py-4 px-8 bg-white rounded dark:bg-gray-800">
                     <div class="bg-white">
                         <a href="{{ route('friend.show', $conversation->user->id) }}">
-                            <img src="{{ asset('icon/' . $conversation->user->icon) }}" style="max-height:40px;">
+                            <img src="{{ asset('storage/img/' . $conversation->user->image) }}" style="max-height:40px;">
                         </a>
                     </div>
                     <span
                         class="px-0 w-full my-auto mx-1 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-black dark:placeholder-gray-400">
                         {{ $conversation->comment }}
                     </span>
+                    @if($conversation->image != null)
+                        <img src={{ asset( 'storage/img/'.$conversation->image ) }} style="max-height:40px;" >
+                    @endif
                 </div>
             @endif
         @endforeach
     @endif
     {{-- トーク投稿 --}}
-    <form method="POST" action={{ route('conversation.store', ['group_id' => $group->id]) }}>
+    <form method="POST" action={{ route('conversation.store', ['group_id' => $group->id]) }} enctype="multipart/form-data">
         @csrf
         <div id="container">
             <div class="content">
@@ -74,10 +80,10 @@
                         </svg>
                         <input type="file" name="image" id="image" class="hidden" accept='image/*' onchange="previewImage(this);">
                     </label>
-                {{-- 画像プレビュー表示 --}}
-                    @if($filepath != null)
+                {{-- 画像プレビュー表示
+                    @if($filepath == null)
                         <img id="img_prv" class="img-thumbnail h-25 w-25 mb-3" src="/resources/storage/app/public{{ $filepath }}">
-                    @endif
+                    @endif --}}
             </div>
             {{-- 送信ボタン --}}
             <button class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-0 px-4 my-0 mx-2 rounded">send</button>

@@ -43,6 +43,13 @@ class ConversationController extends Controller
         $conversation->group_id = $request->group_id;
         $conversation->comment = $request->comment;
         $conversation->image = $request->image;
+        if($conversation->image != null) {
+            $originalName = $request->file('image')->getClientOriginalName();
+            // 日時追加
+            $name = date('Ymd_His').'_'.$originalName;
+            $request->file('image')->move('storage/img',$name);
+            $conversation->image = $name;
+        }
         $conversation->save();
 
         // そのグループに所属するmember全員のupdated_atを更新
