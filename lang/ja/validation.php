@@ -153,6 +153,9 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'memberId' => 'メンバー',
+        'groupName' => 'グループ名',
+    ],
 
 ];

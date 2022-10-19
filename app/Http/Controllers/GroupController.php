@@ -46,8 +46,11 @@ class GroupController extends Controller
         // メンバーが一人以上選択されていない、名前が未設定だとエラー
         $Validator = Validator::make($request->all(), [
             'memberId' => ['required'],
-            'name' => ['required'],
-        ]);
+            'groupName' => ['required'],
+        ],
+    [
+        'memberId.required' => 'メンバーは、2人以上選択してください。',
+    ]);
 
         if ($Validator->fails()) {
             return redirect()->route('group.create')
@@ -57,16 +60,17 @@ class GroupController extends Controller
 
         // 新規グループ作成
         $group = new Group();
-        $group->name = $request->name;
+        $group->name = $request->groupName;
         $group->type = 1;
-        if (request('icon')) {
-            $original = request()->file('icon')->getClientOriginalName();
-            $name = date('Ymd_His') . '_' . $original;
-            request()->file('icon')->move('icon', $name);
-            $group->icon = $name;
-        } else {
-            $group->icon = 'default_group_icon' . random_int(1, 5) . '.png';
-        }
+        $group->icon = 'default_group_icon' . random_int(1, 5) . '.png';
+        // if (request('icon')) {
+        //     $original = request()->file('icon')->getClientOriginalName();
+        //     $name = date('Ymd_His') . '_' . $original;
+        //     request()->file('icon')->move('icon', $name);
+        //     $group->icon = $name;
+        // } else {
+        //     $group->icon = 'default_group_icon' . random_int(1, 5) . '.png';
+        // }
         $group->save();
 
         $id = $group->id;

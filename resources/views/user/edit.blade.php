@@ -1,12 +1,16 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight flex">
-            {{ __('プロフィール') }}
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                stroke="currentColor" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-            </svg>
+            <div class="my-auto">
+                {{ __('プロフィール') }}
+            </div>
+            <div class="my-auto p-1">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                </svg>
+            </div>
         </h2>
     </x-slot>
 
@@ -14,7 +18,8 @@
     <div class="py-12">
 
         @if (Session::has('message'))
-            <div class="max-w-6xl mx-auto border px-4 py-3 rounded relative bg-amber-100 border-amber-400 text-amber-700">
+            <div
+                class="max-w-6xl mx-auto border px-4 py-3 rounded relative bg-amber-100 border-amber-400 text-amber-700">
                 {{ session('message') }}
             </div>
         @endif
@@ -25,22 +30,31 @@
                     @csrf
                     <div class="flex">
                         {{-- 画像 --}}
-                                        <script>
-                                            document.getElementById('preview').style.display="none";
-                                            function previewImage(obj) {
-                                                var fileReader = new FileReader();
-                                                fileReader.onload = (function() {
-                                                    originIcon.style.display ="none";
-                                                    document.getElementById('preview').src = fileReader.result;
-                                                });
-                                                fileReader.readAsDataURL(obj.files[0]);
-                                            }
-                                        </script>
+                        <script>
+                            document.getElementById('preview').style.display = "none";
+
+                            function previewImage(obj) {
+                                var fileReader = new FileReader();
+                                fileReader.onload = (function() {
+                                    originIcon.style.display = "none";
+                                    document.getElementById('preview').src = fileReader.result;
+                                });
+                                fileReader.readAsDataURL(obj.files[0]);
+                            }
+                        </script>
                         <div class="flex justify-center p-2 bg-white m-10">
                             <div class="relative">
                                 {{-- 元々のicon --}}
+<<<<<<< HEAD
                                 <img src="{{ asset('icon/' . $user->icon) }}" style="max-height:240px;" id="originIcon" alt="">
                                 <img style="max-height:240px;" class="rounded-full w-60 h-60" id="previewIcon">
+=======
+                                <img src="{{ asset('icon/' . $user->icon) }}" style="max-height:240px;" id="originIcon">
+                                {{-- アップロード後 --}}
+                                <img id="preview"
+                                    src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+                                    style="max-height:240px;" class="rounded-full w-60 h-60 object-cover ">
+>>>>>>> develop
                                 {{-- アップロードボタン --}}
                                 <div class="flex p-2 absolute top-60 right-0">
                                     <label class="cursor-pointer border-solid border-white rounded-full bg-white">
@@ -123,8 +137,10 @@
 
 
                             {{-- 変更ボタン --}}
-                            <button type="submit" class="bg-amber-300 hover:bg-amber-400 text-gray-800 font-semibold rounded px-4 py-2 w-40">変更</button>
-                            <button type="button" onclick="history.back()" class="bg-gray-500 hover:bg-gray-700 text-white font-semibold rounded px-4 py-2 w-40">戻る</button>
+                            <button type="submit"
+                                class="bg-amber-300 hover:bg-amber-400 text-gray-800 font-semibold rounded px-4 py-2 w-40">変更</button>
+                            <button type="button" onclick="history.back()"
+                                class="bg-gray-500 hover:bg-gray-700 text-white font-semibold rounded px-4 py-2 w-40">戻る</button>
 
                         </div>
                     </div>

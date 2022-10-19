@@ -29,7 +29,7 @@
 
                 {{-- 一言 --}}
                 <div class="flex justify-center font-semibold text-l text-gray-800 leading-tight p-2">
-                    <div class="mb-1">
+                    <div class="mb-1 max-w-md break-words inline-block">
                         <label class="block mb-0 text-sm font-medium text-gray-500">ひとこと</label>
                         {{ $friend->introduction }}
                     </div>

@@ -5,7 +5,7 @@
                 <div class="my-auto">
                     {{ __('フレンド') }}
                 </div>
-                <div class="my-auto">
+                <div class="my-auto p-1">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -44,22 +44,22 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-1">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg flex">
                     {{-- 画像 --}}
-                    <div class="p-6 bg-white border-b border-gray-200">
+                    <div class="p-6 bg-white my-auto">
                         <a href="{{ route('friend.show', $friend->follow_id) }}"><img
                                 src="{{ asset('icon/' . $friend->user->icon) }}" style="max-height:70px;"></a>
                     </div>
                     {{-- 名前 --}}
-                    <div class="ml-1 mt-11 bg-white flex-initial text: left; text-xl ">
+                    <div class="ml-1 bg-white flex-initial text: left; text-xl my-auto">
                         {{ $friend->user->name }}
                     </div>
                     {{-- ひとこと --}}
-                    <div class="ml-20 mt-11 bg-white flex-initial text: left; text-xl text-gray-500">
+                    <div class="ml-20 bg-white flex-initial text: left; text-xl text-gray-500 my-auto overflow-hidden max-w-2xl text-ellipsis">
                         {{ $friend->user->introduction }}
                     </div>
                     {{-- トークする --}}
-                    <div class="my-10 ml-auto mr-10">
+                    <div class="my-auto ml-auto mr-10">
                         <form method="GET" action={{ route('talk.store', $friend->follow_id) }} >
-                            <button class="bg-amber-300 hover:bg-amber-500 text-white font-semibold hover:text-slate-700 py-4 px-4 border border-slate-700 hover:border-transparent rounded">
+                            <button class="bg-amber-300 hover:bg-amber-500 text-white font-semibold hover:text-slate-700 p-3 border border-slate-700 hover:border-transparent rounded">
                                 トークする
                             </button>
                         </form>
