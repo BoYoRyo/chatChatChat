@@ -83,8 +83,5 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/group/show/{id}', [App\Http\Controllers\GroupController::class, 'show'])->name('group.show');
     // グループ一覧画面に遷移
     Route::get('/group/index', [App\Http\Controllers\GroupController::class, 'index'])->name('group.index');
-
-    // 画像プレビューへ遷移、登録
-    Route::post('/talk/show/{id}',[App\Http\Controllers\ImageController::class, "store"])->name('image.store');
     
 });
