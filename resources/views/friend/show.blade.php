@@ -44,6 +44,18 @@
                         </button>
                     </form>
                 </div>
+
+                {{-- トークボタン --}}
+                <div class="flex justify-center mb-2">
+                    <form method="GET" action="{{ route('friend.destroy', $friend->id) }}">
+                        @csrf
+                        @method('delete')
+                        <button type="submit"
+                            class="border-1 border-amber-300 hover:bg-amber-400 text-gray-400 hover:text-gray-700 font-semibold rounded px-4 py-2 w-40">
+                            ブロック
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

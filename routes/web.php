@@ -38,7 +38,9 @@ Route::group(['middleware' => 'auth'], function () {
     // 友達一覧画面に遷移
     Route::get('/friend/index', [FriendController::class, 'index'])->name('friend.index');
     // 友達詳細画面に遷移
-    Route::get('/friend/show/{id}', [App\Http\Controllers\FriendController::class, 'show'])->name('friend.show');
+    Route::get('/friend/show/{id}', [FriendController::class, 'show'])->name('friend.show');
+    //フレンドブロック
+    Route::get('/friend/destroy/{id}', [FriendController::class, 'destroy'])->name('friend.destroy');
 
 
     // プロフィール画面に遷移
@@ -86,5 +88,5 @@ Route::group(['middleware' => 'auth'], function () {
 
     // 画像プレビューへ遷移、登録
     Route::post('/talk/show/{id}',[App\Http\Controllers\ImageController::class, "store"])->name('image.store');
-    
+
 });
