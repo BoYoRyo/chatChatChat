@@ -30,7 +30,7 @@
         @foreach ($group->conversation as $conversation)
             @if ($conversation->user_id == Auth::id())
                 {{-- ユーザー側のコメント --}}
-                <div class="container mx-auto  w-1/2 py-4 text-right rounded-2xl flex flex-row-reverse">
+                <div class="container mx-auto  w-1/2 py-2 text-right rounded-2xl flex flex-row-reverse">
                     <div
                         class="max-w-md break-words inline-block my-auto px-3 py-3 text-l text-gray-900 bg-white dark:bg-gray-800 dark:text-black rounded-2xl border">
                         {{ $conversation->comment }}
@@ -45,7 +45,7 @@
                 </div>
             @else
                 {{-- 相手側のコメント --}}
-                <div class="container mx-auto flex m-4 w-1/2 py-4 pl-3 pr-8">
+                <div class="container mx-auto flex m-4 w-1/2 pl-3 pr-8">
                     {{-- icon --}}
                     <div class="mr-3">
                         <a href="{{ route('friend.show', $conversation->user->id) }}">
@@ -60,7 +60,7 @@
                             </div>
                             {{-- こめんと --}}
                             <div
-                                class="max-w-md break-words inline-block my-auto px-3 py-3 text-l text-gray-900 bg-white dark:bg-gray-800 dark:text-black rounded-2xl border">
+                                class="max-w-md break-words inline-block my-auto px-3 py-0 text-l text-gray-900 bg-white dark:bg-gray-800 dark:text-black rounded-2xl border">
                                 {{ $conversation->comment }}
                                 @if ($conversation->image != null)
                                     <img src={{ asset('storage/img/' . $conversation->image) }} style="width:150px;">
