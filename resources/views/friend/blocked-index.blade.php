@@ -21,8 +21,7 @@
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg flex">
                     {{-- 画像 --}}
                     <div class="p-6 bg-white my-auto">
-                        <a href="{{ route('friend.show', $friend->follow_id) }}"><img
-                                src="{{ asset('icon/' . $friend->user->icon) }}" style="max-height:70px;"></a>
+                        <img src="{{ asset('icon/' . $friend->user->icon) }}" style="max-height:70px;">
                     </div>
                     {{-- 名前 --}}
                     <div class="ml-1 bg-white flex-initial text: left; text-xl my-auto">
