@@ -16,28 +16,44 @@
         </h2>
     </x-slot>
 
-    {{-- 友達一覧 --}}
     <div class="py-12">
+        {{-- グループ作成フォーム --}}
         <form action="{{ route('group.store') }}" method="get" enctype="multipart/form-data">
+            @csrf
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-1">
                 <div class="py-3 bg-white overflow-hidden shadow-sm sm:rounded-lg">
+
                     <div class="flex items-center my-auto">
-                        <div>
-                            グループ名：<input type="text" name="name">
-                        </div>
-                        <div>
+                        {{-- <div class="ml-3">
                             アイコン：<input type="file" name="icon">
-                        </div>
-                        <div>
-                            <button
-                            class="bg-amber-300 hover:bg-amber-500 border-amber-300 hover:border-slate-700 text-base border text-white p-2 my-auto rounded"
-                            type="submit">
-                            グループ作成
-                        </button>
+                            <img src="{{ asset('icon/' . 'default_group_icon' . random_int(1, 5) . '.png') }}" style="max-height:80px;" class="rounded-full">
+                        </div> --}}
+                        <div class="font-semibold text-l text-gray-800 leading-tight p-2 my-auto ml-4">
+                            <input type="text" name="groupName"
+                                class="bg-gray-50 border border-gray-300 text-gray-800 text-sm rounded focus:ring-amber-400 focus:border-amber-400 block w-full h-11"
+                                placeholder="グループ名" value="{{ old('groupName') }}">
+                            </div>
+                            <div>
+                                <button
+                                class="bg-amber-300 hover:bg-amber-500 border-amber-300 hover:border-slate-700 text-base border text-white p-2 my-auto rounded"
+                                type="submit">
+                                グループ作成
+                            </button>
                         </div>
                     </div>
+                    @if ($errors->any())
+                    <div class="text-red-700 ml-7">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 </div>
             </div>
+
+            {{-- 友達一覧 --}}
             @foreach ($friends as $friend)
                 <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-1">
                     <div class="py-3 bg-white overflow-hidden shadow-sm sm:rounded-lg">
