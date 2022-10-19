@@ -29,9 +29,11 @@
                             アイコン：<input type="file" name="icon">
                         </div>
                         <div>
-                            <button type="submit">
-                                作成
-                            </button>
+                            <button
+                            class="bg-amber-300 hover:bg-amber-500 border-amber-300 hover:border-slate-700 text-base border text-white p-2 my-auto rounded"
+                            type="submit">
+                            グループ作成
+                        </button>
                         </div>
                     </div>
                 </div>
