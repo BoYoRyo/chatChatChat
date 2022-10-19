@@ -45,16 +45,8 @@
                         <div class="flex justify-center p-2 bg-white m-10">
                             <div class="relative">
                                 {{-- 元々のicon --}}
-<<<<<<< HEAD
                                 <img src="{{ asset('icon/' . $user->icon) }}" style="max-height:240px;" id="originIcon" alt="">
                                 <img style="max-height:240px;" class="rounded-full w-60 h-60" id="previewIcon">
-=======
-                                <img src="{{ asset('icon/' . $user->icon) }}" style="max-height:240px;" id="originIcon">
-                                {{-- アップロード後 --}}
-                                <img id="preview"
-                                    src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
-                                    style="max-height:240px;" class="rounded-full w-60 h-60 object-cover ">
->>>>>>> develop
                                 {{-- アップロードボタン --}}
                                 <div class="flex p-2 absolute top-60 right-0">
                                     <label class="cursor-pointer border-solid border-white rounded-full bg-white">
