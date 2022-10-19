@@ -5,7 +5,7 @@
                 <div class="my-auto">
                     {{ __('グループ') }}
                 </div>
-                <div class="my-auto">
+                <div class="my-auto p-1">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -59,7 +59,7 @@
                         {{ $group->name }}
                     </div>
                     {{-- トークする --}}
-                    <div class="my-10 ml-auto mr-10">
+                    <div class="my-auto ml-auto mr-10">
                         <form method="GET" action={{ route('talk.show', $group->id) }}>
                             <button
                                 class="bg-amber-300 hover:bg-amber-500 text-white font-semibold hover:text-slate-700 py-4 px-4 border border-slate-700 hover:border-transparent rounded">

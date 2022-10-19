@@ -5,7 +5,7 @@
                 <div class="my-auto">
                     {{ __('トーク一覧') }}
                 </div>
-                <div class="my-auto">
+                <div class="my-auto p-1">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -30,7 +30,7 @@
                 <a href="/talk/show/{{ $group->group_id }}">
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg flex">
                         {{-- 画像 --}}
-                        <div class="p-6 bg-white border-b border-gray-200">
+                        <div class="p-6 bg-white my-auto">
                             @if ($group->group->type == '0')
                                 <img src="{{ asset('icon/' . $group->user->icon) }}" style="max-height:70px;" class="rounded-full">
                             @else
@@ -38,7 +38,7 @@
                             @endif
                         </div>
                         {{-- 名前と最新のトーク --}}
-                        <div class="ml-1 m-4 bg-white flex-initial text: left; text-xl ">
+                        <div class="ml-1 m-4 bg-white flex-initial text: left; text-xl my-auto">
                             {{-- 名前 --}}
                             <div class="text: left; text-xl ">
                                 @if ($group->group->type == '0')
@@ -48,7 +48,7 @@
                                 @endif
                             </div>
                             {{-- 最新のトーク --}}
-                            <div class="text: left; text-l text-gray-500 mt-2">
+                            <div class="text: left; text-l text-gray-500 mt-2 overflow-hidden max-w-3xl text-ellipsis">
                                 @if ($group->conversation)
                                     {{-- 何分前のメッセージか表示 --}}
                                     {{ $group->conversation->created_at->diffForHumans() }}
@@ -58,7 +58,7 @@
                             </div>
                         </div>
                         {{-- 非表示ボタン --}}
-                        <div class="my-10 ml-auto mr-10">
+                        <div class="my-auto ml-auto mr-10">
                             <form action={{ route('talk.update',$group->id) }} type="get">
                                 <button class="bg-transparent hover:bg-slate-700 text-slate-500 font-semibold hover:text-slate-700 py-4 px-4 border border-slate-700 hover:border-transparent rounded" name="invisible" type="submit">
                                     非表示にする
