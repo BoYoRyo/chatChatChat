@@ -43,6 +43,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/friend/show/{id}', [FriendController::class, 'show'])->name('friend.show');
     //フレンドブロック
     Route::get('/friend/destroy/{id}', [FriendController::class, 'destroy'])->name('friend.destroy');
+    //フレンドブロック
+    Route::get('/friend/cancel/{id}', [FriendController::class, 'cancelDestroy'])->name('friend.cancelDestroy');
 
 
     // プロフィール画面に遷移

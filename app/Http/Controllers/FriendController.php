@@ -63,7 +63,7 @@ class FriendController extends Controller
      */
     public function show($id)
     {
-        if($id == Auth::id()){
+        if ($id == Auth::id()) {
             return view('user/edit')->with('user', auth()->user());
         }
         $friend = User::find($id);
@@ -108,13 +108,46 @@ class FriendController extends Controller
         $friend->save();
 
         // １対１のトークをしていた場合、メンバーテーブルのブロックフラグをたてる→トーク一覧から消える
-        $member = Member::whereIn('group_id', Group::whereIn('id',Member::whereIn('user_id', Member::where('user_id',auth()->user()->id)->pluck('group_id'))->where('user_id', $id)->pluck('group_id'))
-        ->where('type','0')->get('id'))
-        ->where('user_id', $id)
-        ->first();
-        $member->blocked = true;
-        $member->save();
+        $member = Member::whereIn('group_id', Group::whereIn('id', Member::whereIn('user_id', Member::where('user_id', auth()->user()->id)->pluck('group_id'))
+            ->where('user_id', $id)
+            ->pluck('group_id'))
+            ->where('type', '0')->get('id'))
+            ->where('user_id', $id)
+            ->first();
+
+        if ($member) {
+            $member->blocked = 1;
+            $member->save();
+        }
 
         return redirect()->route('friend.index');
+    }
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function cancelDestroy($id)
+    {
+        // フレンドテーブルのブロックフラグを消す→フレンド一覧に復帰
+        $friend = Friend::where('user_id', Auth::id())->where('follow_id', $id)->first();
+        $friend->blocked = false;
+        $friend->save();
+
+        // １対１のトークをしていた場合、メンバーテーブルのブロックフラグを消す→トーク一覧から復帰
+        $member = Member::whereIn('group_id', Group::whereIn('id', Member::whereIn('user_id', Member::where('user_id', auth()->user()->id)->pluck('group_id'))
+            ->where('user_id', $id)
+            ->pluck('group_id'))
+            ->where('type', '0')->get('id'))
+            ->where('user_id', $id)
+            ->first();
+
+        if ($member) {
+            $member->blocked = 0;
+            $member->save();
+        }
+
+        return redirect()->route('friend.blockedIndex');
     }
 }
