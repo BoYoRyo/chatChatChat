@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('members', function (Blueprint $table) {
-            $table->char('blocked', 1)->default('0');
+            $table->boolean('blocked')->default(false);
         });
     }
 

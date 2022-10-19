@@ -34,6 +34,15 @@
                         </div>
                     </form>
                 </div>
+                <div class="px-2 my-auto">
+                    <a href="{{ route('friend.blockedIndex') }}">
+                        <button
+                            class="bg-amber-300 hover:bg-amber-500 border-amber-300 hover:border-slate-700 text-base border text-white p-2 my-auto rounded"
+                            type="button">
+                            ブロックリスト
+                        </button>
+                    </a>
+                </div>
             </div>
         </h2>
     </x-slot>
