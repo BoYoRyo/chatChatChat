@@ -27,13 +27,12 @@ class TalkController extends Controller
         // userIDで絞って、相手のIDでiconを持ってくる
         // ↓ログインユーザーのIDで絞ったグループIDだけでメンバーテーブルを検索（ログインユーザーIDを除外して）
         // SELECT * FROM members WHERE group_id IN (SELECT group_id FROM members WHERE user_id = 1) AND user_id != 1;
-        $groups = Member::whereIn('group_id', Member::where('user_id', auth()->user()->id)->pluck('group_id'))
+        $groups = Member::whereIn('group_id', Member::where('user_id', auth()->user()->id)->where('invisible',0)->pluck('group_id'))
             ->where('user_id', '!=', auth()->user()->id)
             ->where('blocked', 0)
             ->selectRaw('id')
             ->selectRaw('group_id')
             ->selectRaw('user_id')
-            ->selectRaw('invisible')
             ->groupBy('group_id')
             ->orderBy('updated_at', 'DESC')
             ->get();
@@ -110,7 +109,7 @@ class TalkController extends Controller
         $group = Group::find($groupId);
 
         // 非表示フラグを0（表示）にする処理
-        $member = Member::where('group_id',$groupId)->whereNot('user_id',auth()->id())->first();
+        $member = Member::where('group_id',$groupId)->where('user_id',auth()->id())->first();
         $member->invisible = 0;
         $member->save();
 
@@ -209,9 +208,10 @@ class TalkController extends Controller
     public function update($id)
     {
         // トークを非表示にするよう表示フラグを変更
-        $member = Member::find($id);
-        $member->invisible = 1;
-        $member->save();
+        $groupMember = Member::find($id);
+        $authUser = Member::where('group_id',$groupMember->group_id)->where('user_id',Auth::id())->first();
+        $authUser->invisible = 1;
+        $authUser->save();
 
         return redirect()->route('talk.index');
     }
