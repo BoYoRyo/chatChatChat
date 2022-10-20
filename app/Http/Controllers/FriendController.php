@@ -8,6 +8,7 @@ use App\Models\Member;
 use App\Models\User;
 use App\Models\Group;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 
 
 class FriendController extends Controller
@@ -133,7 +134,7 @@ class FriendController extends Controller
             $member->save();
         }
 
-        return redirect()->route('friend.index');
+        return redirect()->route('friend.show', $id);
     }
     /**
      * Remove the specified resource from storage.
@@ -161,6 +162,7 @@ class FriendController extends Controller
             $member->save();
         }
 
-        return redirect()->route('friend.blockedIndex');
+        // 元いたページへ
+        return Redirect::back();
     }
 }
