@@ -30,28 +30,15 @@
                     @csrf
                     <div class="flex">
                         {{-- 画像 --}}
-                        <script>
-                            document.getElementById('preview').style.display = "none";
-
-                            function previewImage(obj) {
-                                var fileReader = new FileReader();
-                                fileReader.onload = (function() {
-                                    originIcon.style.display = "none";
-                                    document.getElementById('preview').src = fileReader.result;
-                                });
-                                fileReader.readAsDataURL(obj.files[0]);
-                            }
-                        </script>
                         <div class="flex justify-center p-2 bg-white m-10">
                             <div class="relative">
                                 {{-- 元々のicon --}}
-                                <img src="{{ asset('icon/' . $user->icon) }}" style="max-height:240px;" id="originIcon" alt="">
-                                <img style="max-height:240px;" class="rounded-full w-60 h-60" id="previewIcon">
-                                {{-- アップロードボタン --}}
+                                <img src="{{ asset('icon/' . $user->icon) }}" style="max-height:240px;" class="rounded-full w-60 h-60 object-cover" id="originIcon" alt="">
                                 <div class="flex p-2 absolute top-60 right-0">
                                     <label class="cursor-pointer border-solid border-white rounded-full bg-white">
-                                        {{-- アップロード後 --}}
+                                        {{-- アップロードするための空のファイル --}}
                                         <input type="file" name="icon" class="hidden" accept='image/*' onchange="previewImage(this);">
+                                        {{-- アップロードボタン --}}
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -59,10 +46,6 @@
                                         <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
                                     </svg>
-                                {{-- <img id="preview"
-                                src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
-                                style="max-height:240px;"
-                                class="rounded-full w-60 h-60 object-cover "> --}}
                                     </label>
                                 </div>
                             </div>
@@ -130,9 +113,9 @@
 
                             {{-- 変更ボタン --}}
                             <button type="submit"
-                                class="bg-amber-300 hover:bg-amber-400 text-gray-800 font-semibold rounded px-4 py-2 w-40">変更</button>
+                                class="bg-amber-300 hover:bg-amber-400 text-gray-800 font-semibold rounded px-4 py-2 w-40 m-4">変更</button>
                             <button type="button" onclick="history.back()"
-                                class="bg-gray-500 hover:bg-gray-700 text-white font-semibold rounded px-4 py-2 w-40">戻る</button>
+                                class="bg-gray-500 hover:bg-gray-700 text-white font-semibold rounded px-4 py-2 w-40 m-4">戻る</button>
 
                         </div>
                     </div>
@@ -140,7 +123,7 @@
             </div>
         </div>
     </div>
-    <!-- 以下Scripts -->
+<!-- 以下Scripts 画像プレビューに使用するイベント -->
     <script src="{{ asset('js/app.js') }}" defer></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script>
@@ -153,7 +136,7 @@
             var reader = new FileReader();
             
             reader.onload = function (e) {
-                $("#previewIcon").attr('src', e.target.result);
+                $("#originIcon").attr('src', e.target.result);
             }
 
             reader.readAsDataURL(e.target.files[0]);
