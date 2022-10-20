@@ -8,6 +8,7 @@ use App\Models\Member;
 use App\Models\User;
 use App\Models\Group;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 
 
 class FriendController extends Controller
@@ -63,12 +64,25 @@ class FriendController extends Controller
      */
     public function show($id)
     {
+        // グループ詳細から自分のアイコンをクリックした場合、自分のプロフィール画面へ
         if ($id == Auth::id()) {
             return view('user/edit')->with('user', auth()->user());
         }
+
+        // ユーザーの詳細情報取得
         $friend = User::find($id);
 
-        return view('friend/show', compact('friend'));
+        // ユーザーとの関係を取得
+        $followStatus = Friend::where('user_id', Auth::id())->where('follow_id', $id)->value('blocked');
+        if($followStatus === 0){
+            $relationship = 'friend'; //フォローしている
+        } else if($followStatus === 1){
+            $relationship = 'blockedFriend'; //ブロックした
+        } else {
+            $relationship = 'other'; //他人
+        }
+
+        return view('friend/show', compact('friend', 'relationship'));
     }
 
     /**
@@ -120,7 +134,7 @@ class FriendController extends Controller
             $member->save();
         }
 
-        return redirect()->route('friend.index');
+        return redirect()->route('friend.show', $id);
     }
     /**
      * Remove the specified resource from storage.
@@ -148,6 +162,7 @@ class FriendController extends Controller
             $member->save();
         }
 
-        return redirect()->route('friend.blockedIndex');
+        // 元いたページへ
+        return Redirect::back();
     }
 }
