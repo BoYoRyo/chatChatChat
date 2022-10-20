@@ -63,12 +63,25 @@ class FriendController extends Controller
      */
     public function show($id)
     {
+        // グループ詳細から自分のアイコンをクリックした場合、自分のプロフィール画面へ
         if ($id == Auth::id()) {
             return view('user/edit')->with('user', auth()->user());
         }
+
+        // ユーザーの詳細情報取得
         $friend = User::find($id);
 
-        return view('friend/show', compact('friend'));
+        // ユーザーとの関係を取得
+        $followStatus = Friend::where('user_id', Auth::id())->where('follow_id', $id)->value('blocked');
+        if($followStatus === 0){
+            $relationship = 'friend'; //フォローしている
+        } else if($followStatus === 1){
+            $relationship = 'blockedFriend'; //ブロックした
+        } else {
+            $relationship = 'other'; //他人
+        }
+
+        return view('friend/show', compact('friend', 'relationship'));
     }
 
     /**
@@ -104,7 +117,7 @@ class FriendController extends Controller
     {
         // フレンドテーブルのブロックフラグをたてる→フレンド一覧から消える
         $friend = Friend::where('user_id', Auth::id())->where('follow_id', $id)->first();
-        $friend->blocked = true;
+        $friend = true;
         $friend->save();
 
         // １対１のトークをしていた場合、メンバーテーブルのブロックフラグをたてる→トーク一覧から消える
@@ -116,7 +129,7 @@ class FriendController extends Controller
             ->first();
 
         if ($member) {
-            $member->blocked = 1;
+            $member = 1;
             $member->save();
         }
 
@@ -132,7 +145,7 @@ class FriendController extends Controller
     {
         // フレンドテーブルのブロックフラグを消す→フレンド一覧に復帰
         $friend = Friend::where('user_id', Auth::id())->where('follow_id', $id)->first();
-        $friend->blocked = false;
+        $friend = false;
         $friend->save();
 
         // １対１のトークをしていた場合、メンバーテーブルのブロックフラグを消す→トーク一覧から復帰
@@ -144,7 +157,7 @@ class FriendController extends Controller
             ->first();
 
         if ($member) {
-            $member->blocked = 0;
+            $member = 0;
             $member->save();
         }
 
