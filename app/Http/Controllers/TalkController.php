@@ -27,12 +27,12 @@ class TalkController extends Controller
         // userIDで絞って、相手のIDでiconを持ってくる
         // ↓ログインユーザーのIDで絞ったグループIDだけでメンバーテーブルを検索（ログインユーザーIDを除外して）
         // SELECT * FROM members WHERE group_id IN (SELECT group_id FROM members WHERE user_id = 1) AND user_id != 1;
-        $groups = Member::whereIn('group_id', Member::where('user_id', auth()->user()->id)->pluck('group_id'))
+        $groups = Member::whereIn('group_id', Member::where('user_id', auth()->user()->id)->where('invisible',0)->pluck('group_id'))
             ->where('user_id', '!=', auth()->user()->id)
+            ->where('blocked', 0)
             ->selectRaw('id')
             ->selectRaw('group_id')
             ->selectRaw('user_id')
-            ->selectRaw('invisible')
             ->groupBy('group_id')
             ->orderBy('updated_at', 'DESC')
             ->get();
@@ -104,17 +104,17 @@ class TalkController extends Controller
     public function show($id)
     {
         // 画像が添付された場合の処理
-        
+
         $groupId = $id;
         $group = Group::find($groupId);
-        
+
         // 非表示フラグを0（表示）にする処理
-        $member = Member::where('group_id',$groupId)->whereNot('user_id',auth()->id())->first();
+        $member = Member::where('group_id',$groupId)->where('user_id',auth()->id())->first();
         $member->invisible = 0;
         $member->save();
-        
+
         // $dialogUser = User::whereIn('id', Member::where('group_id', $groupId)->where('user_id', '!=', auth()->user()->id)->pluck('user_id'))->first();
-        
+
         if($group->type == 0){
             $groupName = User::whereIn('id', Member::where('group_id', $groupId)->where('user_id', '!=', auth()->user()->id)->pluck('user_id'))->first();
         } else {
@@ -123,7 +123,7 @@ class TalkController extends Controller
 
         //グッドテーブルの該当ユーザーid
         // dd($group->conversation[0]->goods[0]->user_id);
-        
+
         //conversation配列のうち、goodsのuser_idで自分のuser_idが入っているものをピックアップ(good済み)
         //該当グループのコメント一覧のうち、自分のコメント以外のcoversationのidを格納
         $commentIds = Conversation::where('group_id',$groupId)->where('user_id', '!=', auth()->user()->id)->pluck('id');
@@ -149,7 +149,7 @@ class TalkController extends Controller
         //コメント5にいいねしたユーザ一覧が配列にある時だけ$gooded配列に格納する処理の実験(※)
         // $gooded = array();
         // $userIds = Good::where('conversation_id',5)->pluck('user_id');
-        
+
         // $userIdsArray = $userIds->toArray();
         // dd($userIdsArray);
         // $userIds = (array)$userIds;
@@ -166,12 +166,12 @@ class TalkController extends Controller
             foreach($commentIds as $commentId){
                 //$userIdsは値があれば既に配列→commentId5で実証済み
                 $userIds = Good::where('conversation_id',$commentId)->pluck('user_id');
-                
+
                 //$userIdsを配列に変換できることは上で実証できた（☆）
                 $userIds = $userIds->toArray();
                 // dd($userIds);
                 //→foreachの中だから確認できない
-                
+
                 //自分のidとusetIdsが一致した時だけgoodedに追加
                 //なぜかここが効かない、条件がfalseになる
                 //◆よりin_arrayが正しいことがわかる→$userIdsかforeachが悪い
@@ -179,11 +179,11 @@ class TalkController extends Controller
                     // array_push($gooded,$commentId);
                     array_push($gooded,$commentId);
                 }
-               
+
             }
-                
+
         }
-       
+
         return view('talk.show', compact('group', 'groupName','gooded'));
     }
 
@@ -208,9 +208,10 @@ class TalkController extends Controller
     public function update($id)
     {
         // トークを非表示にするよう表示フラグを変更
-        $member = Member::find($id);
-        $member->invisible = 1;
-        $member->save();
+        $groupMember = Member::find($id);
+        $authUser = Member::where('group_id',$groupMember->group_id)->where('user_id',Auth::id())->first();
+        $authUser->invisible = 1;
+        $authUser->save();
 
         return redirect()->route('talk.index');
     }

@@ -53,7 +53,7 @@ class ConversationController extends Controller
         $conversation->save();
 
         // そのグループに所属するmember全員のupdated_atを更新
-        Member::where('group_id', $request->group_id)->update(['updated_at' => now()]);
+        Member::where('group_id', $request->group_id)->update(['updated_at' => now(),'invisible' => 0 ]);
 
         return redirect()->route('talk.show',$request->group_id);
     }
