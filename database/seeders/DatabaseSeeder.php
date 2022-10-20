@@ -25,7 +25,8 @@ class DatabaseSeeder extends Seeder
 
         for ($i = 0; $i < 10; $i++) {
             User::create([
-                'name' => Str::random(10),
+                // 'name' => Str::random(10),
+                'name' => "ユーザー" . $i + 1,
                 'email' => Str::random(7).'@example.com',
                 'password' => Hash::make('12345678'),
                 'account_id' => Str::random(8),
@@ -78,6 +79,18 @@ class DatabaseSeeder extends Seeder
             'group_id' => 3,
             'user_id' => 4,
         ]);
+
+        Group::create([
+            'type' => 1,
+            'name' => 'テストグループ',
+            'icon' => 'default_group_icon' . random_int(1, 5) . '.png',
+        ]);
+        for ($i = 0; $i < 3; $i++) {
+            Member::create([
+                'group_id' => 4,
+                'user_id' => $i + 1,
+            ]);
+        }
 
         for ($i = 1; $i < 10; $i++) {
             Conversation::create([
