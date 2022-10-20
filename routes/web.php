@@ -37,10 +37,14 @@ require __DIR__ . '/auth.php';
 Route::group(['middleware' => 'auth'], function () {
     // 友達一覧画面に遷移
     Route::get('/friend/index', [FriendController::class, 'index'])->name('friend.index');
+    // ブロック一覧画面に遷移
+    Route::get('/friend/blocked/index', [FriendController::class, 'blockedIndex'])->name('friend.blockedIndex');
     // 友達詳細画面に遷移
     Route::get('/friend/show/{id}', [FriendController::class, 'show'])->name('friend.show');
     //フレンドブロック
     Route::get('/friend/destroy/{id}', [FriendController::class, 'destroy'])->name('friend.destroy');
+    //フレンドブロック
+    Route::get('/friend/cancel/{id}', [FriendController::class, 'cancelDestroy'])->name('friend.cancelDestroy');
 
 
     // プロフィール画面に遷移

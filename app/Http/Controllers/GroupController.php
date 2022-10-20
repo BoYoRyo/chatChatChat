@@ -31,7 +31,7 @@ class GroupController extends Controller
      */
     public function create()
     {
-        $friends = Friend::where('user_id', auth()->user()->id)->get();
+        $friends = Friend::where('user_id', auth()->user()->id)->where('blocked', 0)->get();
         return view('group.create', compact('friends'));
     }
 
