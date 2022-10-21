@@ -92,5 +92,5 @@ Route::group(['middleware' => 'auth'], function () {
     // グループにメンバーを追加する画面へ遷移
     Route::get('/group/edit/{id}', [App\Http\Controllers\GroupController::class, 'edit'])->name('group.edit');
     // グループにメンバーを追加
-    Route::post('/group/update', [App\Http\Controllers\GroupController::class, 'update'])->name('group.update');
+    Route::post('/group/update/{id}', [App\Http\Controllers\GroupController::class, 'update'])->name('group.update');
 });

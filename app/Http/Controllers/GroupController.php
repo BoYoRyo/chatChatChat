@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 
 
 class GroupController extends Controller
@@ -122,12 +123,13 @@ class GroupController extends Controller
     public function edit($id)
     {
         // グループメンバー以外のフレンズを表示
+        $group = Group::find($id);
         $wantAddFriends = Friend::where('user_id', auth()->user()->id)
         ->whereNotIn('follow_id',Member::where('group_id',$id)->pluck('user_id'))
         ->where('blocked', 0)
         ->get();
         
-        return view('group.edit', compact('wantAddFriends'));
+        return view('group.edit', compact('wantAddFriends','group'));
     }
 
     /**
@@ -137,9 +139,23 @@ class GroupController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request,$id)
     {
+        // dd($request);
         // グループにメンバーを追加
+        foreach ($request->user_id as $user_id) {
+            $member[] = array(
+                'group_id' => $id,
+                'user_id' => $user_id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            );
+            
+        }
+
+        DB::table('members')->insert($member);
+        
+        return Redirect::back();
     }
 
     /**
