@@ -1,6 +1,11 @@
 <?php
 
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
+use App\Http\Controllers\FriendController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\AddFriendsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,5 +19,74 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return Inertia::render('Welcome', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
+    ]);
+});
+
+Route::get('/dashboard', function () {
+    return Inertia::render('Dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+require __DIR__ . '/auth.php';
+
+// ログイン時のみ実行できるルーティング
+Route::group(['middleware' => 'auth'], function () {
+    // 友達一覧画面に遷移
+    Route::get('/friend/index', [FriendController::class, 'index'])->name('friend.index');
+    // ブロック一覧画面に遷移
+    Route::get('/friend/blocked/index', [FriendController::class, 'blockedIndex'])->name('friend.blockedIndex');
+    // 友達詳細画面に遷移
+    Route::get('/friend/show/{id}', [FriendController::class, 'show'])->name('friend.show');
+    //フレンドブロック
+    Route::get('/friend/destroy/{id}', [FriendController::class, 'destroy'])->name('friend.destroy');
+    //フレンドブロック
+    Route::get('/friend/cancel/{id}', [FriendController::class, 'cancelDestroy'])->name('friend.cancelDestroy');
+
+
+    // プロフィール画面に遷移
+    Route::get('/user/edit', [UserController::class, 'edit'])->name('user.edit');
+    // プロフィール更新
+    Route::post('/user/update', [UserController::class, 'update'])->name('user.update');
+    //フレンド検索画面に遷移
+    Route::get('add/index', [AddFriendsController::class, 'index'])->name('add.index');
+    //フレンド検索
+    Route::post('add/show', [AddFriendsController::class, 'show'])->name('add.show');
+    //フレンド追加
+    Route::get('add/connect/{id}', [AddFriendsController::class, 'connect'])->name('add.connect');
+    //フレンド登録完了画面に遷移
+    Route::get('add/finished', [AddFriendsController::class, 'finished'])->name('add.finished');
+    Route::post('/user/update', [App\Http\Controllers\UserController::class, 'update'])->name('user.update');
+
+    // トーク一覧を表示する
+    Route::get('/talk/index', [App\Http\Controllers\TalkController::class, "index"])->name('talk.index');
+
+    // トークを開始する
+    Route::get('/talk/store/{id}', [App\Http\Controllers\TalkController::class, "store"])->name('talk.store');
+    Route::post('/conversation/store', [App\Http\Controllers\ConversationController::class, "store"])->name('conversation.store');
+
+    // トーク画面を表示する
+    Route::get('/talk/show/{id}', [App\Http\Controllers\TalkController::class, "show"])->name('talk.show');
+
+    // トークを非表示にする
+    Route::get('/talk/update/{id}',[App\Http\Controllers\TalkController::class, "update"])->name('talk.update');
+
+    Route::get('/friend/index', [App\Http\Controllers\FriendController::class, 'index'])->name('friend.index');
+    // Route::resource('friend', FriendController::class);
+
+    // グループ作成画面を表示する
+    Route::get('/group/create', [App\Http\Controllers\GroupController::class, 'create'])->name('group.create');
+    // グループ作成する
+    Route::get('/group/store', [App\Http\Controllers\GroupController::class, 'store'])->name('group.store');
+    //いいねをつける
+    Route::post('good/create/{groupId}/{conversationId}',[App\Http\Controllers\GoodController::class, 'create'])->name('good.create');
+    //いいねをはずす
+    Route::post('good/destroy/{conversationId}/{groupId}',[App\Http\Controllers\GoodController::class, 'destroy'])->name('good.destroy');
+    // グループ詳細画面へ遷移
+    Route::get('/group/show/{id}', [App\Http\Controllers\GroupController::class, 'show'])->name('group.show');
+    // グループ一覧画面に遷移
+    Route::get('/group/index', [App\Http\Controllers\GroupController::class, 'index'])->name('group.index');
 });

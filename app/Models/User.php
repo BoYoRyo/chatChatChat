@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\friend;
+use App\Models\Member;
+use App\Models\conversation;
 
 class User extends Authenticatable
 {
@@ -21,6 +24,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'account_id',
+        'icon',
     ];
 
     /**
@@ -41,4 +46,25 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    // Userテーブルと結合.
+    public function group() {
+        return $this->belongsTo(Group::class);
+    }
+
+    public function friends() {
+        return $this->hasMany(Friend::class,'follow_id');
+    }
+
+    public function members() {
+        return $this->hasMany(Member::class);
+    }
+
+    public function member() {
+        return $this->hasOne(Member::class);
+    }
+
+    public function conversation() {
+        return $this->hasMany(conversation::class);
+    }
 }
