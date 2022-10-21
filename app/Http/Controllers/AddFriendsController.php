@@ -46,15 +46,16 @@ class AddFriendsController extends Controller
     /**
      * 名前かIDで友達を検索し一覧表示する
      *
-     * @param  int  $id 
+     * @param  int  $id
      * @return フレンド一覧
      */
     public function show(Request $request)
     {
-        $friends = User::where('name', 'like', '%' . $request->friendSerchWord . '%')
-        ->orWhere('account_id','like','%'.$request->friendSerchWord.'%')
+        $friends = User::whereNotIn('id', friend::where('user_id', Auth::id())->get('follow_id'))
+        // ->orWhere('name', 'like', '%' . $request->friendSerchWord . '%')
+        ->where('account_id','like','%'.$request->friendSerchWord.'%')
         ->get();
-        
+
         return view('addFriends.index', compact('friends'));
     }
 
@@ -107,17 +108,19 @@ class AddFriendsController extends Controller
         $friendOrNot = friend::where('user_id', '=', Auth::id())->where('follow_id', '=', $id)->get();
 
         //isEmpty()は空ならtrue
-        if ($friendOrNot->isEmpty()) {
+        // if ($friendOrNot->isEmpty()) {
             $friend = new friend();
             $friend->create([
                 'user_id' => Auth::id(),
                 'follow_id' => $id,
             ]);
 
-            return view('addFriends.finished', compact('addFriendName'));
-        } else {
+        //     return view('addFriends.finished', compact('addFriendName'));
+        // } else {
 
-            return view('addFriends.connected', compact('addFriendName'));
-        }
+        //     return view('addFriends.connected', compact('addFriendName'));
+        // }
+        return redirect()->route('friend.show', $id);
+
     }
 }
