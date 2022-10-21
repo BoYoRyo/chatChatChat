@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Group;
 use App\Models\friend;
 use App\Models\Member;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -120,7 +121,13 @@ class GroupController extends Controller
      */
     public function edit($id)
     {
-        //
+        // グループメンバー以外のフレンズを表示
+        $wantAddFriends = Friend::where('user_id', auth()->user()->id)
+        ->whereNotIn('follow_id',Member::where('group_id',$id)->pluck('user_id'))
+        ->where('blocked', 0)
+        ->get();
+        
+        return view('group.edit', compact('wantAddFriends'));
     }
 
     /**
@@ -132,7 +139,7 @@ class GroupController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // グループにメンバーを追加
     }
 
     /**
