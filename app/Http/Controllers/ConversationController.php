@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\conversation;
 use App\Models\Member;
 use App\Models\group;
+use Illuminate\Support\Facades\Redirect;
 
 class ConversationController extends Controller
 {
@@ -55,7 +56,8 @@ class ConversationController extends Controller
         // そのグループに所属するmember全員のupdated_atを更新
         Member::where('group_id', $request->group_id)->update(['updated_at' => now(),'invisible' => 0 ]);
 
-        return redirect()->route('talk.show',$request->group_id);
+        return Redirect::back();
+        // return redirect()->route('talk.show',$request->group_id);
     }
 
     /**

@@ -30,7 +30,7 @@
 
         @foreach ($groups as $group)
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-1">
-                <a href="/talk/show/{{ $group->group_id }}">
+                <a href="/talk/show/{{ $group->group_id }}/{{$notReadCountList[$loop->index]}}">
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg flex">
                         {{-- 画像 --}}
                         <div class="p-6 bg-white my-auto">
@@ -60,6 +60,12 @@
                                 @endif
                             </div>
                         </div>
+                        {{-- 未読数 --}}
+                        @if($notReadCountList[$loop->index] !=0)
+                        <div class="bg-red-500 rounded-xl my-20 text-center text-white font-bold border-spacing-1 border-black w-5" >
+                        {{$notReadCountList[$loop->index]}} 
+                        </div>
+                        @endif
                         {{-- 非表示ボタン --}}
                         <div class="my-auto ml-auto mr-10">
                             <form action={{ route('talk.update',$group->id) }} type="get">

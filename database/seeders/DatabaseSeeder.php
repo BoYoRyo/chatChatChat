@@ -9,6 +9,7 @@ use App\Models\Friend;
 use App\Models\User;
 use App\Models\Group;
 use App\Models\Member;
+use App\Models\Read;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
@@ -96,11 +97,40 @@ class DatabaseSeeder extends Seeder
             'user_id' => 10,
         ]);
 
-        for ($i = 1; $i < 10; $i++) {
+        for ($i = 1; $i <= 9; $i++) {
             Conversation::create([
                 'user_id' => ($i % 2) + 1,
                 'group_id' => 1,
                 'comment' => Str::random(10),
+            ]);
+        }
+
+        for ($i = 1; $i <= 15; $i++) {
+            if($i % 2 == 1){
+                $userId = 1;
+            }else{
+                $userId = 3;
+            }
+            Conversation::create([
+                'user_id' => $userId,
+                'group_id' => 2,
+                'comment' => Str::random(10),
+            ]);
+        }
+
+        for($i = 1; $i <= 3; $i++){
+            Read::create([
+                'conversation_id' => $i * 2 - 1,
+                'group_id'=> 1,
+                'user_id'=> 1,
+            ]);
+        }
+
+        for($i = 1; $i <= 4; $i++){
+            Read::create([
+                'conversation_id' => $i * 2 + 9,
+                'group_id'=> 2,
+                'user_id'=> 1,
             ]);
         }
     }
