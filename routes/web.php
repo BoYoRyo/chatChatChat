@@ -43,7 +43,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/friend/show/{id}', [FriendController::class, 'show'])->name('friend.show');
     //フレンドブロック
     Route::get('/friend/destroy/{id}', [FriendController::class, 'destroy'])->name('friend.destroy');
-    //フレンドブロック
+    //フレンドブロック解除
     Route::get('/friend/cancel/{id}', [FriendController::class, 'cancelDestroy'])->name('friend.cancelDestroy');
 
 
@@ -51,6 +51,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/user/edit', [UserController::class, 'edit'])->name('user.edit');
     // プロフィール更新
     Route::post('/user/update', [UserController::class, 'update'])->name('user.update');
+
+
     //フレンド検索画面に遷移
     Route::get('add/index', [AddFriendsController::class, 'index'])->name('add.index');
     //フレンド検索
@@ -61,32 +63,33 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('add/finished', [AddFriendsController::class, 'finished'])->name('add.finished');
     Route::post('/user/update', [App\Http\Controllers\UserController::class, 'update'])->name('user.update');
 
+
     // トーク一覧を表示する
     Route::get('/talk/index', [App\Http\Controllers\TalkController::class, "index"])->name('talk.index');
-
     // トークを開始する
     Route::get('/talk/store/{id}', [App\Http\Controllers\TalkController::class, "store"])->name('talk.store');
     Route::post('/conversation/store', [App\Http\Controllers\ConversationController::class, "store"])->name('conversation.store');
-
     // トーク画面を表示する
     Route::get('/talk/show/{id}', [App\Http\Controllers\TalkController::class, "show"])->name('talk.show');
-
     // トークを非表示にする
     Route::get('/talk/update/{id}',[App\Http\Controllers\TalkController::class, "update"])->name('talk.update');
 
     Route::get('/friend/index', [App\Http\Controllers\FriendController::class, 'index'])->name('friend.index');
     // Route::resource('friend', FriendController::class);
 
+
     // グループ作成画面を表示する
     Route::get('/group/create', [App\Http\Controllers\GroupController::class, 'create'])->name('group.create');
     // グループ作成する
     Route::get('/group/store', [App\Http\Controllers\GroupController::class, 'store'])->name('group.store');
-    //いいねをつける
-    Route::post('good/create/{groupId}/{conversationId}',[App\Http\Controllers\GoodController::class, 'create'])->name('good.create');
-    //いいねをはずす
-    Route::post('good/destroy/{conversationId}/{groupId}',[App\Http\Controllers\GoodController::class, 'destroy'])->name('good.destroy');
     // グループ詳細画面へ遷移
     Route::get('/group/show/{id}', [App\Http\Controllers\GroupController::class, 'show'])->name('group.show');
     // グループ一覧画面に遷移
     Route::get('/group/index', [App\Http\Controllers\GroupController::class, 'index'])->name('group.index');
+
+
+    //いいねをつける
+    Route::post('good/create/{groupId}/{conversationId}',[App\Http\Controllers\GoodController::class, 'create'])->name('good.create');
+    //いいねをはずす
+    Route::post('good/destroy/{conversationId}/{groupId}',[App\Http\Controllers\GoodController::class, 'destroy'])->name('good.destroy');
 });
