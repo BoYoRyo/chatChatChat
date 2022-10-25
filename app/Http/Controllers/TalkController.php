@@ -128,7 +128,7 @@ class TalkController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id,$notReadCount)
+    public function show($id)
     {
         // 画像が添付された場合の処理
 
@@ -169,24 +169,35 @@ class TalkController extends Controller
         }
 
         /////////未読機能/////////
-        $insertConversations = conversation::where('group_id',$id)
-        ->where('user_id','!=',Auth::id())
-        ->orderBy('created_at','desc')
-        ->limit($notReadCount)
-        ->get();
+         //自分以外の投稿数
+         $conversationCount = Conversation::where('group_id',$id)->where('user_id', '!=', Auth::id())->count();
+         //既読数
+         $readCount = Read::where('group_id',$id)->where('user_id',Auth::id())->count();
+         //未読数
+         $notReadCount = $conversationCount - $readCount;
+        //  dd($notReadCount);
 
-        // dd($insertConversations);
-        //未読があった分だけreadsテーブルに追加
-        foreach($insertConversations as $conversation){
-            $newReadConversation = new Read();
-            $newReadConversation->create([
-                'conversation_id' => $conversation->id,
-                'group_id' => $conversation->group_id,
-                'user_id' => Auth::id(),
-            ]);
+         if($notReadCount > 0){
 
-        }
-
+             $insertConversations = conversation::where('group_id',$id)
+             ->where('user_id','!=',Auth::id())
+             ->orderBy('created_at','desc')
+             ->limit($notReadCount)
+             ->get();
+            //  dd($insertConversations);
+             
+             //未読があった分だけreadsテーブルに追加
+             foreach($insertConversations as $conversation){
+                 $newReadConversation = new Read();
+                 $newReadConversation->create([
+                     'conversation_id' => $conversation->id,
+                     'group_id' => $conversation->group_id,
+                     'user_id' => Auth::id(),
+                    ]);
+                    
+                }
+            }
+                
         return view('talk.show', compact('group', 'groupName','gooded'));
     }
 

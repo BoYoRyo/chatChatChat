@@ -30,7 +30,7 @@
 
         @foreach ($groups as $group)
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-1">
-                <a href="/talk/show/{{ $group->group_id }}/{{$notReadCountList[$loop->index]}}">
+                <a href="/talk/show/{{ $group->group_id }}">
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg flex">
                         {{-- 画像 --}}
                         <div class="p-6 bg-white my-auto">

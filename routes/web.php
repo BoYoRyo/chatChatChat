@@ -69,7 +69,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/conversation/store', [App\Http\Controllers\ConversationController::class, "store"])->name('conversation.store');
 
     // トーク画面を表示する
-    Route::get('/talk/show/{id}/{notReadCount}', [App\Http\Controllers\TalkController::class, "show"])->name('talk.show');
+    Route::get('/talk/show/{id}', [App\Http\Controllers\TalkController::class, "show"])->name('talk.show');
 
     // トークを非表示にする
     Route::get('/talk/update/{id}',[App\Http\Controllers\TalkController::class, "update"])->name('talk.update');

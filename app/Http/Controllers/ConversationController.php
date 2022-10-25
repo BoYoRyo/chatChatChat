@@ -56,8 +56,8 @@ class ConversationController extends Controller
         // そのグループに所属するmember全員のupdated_atを更新
         Member::where('group_id', $request->group_id)->update(['updated_at' => now(),'invisible' => 0 ]);
 
-        return Redirect::back();
-        // return redirect()->route('talk.show',$request->group_id);
+        return redirect()->route('talk.show',$request->group_id);
+        // return redirect()->route('talk.show', ['id' => $request->group_id, 'notReadCount' => 0]);
     }
 
     /**
