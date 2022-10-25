@@ -19,7 +19,7 @@
 
         @if (Session::has('message'))
             <div
-                class="max-w-6xl mx-auto border px-4 py-3 rounded relative bg-amber-100 border-amber-400 text-amber-700">
+                class="max-w-6xl mx-auto border px-4 py-3 my-3 rounded relative bg-amber-100 border-amber-400 text-amber-700">
                 {{ session('message') }}
             </div>
         @endif
