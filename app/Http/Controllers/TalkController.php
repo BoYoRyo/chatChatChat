@@ -11,6 +11,7 @@ use App\Http\Requests\CreateRequest;
 use App\Models\Member;
 use App\Models\User;
 use App\Models\Good;
+use App\Models\Read;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 
@@ -38,7 +39,33 @@ class TalkController extends Controller
             ->get();
 
 
-        return view('talk.index', compact('groups'));
+        ///////////未読機能///////////
+        $groupIdList = Member::whereIn('group_id', Member::where('user_id', auth()->user()->id)->pluck('group_id'))
+            ->where('user_id', '!=', auth()->user()->id)
+            ->selectRaw('group_id')
+            ->groupBy('group_id')
+            ->orderBy('updated_at', 'DESC')
+            ->pluck('group_id')
+            ->toArray();
+
+
+        //トーク一覧の未読数配列
+        $notReadCountList = array();
+        //トーク一覧画面のグループidのみを抽出したもの
+        $ParticipatedGroupIdList = $groupIdList;
+        // dd($ParticipatedGroupIdList);
+
+        foreach($ParticipatedGroupIdList as $id){
+            //自分以外の投稿数
+            $conversationCount = Conversation::where('group_id',$id)->where('user_id', '!=', Auth::id())->count();
+            //既読数
+            $readCount = Read::where('group_id',$id)->where('user_id',Auth::id())->count();
+            //未読数
+            $notReadCount = $conversationCount - $readCount;
+            array_push($notReadCountList,$notReadCount);
+        }
+        // dd($notReadCountList);
+        return view('talk.index', compact('groups','notReadCountList'));
     }
 
     /**
@@ -121,45 +148,11 @@ class TalkController extends Controller
             $groupName = $group->name;
         }
 
-        //グッドテーブルの該当ユーザーid
-        // dd($group->conversation[0]->goods[0]->user_id);
-
+            /////////いいね機能/////////
         //conversation配列のうち、goodsのuser_idで自分のuser_idが入っているものをピックアップ(good済み)
-        //該当グループのコメント一覧のうち、自分のコメント以外のcoversationのidを格納
+        //コメント一覧のうち、自分のコメント以外のcoversationのidを格納
         $commentIds = Conversation::where('group_id',$groupId)->where('user_id', '!=', auth()->user()->id)->pluck('id');
-        // dd($commentIds);
-        //1,3,5,7,9→ユーザー2のコメント一覧
-
-        //コメント5番をいいねしたユーザーのid一覧が取れる（☆）
-        // $userIds = Good::where('conversation_id',5)->pluck('user_id');
-        // 変換前の方が綺麗に配列の形になっている気がする
-        // dd($userIds);
-        // $userIds = (array)$userIds;
-        //→arryの中で1,2がとれてて、あんまり綺麗な配列ではない？
-        // dd($userIds);
-
-            // in_arrayは正しく動作した(◆)
-            // $hello = "hello";
-            // $array = [1,2,3,4,5];
-            // dd($array);
-            // if(in_array(Auth::id(),$array,true)){
-            //     dd($hello);
-            // }
-
-        //コメント5にいいねしたユーザ一覧が配列にある時だけ$gooded配列に格納する処理の実験(※)
-        // $gooded = array();
-        // $userIds = Good::where('conversation_id',5)->pluck('user_id');
-
-        // $userIdsArray = $userIds->toArray();
-        // dd($userIdsArray);
-        // $userIds = (array)$userIds;
-        // dd($userIds[0]);
-        // if(in_array(Auth::id(),$userIdsArray,true)){
-            // array_push($gooded,$commentId);
-        //     array_push($gooded,1);
-        // }
-        // dd($gooded);
-
+      
         //$goodedには自分がいいねをつけたconversationのidが格納→それをviewで条件分岐させて黄色くする
         $gooded = array();
         if(!$commentIds->isEmpty()){
@@ -167,23 +160,44 @@ class TalkController extends Controller
                 //$userIdsは値があれば既に配列→commentId5で実証済み
                 $userIds = Good::where('conversation_id',$commentId)->pluck('user_id');
 
-                //$userIdsを配列に変換できることは上で実証できた（☆）
                 $userIds = $userIds->toArray();
-                // dd($userIds);
-                //→foreachの中だから確認できない
-
-                //自分のidとusetIdsが一致した時だけgoodedに追加
-                //なぜかここが効かない、条件がfalseになる
-                //◆よりin_arrayが正しいことがわかる→$userIdsかforeachが悪い
+                //自分のidと同じものがあればそのconversation_idをgoodedに加える
                 if(in_array(Auth::id(),$userIds,true)){
-                    // array_push($gooded,$commentId);
                     array_push($gooded,$commentId);
                 }
-
             }
-
         }
 
+        /////////未読機能/////////
+         //自分以外の投稿数
+         $conversationCount = Conversation::where('group_id',$id)->where('user_id', '!=', Auth::id())->count();
+         //既読数
+         $readCount = Read::where('group_id',$id)->where('user_id',Auth::id())->count();
+         //未読数
+         $notReadCount = $conversationCount - $readCount;
+        //  dd($notReadCount);
+
+         if($notReadCount > 0){
+
+             $insertConversations = conversation::where('group_id',$id)
+             ->where('user_id','!=',Auth::id())
+             ->orderBy('created_at','desc')
+             ->limit($notReadCount)
+             ->get();
+            //  dd($insertConversations);
+             
+             //未読があった分だけreadsテーブルに追加
+             foreach($insertConversations as $conversation){
+                 $newReadConversation = new Read();
+                 $newReadConversation->create([
+                     'conversation_id' => $conversation->id,
+                     'group_id' => $conversation->group_id,
+                     'user_id' => Auth::id(),
+                    ]);
+                    
+                }
+            }
+                
         return view('talk.show', compact('group', 'groupName','gooded'));
     }
 

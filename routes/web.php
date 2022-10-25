@@ -86,6 +86,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/group/show/{id}', [App\Http\Controllers\GroupController::class, 'show'])->name('group.show');
     // グループ一覧画面に遷移
     Route::get('/group/index', [App\Http\Controllers\GroupController::class, 'index'])->name('group.index');
+    // グループにメンバーを追加する画面へ遷移
+    Route::get('/group/edit/{id}', [App\Http\Controllers\GroupController::class, 'edit'])->name('group.edit');
+    // グループにメンバーを追加
+    Route::post('/group/update/{id}', [App\Http\Controllers\GroupController::class, 'update'])->name('group.update');
 
 
     //いいねをつける
