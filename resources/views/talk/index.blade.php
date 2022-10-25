@@ -60,6 +60,12 @@
                                 @endif
                             </div>
                         </div>
+                        {{-- 未読数 --}}
+                        @if($notReadCountList[$loop->index] !=0)
+                        <div class="bg-red-500 rounded-xl my-20 text-center text-white font-bold border-spacing-1 border-black w-5" >
+                        {{$notReadCountList[$loop->index]}} 
+                        </div>
+                        @endif
                         {{-- 非表示ボタン --}}
                         <div class="my-auto ml-auto mr-10">
                             <form action={{ route('talk.update',$group->id) }} type="get">
