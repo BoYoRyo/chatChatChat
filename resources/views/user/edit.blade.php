@@ -32,9 +32,12 @@
                         {{-- 画像 --}}
                         <div class="flex justify-center p-2 bg-white m-10">
                             <div class="relative">
-                                {{-- 元々のicon --}}
+                                {{-- リセット時に表示されるicon --}}
+                                <img src="{{ asset('icon/default_icon_reset.png') }}" style="max-height:240px;"
+                                    class="rounded-full w-60 h-60 object-cover" class="">
+                                {{-- ユーザーのicon --}}
                                 <img src="{{ asset('icon/' . $user->icon) }}" style="max-height:240px;"
-                                    class="rounded-full w-60 h-60 object-cover" id="originIcon" alt="">
+                                    class="rounded-full w-60 h-60 object-cover absolute top-0" id="originIcon" alt="">
                                 <div class="flex p-2 absolute top-60 right-0">
                                     <label class="cursor-pointer border-solid border-white rounded-full bg-white">
                                         {{-- アップロードするための空のファイル --}}
@@ -47,7 +50,8 @@
                                                 d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
                                         </svg>
                                     </label>
-                                    <div class="cursor-pointer ml-1" onclick="showDefaultIcon()">
+                                    {{-- プロフィール画像削除ボタン --}}
+                                    <div class="cursor-pointer ml-1" onclick="deleteIcon()">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -134,10 +138,12 @@
     <script src="{{ asset('js/app.js') }}" defer></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script>
-        // ×を押したらiconをdefault_icon変更
-        function showimg1() {
-            // icon = 'default_icon'.random_int(1, 5).'.png';
-            icon = 'default_icon5).png';
+        function deleteIcon() {
+            // ×を押したらiconが非表示になり裏においてあったdefault_icon_reset.pngが見えるようになる
+            document.getElementById("originIcon").style.visibility ="hidden";
+            // iconのパラメータをnullに上書き
+            var obj = document.getElementById("icon");
+            obj.value = "";
         }
 
         // 画像プレビュー処理

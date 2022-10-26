@@ -96,6 +96,8 @@ class UserController extends Controller
             $name = date('Ymd_His').'_'.$original;
             request()->file('icon')->move('icon', $name);
             $user->icon = $name;
+        } elseif(request('icon') == null){
+            $user->icon = 'default_icon' . random_int(1, 5) . '.png';
         }
 
         $user->save();
