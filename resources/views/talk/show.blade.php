@@ -108,7 +108,7 @@
                     {{-- icon --}}
                     <div class="mr-3">
                         <a href="{{ route('friend.show', $conversation->user->id) }}">
-                            <img src="{{ asset('icon/' . $conversation->user->icon) }}" style="max-height:60px;">
+                            <img src="{{ asset('icon/' . $conversation->user->icon) }}" style="max-height:60px;" class="rounded-full">
                         </a>
                     </div>
                     @if ($group->type == '1')
