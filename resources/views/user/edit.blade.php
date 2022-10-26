@@ -37,7 +37,8 @@
                                     class="rounded-full w-60 h-60 object-cover" class="">
                                 {{-- ユーザーのicon --}}
                                 <img src="{{ asset('icon/' . $user->icon) }}" style="max-height:240px;"
-                                    class="rounded-full w-60 h-60 object-cover absolute top-0" id="originIcon" alt="">
+                                    class="rounded-full w-60 h-60 object-cover absolute top-0" id="originIcon"
+                                    alt="">
                                 <div class="flex p-2 absolute top-60 right-0">
                                     <label class="cursor-pointer border-solid border-white rounded-full bg-white">
                                         {{-- アップロードするための空のファイル --}}
@@ -133,6 +134,28 @@
                 </form>
             </div>
         </div>
+
+        <div class="max-w-4xl max-h-8xl mx-auto sm:px-6 lg:px-8 py-1">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-2 my-auto ml-8 text-gray-500">
+                    <ul class="list-disc">
+                        <li>
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit">
+                                    ログアウト
+                                </button>
+                            </form>
+                        </li>
+                        <li>
+                            <a href="{{ route('user.edit') }}">
+                                アカウント削除
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
     <!-- 以下Scripts 画像プレビューに使用するイベント -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -140,7 +163,7 @@
     <script>
         function deleteIcon() {
             // ×を押したらiconが非表示になり裏においてあったdefault_icon_reset.pngが見えるようになる
-            document.getElementById("originIcon").style.visibility ="hidden";
+            document.getElementById("originIcon").style.visibility = "hidden";
             // iconのパラメータをnullに上書き
             var obj = document.getElementById("icon");
             obj.value = "";
