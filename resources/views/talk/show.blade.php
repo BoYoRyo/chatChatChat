@@ -91,17 +91,7 @@
                             @endif
                         </div>
                     </div>
-                   
-
-
-
-
-
-                   {{-- いいね機能ここまで --}}
-
                 </div>
-                
-                
             @else
                 {{-- 相手側のコメント --}}
                 <div class="container mx-auto flex m-4 w-1/2 pl-3 pr-8">
