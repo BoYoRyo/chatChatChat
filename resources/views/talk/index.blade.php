@@ -35,9 +35,11 @@
                         {{-- 画像 --}}
                         <div class="p-6 bg-white my-auto">
                             @if ($group->group->type == '0')
-                                <img src="{{ asset('icon/' . $group->user->icon) }}" style="max-height:70px;" class="rounded-full">
+                                <img src="{{ asset('icon/' . $group->user->icon) }}" style="max-height:70px;"
+                                    class="rounded-full">
                             @else
-                                <img src="{{ asset('icon/' . $group->group->icon) }}" style="max-height:70px;" class="rounded-full">
+                                <img src="{{ asset('icon/' . $group->group->icon) }}" style="max-height:70px;"
+                                    class="rounded-full">
                             @endif
                         </div>
                         {{-- 名前と最新のトーク --}}
@@ -61,15 +63,18 @@
                             </div>
                         </div>
                         {{-- 未読数 --}}
-                        @if($notReadCountList[$loop->index] !=0)
-                        <div class="bg-red-500 rounded-xl my-20 text-center text-white font-bold border-spacing-1 border-black w-5" >
-                        {{$notReadCountList[$loop->index]}} 
-                        </div>
+                        @if ($notReadCountList[$loop->index] != 0)
+                            <div
+                                class="bg-red-500 rounded-xl my-auto text-center text-white font-bold border-spacing-1 border-black w-5">
+                                {{ $notReadCountList[$loop->index] }}
+                            </div>
                         @endif
                         {{-- 非表示ボタン --}}
                         <div class="my-auto ml-auto mr-10">
-                            <form action={{ route('talk.update',$group->id) }} type="get">
-                                <button class="bg-transparent hover:bg-slate-700 text-slate-500 font-semibold hover:text-slate-700 p-2 border border-slate-700 hover:border-transparent rounded" name="invisible" type="submit">
+                            <form action={{ route('talk.update', $group->id) }} type="get">
+                                <button
+                                    class="bg-transparent hover:bg-slate-700 text-slate-500 font-semibold hover:text-slate-700 p-2 border border-slate-700 hover:border-transparent rounded"
+                                    name="invisible" type="submit">
                                     非表示にする
                                 </button>
                             </form>
