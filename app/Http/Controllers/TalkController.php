@@ -151,19 +151,20 @@ class TalkController extends Controller
             /////////いいね機能/////////
         //conversation配列のうち、goodsのuser_idで自分のuser_idが入っているものをピックアップ(good済み)
         //コメント一覧のうち、自分のコメント以外のcoversationのidを格納
-        $commentIds = Conversation::where('group_id',$groupId)->where('user_id', '!=', auth()->user()->id)->pluck('id');
+        // $commentIds = Conversation::where('group_id',$groupId)->where('user_id', '!=', auth()->user()->id)->pluck('id');
+        $commentIds = Conversation::where('group_id',$groupId)->pluck('id');
       
-        //$goodedには自分がいいねをつけたconversationのidが格納→それをviewで条件分岐させて黄色くする
-        $gooded = array();
+        //$goodListには自分がいいねをつけたconversationのidが格納→それをviewで条件分岐させて黄色くする
+        $goodList = array();
         if(!$commentIds->isEmpty()){
             foreach($commentIds as $commentId){
                 //$userIdsは値があれば既に配列→commentId5で実証済み
                 $userIds = Good::where('conversation_id',$commentId)->pluck('user_id');
 
                 $userIds = $userIds->toArray();
-                //自分のidと同じものがあればそのconversation_idをgoodedに加える
+                //自分のidと同じものがあればそのconversation_idをgoodListに加える
                 if(in_array(Auth::id(),$userIds,true)){
-                    array_push($gooded,$commentId);
+                    array_push($goodList,$commentId);
                 }
             }
         }
@@ -198,7 +199,7 @@ class TalkController extends Controller
                 }
             }
                 
-        return view('talk.show', compact('group', 'groupName','gooded'));
+        return view('talk.show', compact('group', 'groupName','goodList'));
     }
 
     /**
