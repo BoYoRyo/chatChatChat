@@ -10,6 +10,9 @@ use Laravel\Sanctum\HasApiTokens;
 use App\Models\friend;
 use App\Models\Member;
 use App\Models\conversation;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+
 
 class User extends Authenticatable implements MustVerifyEmail
 {
