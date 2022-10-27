@@ -11,7 +11,7 @@ use App\Models\friend;
 use App\Models\Member;
 use App\Models\conversation;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
 
