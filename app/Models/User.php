@@ -14,7 +14,9 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable 
+//メール認証したい場合はこっちに切り替える※envファイルの設定も忘れない
+// class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
 
