@@ -209,7 +209,7 @@ class TalkController extends Controller
         ->pluck('count(conversation_id)')
         ->toArray();
                 
-        return view('talk.show', compact('group', 'groupName','goodList','readCountList'));
+        return view('talk.show', compact('group', 'groupName','goodList','readCountList','notReadCount'));
     }
 
     /**

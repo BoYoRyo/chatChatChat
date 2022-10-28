@@ -28,7 +28,13 @@
         {{-- トークがなかった場合 --}}
     @else
         @foreach ($group->conversation as $conversation)
-            @if ($conversation->user_id == Auth::id())
+
+        @if($loop->remaining  == $notReadCount -1)
+            <div class="flex justify-center">
+                ここから未読メッセージ
+            </div>
+        @endif
+        @if ($conversation->user_id == Auth::id())
                 {{-- ユーザー側のコメント --}}
                 <div class="container mx-auto  w-1/2 py-2 text-right rounded-2xl flex flex-row-reverse">
                     <div
