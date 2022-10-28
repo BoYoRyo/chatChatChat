@@ -74,7 +74,7 @@ class UserController extends Controller
     public function update(Request $request)
     {
         $Validator = Validator::make($request->all(), [
-            'name' => ['required','max:255'],
+            'name' => ['required', 'max:255'],
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore(Auth::id())],
             'accountId' => ['required'],
         ]);
@@ -91,12 +91,12 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->account_id = $request->accountId;
         $user->introduction = $request->introduction;
-        if(request('icon')){
+        if (request('icon')) {
             $original = request()->file('icon')->getClientOriginalName();
-            $name = date('Ymd_His').'_'.$original;
+            $name = date('Ymd_His') . '_' . $original;
             request()->file('icon')->move('icon', $name);
             $user->icon = $name;
-        } elseif(request('icon') == null){
+        } elseif (request('icon') == null) {
             $user->icon = 'default_icon' . random_int(1, 5) . '.png';
         }
 
@@ -111,8 +111,15 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function softDelete()
     {
-        //
+        $user = User::find(Auth::id());
+        $user->name = "[unknown]";
+        $user->icon = "default_icon_reset.png";
+        $user->introduction = null;
+        $user->save();
+
+        $user->delete();
+        return redirect()->route('login');
     }
 }

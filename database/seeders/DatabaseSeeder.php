@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         User::create([
-            
+
             'name' => "ユーザー1" ,
             'email' => 'sample@example.com',
             'password' => Hash::make('12345678'),
@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
             'icon' => 'default_icon' . random_int(1, 5) . '.png',
         ]);
 
-        for ($i = 1; $i < 9; $i++) {
+        for ($i = 1; $i <= 9; $i++) {
             User::create([
                 // 'name' => Str::random(10),
                 'name' => "ユーザー" . $i + 1,

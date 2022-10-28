@@ -139,7 +139,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-2 my-auto ml-8 text-gray-500">
                     <ul class="list-disc">
-                        <li>
+                        <li class="hover:text-blue-500">
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <button type="submit">
@@ -147,10 +147,13 @@
                                 </button>
                             </form>
                         </li>
-                        <li>
-                            <a href="{{ route('user.edit') }}">
-                                アカウント削除
-                            </a>
+                        <li class="hover:text-blue-500">
+                            <form method="POST" action="{{ route('user.softDelete') }}">
+                                @csrf
+                                <button type="submit">
+                                    アカウント削除
+                                </button>
+                            </form>
                         </li>
                     </ul>
                 </div>

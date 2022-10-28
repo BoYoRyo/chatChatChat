@@ -51,6 +51,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/user/edit', [UserController::class, 'edit'])->name('user.edit');
     // プロフィール更新
     Route::post('/user/update', [UserController::class, 'update'])->name('user.update');
+    // アカウント削除
+    Route::post('/user/softDelete', [UserController::class, 'softDelete'])->name('user.softDelete');
 
 
     //フレンド検索画面に遷移

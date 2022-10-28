@@ -11,14 +11,18 @@ use App\Models\friend;
 use App\Models\Member;
 use App\Models\conversation;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 
 
-class User extends Authenticatable 
+class User extends Authenticatable
 //メール認証したい場合はこっちに切り替える※envファイルの設定も忘れない
 // class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+
+    // アカウント削除のソフトデリート
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that are mass assignable.
