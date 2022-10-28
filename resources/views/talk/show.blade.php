@@ -40,7 +40,7 @@
                     </div>
                     {{-- 送信日時 --}}
                     <div class="mx-2 text-l text-gray-400 flex flex-col-reverse">
-                        {{ $conversation->created_at->format('Y/m/d h:i') }}
+                        {{ $conversation->created_at->format('Y/m/d H:i') }}
 
                     {{-- 既読数 --}}
                     @if(!empty($readCountList[$loop->index]))
