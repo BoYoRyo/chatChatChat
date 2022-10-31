@@ -150,7 +150,7 @@
                         <li class="hover:text-blue-500">
                             <form method="POST" action="{{ route('user.softDelete') }}">
                                 @csrf
-                                <button type="submit">
+                                <button type="submit" onclick="return confirm('アカウントが削除され全てのトーク履歴も削除されます。よろしいですか？')">
                                     アカウント削除
                                 </button>
                             </form>
