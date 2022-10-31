@@ -148,10 +148,9 @@ class TalkController extends Controller
             $groupName = $group->name;
         }
 
-            /////////いいね機能/////////
+        /////////いいね機能/////////
         //conversation配列のうち、goodsのuser_idで自分のuser_idが入っているものをピックアップ(good済み)
         //コメント一覧のうち、自分のコメント以外のcoversationのidを格納
-        // $commentIds = Conversation::where('group_id',$groupId)->where('user_id', '!=', auth()->user()->id)->pluck('id');
         $commentIds = Conversation::where('group_id',$groupId)->pluck('id');
 
         //$goodListには自分がいいねをつけたconversationのidが格納→それをviewで条件分岐させて黄色くする
@@ -199,7 +198,18 @@ class TalkController extends Controller
                 }
             }
 
-        return view('talk.show', compact('group', 'groupName','goodList'));
+
+        /////////既読機能/////////
+        //グループid内の全ての既読数
+        $readCountList = read::selectRaw('count(conversation_id)')
+        ->where('group_id',$id)
+        ->whereIn('conversation_id',conversation::where('group_id',$id)->orderBy('id')->pluck('id'))
+        ->groupBy('conversation_id')
+        ->orderBy('conversation_id','asc')
+        ->pluck('count(conversation_id)')
+        ->toArray();
+
+        return view('talk.show', compact('group', 'groupName','goodList','readCountList','notReadCount'));
     }
 
     /**
