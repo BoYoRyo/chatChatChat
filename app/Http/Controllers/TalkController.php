@@ -143,7 +143,7 @@ class TalkController extends Controller
         // $dialogUser = User::whereIn('id', Member::where('group_id', $groupId)->where('user_id', '!=', auth()->user()->id)->pluck('user_id'))->first();
 
         if($group->type == 0){
-            $groupName = User::whereIn('id', Member::where('group_id', $groupId)->where('user_id', '!=', auth()->user()->id)->pluck('user_id'))->first();
+            $groupName = User::withTrashed()->whereIn('id', Member::where('group_id', $groupId)->where('user_id', '!=', auth()->user()->id)->pluck('user_id'))->first();
         } else {
             $groupName = $group->name;
         }
@@ -153,7 +153,7 @@ class TalkController extends Controller
         //コメント一覧のうち、自分のコメント以外のcoversationのidを格納
         // $commentIds = Conversation::where('group_id',$groupId)->where('user_id', '!=', auth()->user()->id)->pluck('id');
         $commentIds = Conversation::where('group_id',$groupId)->pluck('id');
-      
+
         //$goodListには自分がいいねをつけたconversationのidが格納→それをviewで条件分岐させて黄色くする
         $goodList = array();
         if(!$commentIds->isEmpty()){
@@ -186,7 +186,7 @@ class TalkController extends Controller
              ->limit($notReadCount)
              ->get();
             //  dd($insertConversations);
-             
+
              //未読があった分だけreadsテーブルに追加
              foreach($insertConversations as $conversation){
                  $newReadConversation = new Read();
@@ -195,10 +195,10 @@ class TalkController extends Controller
                      'group_id' => $conversation->group_id,
                      'user_id' => Auth::id(),
                     ]);
-                    
+
                 }
             }
-                
+
         return view('talk.show', compact('group', 'groupName','goodList'));
     }
 

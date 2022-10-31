@@ -63,7 +63,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('add/connect/{id}', [AddFriendsController::class, 'connect'])->name('add.connect');
     //フレンド登録完了画面に遷移
     Route::get('add/finished', [AddFriendsController::class, 'finished'])->name('add.finished');
-    Route::post('/user/update', [App\Http\Controllers\UserController::class, 'update'])->name('user.update');
 
 
     // トーク一覧を表示する

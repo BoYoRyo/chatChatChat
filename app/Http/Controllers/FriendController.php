@@ -20,7 +20,10 @@ class FriendController extends Controller
      */
     public function index()
     {
-        $friends = Friend::where('user_id', auth()->user()->id)->where('blocked', 0)->get();
+        $friends = Friend::whereIn('follow_id', User::where('deleted_at', null)->pluck('id'))
+        ->where('user_id', auth()->user()->id)
+        ->where('blocked', 0)
+        ->get();
         return view('friend.index', compact('friends'));
     }
 

@@ -3,13 +3,17 @@
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             @if ($group->type == '0')
                 {{-- 個人トーク --}}
-                <a href="{{ route('friend.show', $groupName->id) }}" class=" flex">
-                    <div class="bg-white">
-                        <img src="{{ asset('icon/' . $groupName->icon) }}" style="max-height:50px;" class="rounded-full">
-                    </div>
-                    <div class="ml-3 my-auto">
-                        {{ $groupName->name }}
-                    </div>
+                @if ($groupName->deleted_at == null)
+                    <a href="{{ route('friend.show', $groupName->id) }}" class="flex">
+                    @else
+                        <a class="flex">
+                @endif
+                <div class="bg-white">
+                    <img src="{{ asset('icon/' . $groupName->icon) }}" style="max-height:50px;" class="rounded-full">
+                </div>
+                <div class="ml-3 my-auto">
+                    {{ $groupName->name }}
+                </div>
                 </a>
             @else
                 {{-- グループトーク --}}
@@ -42,9 +46,9 @@
                     <div class="mx-2 text-l text-gray-400 flex flex-col-reverse">
                         {{ $conversation->created_at->format('Y/m/d h:i') }}
                     </div>
-                    
-                   {{-- いいね --}}
-                   <div class="flex flex-col-reverse">
+
+                    {{-- いいね --}}
+                    <div class="flex flex-col-reverse">
                         <div class="mt-0 flex">
                             <!-- いいねが既に押されていたら -->
                             @if (in_array($conversation->id, $goodList))
@@ -97,8 +101,13 @@
                 <div class="container mx-auto flex m-4 w-1/2 pl-3 pr-8">
                     {{-- icon --}}
                     <div class="mr-3">
-                        <a href="{{ route('friend.show', $conversation->user->id) }}">
-                            <img src="{{ asset('icon/' . $conversation->user->icon) }}" style="max-height:60px;" class="rounded-full">
+                        @if ($conversation->user->deleted_at == null)
+                            <a href="{{ route('friend.show', $conversation->user->id) }}" class="flex">
+                            @else
+                                <a class="flex">
+                        @endif
+                        <img src="{{ asset('icon/' . $conversation->user->icon) }}" style="max-height:60px;"
+                            class="rounded-full">
                         </a>
                     </div>
                     @if ($group->type == '1')
