@@ -51,6 +51,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/user/edit', [UserController::class, 'edit'])->name('user.edit');
     // プロフィール更新
     Route::post('/user/update', [UserController::class, 'update'])->name('user.update');
+    // アカウント削除
+    Route::post('/user/softDelete', [UserController::class, 'softDelete'])->name('user.softDelete');
 
 
     //フレンド検索画面に遷移
@@ -61,7 +63,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('add/connect/{id}', [AddFriendsController::class, 'connect'])->name('add.connect');
     //フレンド登録完了画面に遷移
     Route::get('add/finished', [AddFriendsController::class, 'finished'])->name('add.finished');
-    Route::post('/user/update', [App\Http\Controllers\UserController::class, 'update'])->name('user.update');
 
 
     // トーク一覧を表示する

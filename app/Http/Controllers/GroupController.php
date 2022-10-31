@@ -128,7 +128,7 @@ class GroupController extends Controller
         ->whereNotIn('follow_id',Member::where('group_id',$id)->pluck('user_id'))
         ->where('blocked', 0)
         ->get();
-        
+
         return view('group.edit', compact('wantAddFriends','group'));
     }
 
@@ -150,11 +150,11 @@ class GroupController extends Controller
                 'created_at' => now(),
                 'updated_at' => now(),
             );
-            
+
         }
 
         DB::table('members')->insert($member);
-        
+
         return Redirect::back();
     }
 

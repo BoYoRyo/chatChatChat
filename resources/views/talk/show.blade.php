@@ -3,13 +3,17 @@
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             @if ($group->type == '0')
                 {{-- 個人トーク --}}
-                <a href="{{ route('friend.show', $groupName->id) }}" class=" flex">
-                    <div class="bg-white">
-                        <img src="{{ asset('icon/' . $groupName->icon) }}" style="max-height:50px;" class="rounded-full">
-                    </div>
-                    <div class="ml-3 my-auto">
-                        {{ $groupName->name }}
-                    </div>
+                @if ($groupName->deleted_at == null)
+                    <a href="{{ route('friend.show', $groupName->id) }}" class="flex">
+                    @else
+                        <a class="flex">
+                @endif
+                <div class="bg-white">
+                    <img src="{{ asset('icon/' . $groupName->icon) }}" style="max-height:50px;" class="rounded-full">
+                </div>
+                <div class="ml-3 my-auto">
+                    {{ $groupName->name }}
+                </div>
                 </a>
             @else
                 {{-- グループトーク --}}
@@ -52,7 +56,7 @@
                     @if(!empty($readCountList[$loop->index]))
                     <div>既読数{{$readCountList[$loop->index]}}</div>
                     @endif
-
+                    
                     </div>
                     {{-- いいね --}}
                     <div class="flex flex-col-reverse">
@@ -108,8 +112,13 @@
                 <div class="container mx-auto flex m-4 w-1/2 pl-3 pr-8">
                     {{-- icon --}}
                     <div class="mr-3">
-                        <a href="{{ route('friend.show', $conversation->user->id) }}">
-                            <img src="{{ asset('icon/' . $conversation->user->icon) }}" style="max-height:60px;" class="rounded-full">
+                        @if ($conversation->user->deleted_at == null)
+                            <a href="{{ route('friend.show', $conversation->user->id) }}" class="flex">
+                            @else
+                                <a class="flex">
+                        @endif
+                        <img src="{{ asset('icon/' . $conversation->user->icon) }}" style="max-height:60px;"
+                            class="rounded-full">
                         </a>
                     </div>
                     @if ($group->type == '1')
