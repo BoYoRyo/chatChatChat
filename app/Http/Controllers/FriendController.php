@@ -14,14 +14,17 @@ use Illuminate\Support\Facades\Redirect;
 class FriendController extends Controller
 {   
     protected $friend;
+    protected $group;
     protected $member;
 
     public function __construct(
         friend $friend,
-        Member $member
+        group $group,
+        Member $member,
     )
     {
         $this->friend = $friend;
+        $this->group = $group;
         $this->member = $member;
     }
     
@@ -122,7 +125,7 @@ class FriendController extends Controller
             'friends.blocked',
         )
         ->join('friends', 'friends.follow_id', '=', 'users.id')
-        ->where('friends.user_id', Auth::id())
+        ->where('friends.user_id', auth()->user()->id)
         ->where('friends.follow_id', $id)
         ->first()
         ;
@@ -205,6 +208,7 @@ class FriendController extends Controller
 
         return redirect()->route('friend.show', $id);
     }
+
     /**
      * Remove the specified resource from storage.
      *
