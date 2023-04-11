@@ -10,6 +10,16 @@ use Illuminate\Support\Facades\Redirect;
 
 class ConversationController extends Controller
 {
+    protected $conversations;
+
+    public function __construct
+    (
+         Conversation $conversations
+    )
+    {
+        $this->conversations = $conversations;
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -31,9 +41,9 @@ class ConversationController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * トークを投稿する.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  $request : トーク
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)

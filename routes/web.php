@@ -54,16 +54,14 @@ Route::group(['middleware' => 'auth'], function () {
     // アカウント削除
     Route::post('/user/softDelete', [UserController::class, 'softDelete'])->name('user.softDelete');
 
-
     //フレンド検索画面に遷移
-    Route::get('add/index', [AddFriendsController::class, 'index'])->name('add.index');
+    Route::get('add/friend', [AddFriendsController::class, 'index'])->name('add.friend');
     //フレンド検索
-    Route::post('add/show', [AddFriendsController::class, 'show'])->name('add.show');
+    Route::post('add/searchFriend', [AddFriendsController::class, 'searchFriend'])->name('add.searchFriend');
     //フレンド追加
-    Route::get('add/connect/{id}', [AddFriendsController::class, 'connect'])->name('add.connect');
+    Route::get('add/myfriend/{id}', [AddFriendsController::class, 'addMyFriend'])->name('add.myFriend');
     //フレンド登録完了画面に遷移
     Route::get('add/finished', [AddFriendsController::class, 'finished'])->name('add.finished');
-
 
     // トーク一覧を表示する
     Route::get('/talk/index', [App\Http\Controllers\TalkController::class, "index"])->name('talk.index');

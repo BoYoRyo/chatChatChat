@@ -2,29 +2,58 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Friend;
+use App\Models\Group;
 use App\Models\Member;
 use App\Models\User;
-use App\Models\Group;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 
-
 class FriendController extends Controller
-{
+{   
+    protected $friend;
+
+    public function __construct(
+        friend $friend
+    )
+    {
+        $this->friend = $friend;
+    }
+    
     /**
-     * 友達一覧を表示する
+     * フォローしているフレンズ一覧を取得・表示
      *
-     * @return \Illuminate\Http\Response
+     * @return
      */
     public function index()
     {
-        $friends = Friend::whereIn('follow_id', User::where('deleted_at', null)->pluck('id'))
+        // 非ブロックのフレンズのIDを取得.
+        $follow_users = DB::table('friends')
+        ->select('follow_id')
         ->where('user_id', auth()->user()->id)
-        ->where('blocked', 0)
-        ->get();
-        return view('friend.index', compact('friends'));
+        // TODO 定数をconfigで管理したい
+        ->where('blocked', Friend::BLOCK_FLAG['非ブロック'])
+        ;
+        
+        // フレンズの情報を取得.
+        $friends = DB::table('users')
+        ->select(
+            'users.id',
+            'follow_users.follow_id',
+            'users.name',
+            'users.icon',
+            'users.introduction',
+        )
+        ->JoinSub($follow_users, 'follow_users', function($join) {
+            $join->on('follow_users.follow_id', '=', 'users.id');
+        })
+        ->where('deleted_at', null)
+        ->get()
+        ;
+
+        return view('friend.index', ['friends' => $friends]);
     }
 
     /**
@@ -34,7 +63,14 @@ class FriendController extends Controller
      */
     public function blockedIndex()
     {
-        $friends = Friend::where('user_id', auth()->user()->id)->where('blocked', 1)->get();
+        // ユーザーがブロックしているフレンズの取得.
+        $friends = DB::table('friend')
+        ->where('user_id', auth()->user()->id)
+        // TODO マジックナンバーから定数に置き換えたい
+        ->where('blocked', Friend::BLOCK_FLAG['ブロック'])
+        ->get()
+        ;
+
         return view('friend.blocked-index', compact('friends'));
     }
 
@@ -60,9 +96,9 @@ class FriendController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * フレンズのプロフィールを取得.
      *
-     * @param  int  $id
+     * @param  int $id : ユーザーID
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -72,20 +108,23 @@ class FriendController extends Controller
             return view('user/edit')->with('user', auth()->user());
         }
 
-        // ユーザーの詳細情報取得
-        $friend = User::find($id);
+        // フレンズのプロフィール情報を取得.
+        $friend_detail = DB::table('users')
+        ->select(
+            'users.id',
+            'users.name',
+            'users.icon',
+            'users.introduction',
+            'users.account_id',
+            'friends.blocked',
+        )
+        ->join('friends', 'friends.follow_id', '=', 'users.id')
+        ->where('friends.user_id', Auth::id())
+        ->where('friends.follow_id', $id)
+        ->first()
+        ;
 
-        // ユーザーとの関係を取得
-        $followStatus = Friend::where('user_id', Auth::id())->where('follow_id', $id)->value('blocked');
-        if($followStatus === 0){
-            $relationship = 'friend'; //フォローしている
-        } else if($followStatus === 1){
-            $relationship = 'blockedFriend'; //ブロックした
-        } else {
-            $relationship = 'other'; //他人
-        }
-
-        return view('friend/show', compact('friend', 'relationship'));
+        return view('friend/show', ['friend_detail' => $friend_detail]);
     }
 
     /**
@@ -147,12 +186,12 @@ class FriendController extends Controller
      */
     public function cancelDestroy($id)
     {
-        // フレンドテーブルのブロックフラグを消す→フレンド一覧に復帰
+        // フレンドテーブルのブロックフラグを消す -> フレンド一覧に復帰
         $friend = Friend::where('user_id', Auth::id())->where('follow_id', $id)->first();
         $friend->blocked = false;
         $friend->save();
 
-        // １対１のトークをしていた場合、メンバーテーブルのブロックフラグを消す→トーク一覧から復帰
+        // １対１のトークをしていた場合、メンバーテーブルのブロックフラグを消す -> トーク一覧から復帰
         $member = Member::whereIn('group_id', Group::whereIn('id', Member::whereIn('user_id', Member::where('user_id', auth()->user()->id)->pluck('group_id'))
             ->where('user_id', $id)
             ->pluck('group_id'))

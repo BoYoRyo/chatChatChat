@@ -54,20 +54,20 @@
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg flex">
                     {{-- 画像 --}}
                     <div class="p-6 bg-white my-auto">
-                        <a href="{{ route('friend.show', $friend->follow_id) }}"><img
-                                src="{{ asset('icon/' . $friend->user->icon) }}" style="max-height:70px;"></a>
+                        <a href="{{ route('friend.show', $friend->id) }}"><img
+                                src="{{ asset('icon/' . $friend->icon) }}" style="max-height:70px;"></a>
                     </div>
                     {{-- 名前 --}}
                     <div class="ml-1 bg-white flex-initial text: left; text-xl my-auto">
-                        {{ $friend->user->name }}
+                        {{ $friend->name }}
                     </div>
                     {{-- ひとこと --}}
                     <div class="ml-20 bg-white flex-initial text: left; text-xl text-gray-500 my-auto overflow-hidden max-w-2xl text-ellipsis">
-                        {{ $friend->user->introduction }}
+                        {{ $friend->introduction }}
                     </div>
                     {{-- トークする --}}
                     <div class="my-auto ml-auto mr-10">
-                        <form method="GET" action={{ route('talk.store', $friend->follow_id) }} >
+                        <form method="GET" action={{ route('talk.store', $friend->id) }} >
                             <button class="bg-amber-300 hover:bg-amber-500 text-white font-semibold hover:text-slate-700 p-3 border border-slate-700 hover:border-transparent rounded">
                                 トークする
                             </button>

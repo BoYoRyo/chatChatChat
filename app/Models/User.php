@@ -61,10 +61,6 @@ class User extends Authenticatable
         return $this->belongsTo(Group::class);
     }
 
-    public function friends() {
-        return $this->hasMany(Friend::class,'follow_id');
-    }
-
     public function members() {
         return $this->hasMany(Member::class);
     }

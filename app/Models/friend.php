@@ -2,16 +2,57 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
 
 class friend extends Model
 {
     use HasFactory;
-    protected $fillable = ['user_id','follow_id','blocked'];
+    
+    protected $primary_key = ['id'];
+    
+    protected $fillable = [
+        'user_id',
+        'follow_id',
+        'blocked'
+    ];
 
-    public function user() {
-        return $this->belongsTo(User::class,'follow_id','id');
+    protected $dates = [
+        'created_at',
+        'updated_at'
+    ];
+    
+    const BLOCK_FLAG = [
+        '非ブロック' => 0,
+        'ブロック' => 1
+    ];
+
+    /**
+     * マイフレンドに登録する処理.
+     *
+     * @param  $id : ユーザーID.
+     * @return void
+     */
+    public function insertFriend($id)
+    {
+        try
+        {
+            DB::beginTransaction();
+
+            DB::table('friends')->insert([
+            'user_id'    => auth()->user()->id,
+            'follow_id'  => $id,
+            'blocked'    => self::BLOCK_FLAG['非ブロック'],
+            'created_at' => now()
+            ]);
+
+            DB::commit();
+        } catch(Exception $e) {
+            DB::rollBack();
+            // TODO 何か書かないといけなかったので調べてから追加
+        };
     }
+
 }
