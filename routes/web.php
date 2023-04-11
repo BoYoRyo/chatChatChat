@@ -42,7 +42,7 @@ Route::group(['middleware' => 'auth'], function () {
     // 友達詳細画面に遷移
     Route::get('/friend/show/{id}', [FriendController::class, 'show'])->name('friend.show');
     //フレンドブロック
-    Route::get('/friend/destroy/{id}', [FriendController::class, 'destroy'])->name('friend.destroy');
+    Route::get('/friend/blockingFriend/{id}', [FriendController::class, 'blockingFriend'])->name('friend.blockingFriend');
     //フレンドブロック解除
     Route::get('/friend/cancel/{id}', [FriendController::class, 'cancelDestroy'])->name('friend.cancelDestroy');
 

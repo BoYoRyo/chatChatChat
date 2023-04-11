@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Friend;
 use App\Models\Group;
 use App\Models\Member;
-use App\Models\User;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -14,22 +14,25 @@ use Illuminate\Support\Facades\Redirect;
 class FriendController extends Controller
 {   
     protected $friend;
+    protected $member;
 
     public function __construct(
-        friend $friend
+        friend $friend,
+        Member $member
     )
     {
         $this->friend = $friend;
+        $this->member = $member;
     }
     
     /**
-     * フォローしているフレンズ一覧を取得・表示
+     * フォローしているフレンド一覧を取得・表示
      *
      * @return
      */
     public function index()
     {
-        // 非ブロックのフレンズのIDを取得.
+        // 非ブロックのフレンドのIDを取得.
         $follow_users = DB::table('friends')
         ->select('follow_id')
         ->where('user_id', auth()->user()->id)
@@ -37,7 +40,7 @@ class FriendController extends Controller
         ->where('blocked', Friend::BLOCK_FLAG['非ブロック'])
         ;
         
-        // フレンズの情報を取得.
+        // フレンドの情報を取得.
         $friends = DB::table('users')
         ->select(
             'users.id',
@@ -63,10 +66,10 @@ class FriendController extends Controller
      */
     public function blockedIndex()
     {
-        // ユーザーがブロックしているフレンズの取得.
+        // ユーザーがブロックしているフレンドの取得.
         $friends = DB::table('friend')
         ->where('user_id', auth()->user()->id)
-        // TODO マジックナンバーから定数に置き換えたい
+        // TODO 定数をconfigで管理したい
         ->where('blocked', Friend::BLOCK_FLAG['ブロック'])
         ->get()
         ;
@@ -96,19 +99,19 @@ class FriendController extends Controller
     }
 
     /**
-     * フレンズのプロフィールを取得.
+     * フレンドのプロフィールを取得.
      *
      * @param  int $id : ユーザーID
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        // グループ詳細から自分のアイコンをクリックした場合、自分のプロフィール画面へ
-        if ($id == Auth::id()) {
+        // ユーザーIDがログインユーザーの場合はプロフィール画面へ遷移.
+        if ($id == auth()->user()->id) {
             return view('user/edit')->with('user', auth()->user());
         }
 
-        // フレンズのプロフィール情報を取得.
+        // フレンドのプロフィール情報を取得.
         $friend_detail = DB::table('users')
         ->select(
             'users.id',
@@ -151,29 +154,53 @@ class FriendController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * フレンドをブロックする処理.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  $id : ブロック対象となるフレンドのユーザーID
+     * @return フレンド詳細画面
      */
-    public function destroy($id)
+    public function blockingFriend($id)
     {
-        // フレンドテーブルのブロックフラグをたてる→フレンド一覧から消える
-        $friend = Friend::where('user_id', Auth::id())->where('follow_id', $id)->first();
-        $friend->blocked = true;
-        $friend->save();
+        // フレンドをブロック対象へと変更
+        $this->friend->updateBlockingFriend($id);
 
-        // １対１のトークをしていた場合、メンバーテーブルのブロックフラグをたてる→トーク一覧から消える
-        $member = Member::whereIn('group_id', Group::whereIn('id', Member::whereIn('user_id', Member::where('user_id', auth()->user()->id)->pluck('group_id'))
-            ->where('user_id', $id)
-            ->pluck('group_id'))
-            ->where('type', '0')->get('id'))
-            ->where('user_id', $id)
-            ->first();
+        // ログインユーザーが所属しているグループIDを取得.
+        $login_user_group_ids = DB::table('members')
+        ->select('group_id')
+        ->where('user_id', auth()->user()->id)
+        ;
+        
+        // ログインユーザーとブロック対象となるフレンドが所属しているグループを取得.
+        $group_ids = DB::table('members')
+        ->select(
+            'members.group_id',
+            'members.user_id',
+            'members.blocked',
+        )
+        ->joinSub($login_user_group_ids, 'login_user_group_ids', function (JoinClause $join) {
+            $join->on('login_user_group_ids.group_id', '=', 'members.group_id');
+        })
+        ->where('members.user_id', $id)
+        ;
 
-        if ($member) {
-            $member->blocked = 1;
-            $member->save();
+        // ログインユーザーとブロック対象となるフレンドのトークグループのIDを取得.
+        $group_id = DB::table('groups')
+        ->select(
+            'groups.id',
+            'group_ids.user_id',
+            'group_ids.blocked',
+        )
+        ->joinSub($group_ids, 'group_ids', function (JoinClause $join) {
+            $join->on('group_ids.group_id', '=', 'groups.id');
+        })
+        // TODO マジックナンバーを定数へと変更.
+        ->where('type', 0)
+        ->first()
+        ;
+
+        // 1対1のトークグループが存在してればblockフラグを非ブロックからブロックへと変更.
+        if ($group_id) {
+            $this->member->updateBlockingFriend($group_id->id, $group_id->user_id);
         }
 
         return redirect()->route('friend.show', $id);

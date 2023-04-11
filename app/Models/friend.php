@@ -24,6 +24,7 @@ class friend extends Model
         'updated_at'
     ];
     
+    // TODO const.phpにできれば移行したい
     const BLOCK_FLAG = [
         '非ブロック' => 0,
         'ブロック' => 1
@@ -53,6 +54,21 @@ class friend extends Model
             DB::rollBack();
             // TODO 何か書かないといけなかったので調べてから追加
         };
+    }
+
+    /**
+     * フレンドをブロックする処理.
+     *
+     * @param  $id : ブロック対象となるユーザーのID.
+     * @return void
+     */
+    public function updateBlockingFriend($id)
+    {
+        DB::table('friends')
+        ->where('user_id', auth()->user()->id)
+        ->where('follow_id', $id)
+        ->update(['blocked' => self::BLOCK_FLAG['ブロック']])
+        ;
     }
 
 }

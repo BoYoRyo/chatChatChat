@@ -2,15 +2,41 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
 use App\Models\Conversation;
 use App\Models\Group;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
 
 class Member extends Model
 {
     use HasFactory;
+
+    // TODO const.phpにできれば移行したい
+    const BLOCK_FLAG = [
+        '非ブロック' => 0,
+        'ブロック' => 1
+    ];
+
+    /**
+     * ブロックしたフレンドのblockフラグを非ブロックからブロックへと変更する処理.
+     *
+     * @param $group_id : グループID
+     * @param $user_id : ブロック対象となるユーザーのID.
+     * @return void
+     */
+    public function updateBlockingFriend($group_id, $user_id)
+    {
+        // ブロックしたフレンドの取得.
+        DB::table('members')
+        ->where('group_id', $group_id)
+        ->where('user_id', $user_id)
+        ->update(['blocked' => self::BLOCK_FLAG['ブロック']])
+        ;
+        
+    }
+
     public function user() {
         return $this->belongsTo(User::class)->withTrashed();
     }

@@ -47,7 +47,7 @@
 
                     {{-- ブロックボタン --}}
                     <div class="flex justify-center mb-2">
-                        <form method="GET" action="{{ route('friend.destroy', $friend_detail->id) }}">
+                        <form method="GET" action="{{ route('friend.blockingFriend', $friend_detail->id) }}">
                             @csrf
                             @method('delete')
                             <button type="submit"

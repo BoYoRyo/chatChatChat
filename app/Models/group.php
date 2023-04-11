@@ -10,10 +10,24 @@ class group extends Model
 {
     use HasFactory;
 
-    // // userテーブルと結合.
-    // public function user() {
-    //     return $this->hasMany(User::class);
-    // }
+    protected $primary_key = ['id'];
+    
+    protected $fillable = [
+        'type',
+        'name',
+        'icon'
+    ];
+
+    protected $dates = [
+        'created_at',
+        'updated_at'
+    ];
+    
+    // TODO const.phpにできれば移行したい
+    const GROUP_TYPE = [
+        '1対1' => 0,
+        'グループ' => 1
+    ];
 
     // conversationテーブルと結合.
     public function conversation() {
