@@ -59,7 +59,7 @@
                 @elseif($friend_detail->blocked == App\Models\friend::BLOCK_FLAG['ブロック'])
                     {{-- ブロック解除ボタン --}}
                     <div class="flex justify-center mb-2">
-                        <form method="GET" action="{{ route('friend.cancelDestroy', $friend_detail->id) }}">
+                        <form method="GET" action="{{ route('friend.cancelingBlockFriend', $friend_detail->id) }}">
                             @csrf
                             @method('delete')
                             <button type="submit"

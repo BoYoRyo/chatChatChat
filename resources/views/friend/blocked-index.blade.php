@@ -29,7 +29,7 @@
                     </div>
                     {{-- 解除する --}}
                     <div class="my-auto ml-auto mr-10">
-                        <form method="GET" action={{ route('friend.cancelDestroy', $friend->id) }} >
+                        <form method="GET" action={{ route('friend.cancelingBlockFriend', $friend->id) }} >
                             <button class="bg-amber-300 hover:bg-amber-500 text-white font-semibold hover:text-slate-700 p-3 border border-slate-700 hover:border-transparent rounded">
                                 解除
                             </button>

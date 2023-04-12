@@ -44,7 +44,7 @@ Route::group(['middleware' => 'auth'], function () {
     //フレンドブロック
     Route::get('/friend/blockingFriend/{id}', [FriendController::class, 'blockingFriend'])->name('friend.blockingFriend');
     //フレンドブロック解除
-    Route::get('/friend/cancel/{id}', [FriendController::class, 'cancelDestroy'])->name('friend.cancelDestroy');
+    Route::get('/friend/cancelingBlockFriend/{id}', [FriendController::class, 'cancelingBlockFriend'])->name('friend.cancelingBlockFriend');
 
 
     // プロフィール画面に遷移

@@ -189,7 +189,7 @@ class FriendController extends Controller
      * @param  $id : フレンドのユーザーID
      * @return フレンド詳細画面
      */
-    public function cancelDestroy($id)
+    public function cancelingBlockFriend($id)
     {
         // フレンドのブロックを解除.
         $this->friend->updateCancelingBlockFriend($id);
@@ -207,7 +207,7 @@ class FriendController extends Controller
     }
 
     /**
-     * 1対1でのトークグループのIDを取得する処理.
+     * 1対1でのトークグループのIDを取得.
      *
      * @param  $id : フレンドのユーザーID
      * @return グループID
