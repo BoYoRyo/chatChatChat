@@ -21,15 +21,15 @@
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg flex">
                     {{-- 画像 --}}
                     <div class="p-6 bg-white my-auto">
-                        <img src="{{ asset('icon/' . $friend->user->icon) }}" style="max-height:70px;">
+                        <img src="{{ asset('icon/' . $friend->icon) }}" style="max-height:70px;">
                     </div>
                     {{-- 名前 --}}
                     <div class="ml-1 bg-white flex-initial text: left; text-xl my-auto">
-                        {{ $friend->user->name }}
+                        {{ $friend->name }}
                     </div>
                     {{-- 解除する --}}
                     <div class="my-auto ml-auto mr-10">
-                        <form method="GET" action={{ route('friend.cancelDestroy', $friend->follow_id) }} >
+                        <form method="GET" action={{ route('friend.cancelDestroy', $friend->id) }} >
                             <button class="bg-amber-300 hover:bg-amber-500 text-white font-semibold hover:text-slate-700 p-3 border border-slate-700 hover:border-transparent rounded">
                                 解除
                             </button>

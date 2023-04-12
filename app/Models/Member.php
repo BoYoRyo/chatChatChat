@@ -37,6 +37,24 @@ class Member extends Model
         
     }
 
+    /**
+     * ブロックしたフレンドをブロック解除する処理.
+     *
+     * @param $group_id : グループID
+     * @param $user_id : ブロック解除したいユーザーのID.
+     * @return void
+     */
+    public function updateCancelingBlockFriend($group_id, $user_id)
+    {
+        // ブロックしたフレンドの取得.
+        DB::table('members')
+        ->where('group_id', $group_id)
+        ->where('user_id', $user_id)
+        ->update(['blocked' => self::BLOCK_FLAG['非ブロック']])
+        ;
+        
+    }
+
     public function user() {
         return $this->belongsTo(User::class)->withTrashed();
     }

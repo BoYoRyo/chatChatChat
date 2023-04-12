@@ -71,4 +71,19 @@ class friend extends Model
         ;
     }
 
+    /**
+     * フレンドのブロックを解除する処理.
+     *
+     * @param  $id : ブロック対象となるユーザーのID.
+     * @return void
+     */
+    public function updateCancelingBlockFriend($id)
+    {
+        DB::table('friends')
+        ->where('user_id', auth()->user()->id)
+        ->where('follow_id', $id)
+        ->update(['blocked' => self::BLOCK_FLAG['非ブロック']])
+        ;
+    }
+
 }
