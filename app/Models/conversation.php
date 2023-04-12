@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Exception;
 use App\Models\Good;
 use App\Models\Member;
 use Illuminate\Database\Eloquent\Model;
@@ -35,11 +36,13 @@ class conversation extends Model
      */
     public function insertConversation($request)
     {
-        // try
-        // {
-            // DB::beginTransaction();
+        try
+        {
+            DB::beginTransaction();
             
-            if($request->image != null) {
+            if($request->image == null) {
+                $image_name = null;
+            } else {
                 $originalName = $request->file('image')->getClientOriginalName();
                 // 日時追加
                 $image_name = date('Ymd_His').'_'.$originalName;
@@ -55,14 +58,18 @@ class conversation extends Model
                 'created_at' => now()
                 ]);
 
-            // DB::commit();
-        // }
-        // } catch(Exception $e) {
-        //     DB::rollBack();
-        //     // TODO 何か書かないといけなかったので調べてから追加
-        // };
+            DB::commit();
+        } catch(Exception $e) {
+            DB::rollBack();
+            // TODO error投げて画面に表示.
+        };
     }
 
+    // 以下リファクタリング完了し次第削除
+    public function group() {
+        return $this->belongsTo(group::class);
+    }
+    
     public function member() {
         return $this->belongsTo(Member::class,'group_id','id');
     }

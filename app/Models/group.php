@@ -29,6 +29,10 @@ class group extends Model
         'グループ' => 1
     ];
 
+    public function conversation() {
+        return $this->hasMany(Conversation::class);
+    }
+    
     public function member() {
         // グループテーブルが従
         // メンバーテーブルが主
