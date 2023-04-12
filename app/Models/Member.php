@@ -55,6 +55,20 @@ class Member extends Model
         
     }
 
+    /**
+     * そのグループに所属するmember全員のupdated_atを更新.
+     *
+     * @param $group_id : グループID
+     * @return void
+     */
+    public function updateDatetime($group_id)
+    {
+        DB::table('members')
+        ->where('group_id', $group_id)
+        ->update(['updated_at' => now(),'invisible' => 0 ]);
+        
+    }
+
     public function user() {
         return $this->belongsTo(User::class)->withTrashed();
     }

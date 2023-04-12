@@ -214,7 +214,7 @@
         @endforeach
     @endif
     {{-- トーク投稿 --}}
-    <form method="POST" action={{ route('conversation.store', ['group_id' => $group->id]) }}
+    <form method="POST" action={{ route('conversation.postConversation', ['group_id' => $group->id]) }}
         enctype="multipart/form-data">
         @csrf
         <div id="container">
