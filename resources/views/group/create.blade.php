@@ -58,17 +58,17 @@
                 <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-1">
                     <div class="py-3 bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="flex items-center my-auto">
-                            <input name="memberId[]" id="{{ $friend->user->id }}" type="checkbox"
-                                value="{{ $friend->user->id }}"
+                            <input name="memberId[]" id="{{ $friend->user_id }}" type="checkbox"
+                                value="{{ $friend->user_id }}"
                                 class="w-4 h-4 ml-3 my-auto text-amber-600 bg-gray-100 rounded border-gray-300 focus:ring-amber-500">
-                            <label for="{{ $friend->user->id }}" class="flex ml-3 text-sm font-medium text-gray-900">
+                            <label for="{{ $friend->user_id }}" class="flex ml-3 text-sm font-medium text-gray-900">
                                 {{-- 画像 --}}
                                 <div class="my-auto bg-white">
-                                    <img src="{{ asset('icon/' . $friend->user->icon) }}" style="max-height:50px;">
+                                    <img src="{{ asset('icon/' . $friend->user_icon) }}" style="max-height:50px;">
                                 </div>
                                 {{-- 名前 --}}
                                 <div class="ml-1 my-auto bg-white text: left; text-xl ">
-                                    {{ $friend->user->name }}
+                                    {{ $friend->user_name }}
                                 </div>
                             </label>
                         </div>

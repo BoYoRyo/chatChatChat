@@ -30,33 +30,25 @@ class FriendController extends Controller
     /**
      * フォローしているフレンド一覧を取得・表示
      *
-     * @return
+     * @return　$friends : フレンド情報
      */
     public function index()
     {
-        // 非ブロックのフレンドのIDを取得.
-        $follow_users = DB::table('friends')
-        ->select('follow_id')
-        ->where('user_id', auth()->user()->id)
-        // TODO 定数をconfigで管理したい
-        ->where('blocked', Friend::BLOCK_FLAG['非ブロック'])
-        ;
-        
-        // フレンドの情報を取得.
-        $friends = DB::table('users')
-        ->select(
-            'users.id',
-            'follow_users.follow_id',
-            'users.name',
-            'users.icon',
-            'users.introduction',
-        )
-        ->JoinSub($follow_users, 'follow_users', function($join) {
-            $join->on('follow_users.follow_id', '=', 'users.id');
-        })
-        ->where('deleted_at', null)
-        ->get()
-        ;
+        // フォローしているフレンドの情報を取得.
+        $friends = DB::table('friends')
+         ->select(
+            'users.id AS user_id',
+            'users.name AS user_name',
+            'users.icon  AS user_icon',
+            'users.introduction AS user_introduction'
+         )
+         ->join('users', 'users.id', '=', 'friends.follow_id')
+         ->where('friends.user_id', auth()->user()->id)
+        //  TODO const.phpで管理したい
+         ->where('friends.blocked', Friend::BLOCK_FLAG['非ブロック'])
+         ->whereNull('users.deleted_at')
+         ->get()
+         ;
 
         return view('friend.index', ['friends' => $friends]);
     }
@@ -77,7 +69,7 @@ class FriendController extends Controller
         )
         ->join('users', 'users.id', '=', 'friends.follow_id')
         ->where('user_id', auth()->user()->id)
-        // TODO 定数をconfigで管理したい
+        // TODO const.phpで管理したい
         ->where('blocked', Friend::BLOCK_FLAG['ブロック'])
         ->get()
         ;

@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Group;
 use App\Models\friend;
+use App\Models\Group;
 use App\Models\Member;
 use Illuminate\Database\Query\JoinClause;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
 
 
 class GroupController extends Controller
@@ -48,14 +48,27 @@ class GroupController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * グループ作成時にフレンドを取得（表示）する処理.
      *
-     * @return \Illuminate\Http\Response
+     * @return $friend : フレンド一覧
      */
     public function create()
     {
-        $friends = Friend::where('user_id', auth()->user()->id)->where('blocked', 0)->get();
-        return view('group.create', compact('friends'));
+         $friends = DB::table('friends')
+         ->select(
+            'users.id AS user_id',
+            'users.name AS user_name',
+            'users.icon  AS user_icon'
+         )
+         ->join('users', 'users.id', '=', 'friends.follow_id')
+         ->where('friends.user_id', auth()->user()->id)
+        //  TODO const.phpで管理したい
+         ->where('friends.blocked', Friend::BLOCK_FLAG['非ブロック'])
+         ->whereNull('users.deleted_at')
+         ->get()
+         ;
+
+        return view('group.create', ['friends' => $friends]);
     }
 
     /**
