@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Group;
 use App\Models\friend;
 use App\Models\Member;
-use App\Models\User;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -16,13 +16,34 @@ use Illuminate\Support\Facades\Redirect;
 class GroupController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * グループ一覧を取得する処理.
      *
-     * @return \Illuminate\Http\Response
+     * @return グループ一覧
      */
     public function index()
     {
-        $groups = Group::where('type', 1)->whereIn('id', Member::where('user_id', auth()->user()->id)->get('group_id'))->orderBy('id','DESC')->get();
+        // ログインユーザーが所属しているグループIDを取得.
+        $login_user_group_ids = DB::table('members')
+        ->select('group_id')
+        ->where('user_id', auth()->user()->id)
+        ;
+
+        // グループ一覧の取得
+        $groups = DB::table('groups')
+        ->select(
+            'groups.id',
+            'groups.name',
+            'groups.icon'
+        )
+        ->joinSub($login_user_group_ids, 'login_user_group_ids', function (JoinClause $join) {
+            $join->on('login_user_group_ids.group_id', '=', 'groups.id');
+        })
+        // TODO const.phpでできれば管理したい
+        ->where('groups.type', Group::GROUP_TYPE['グループ'])
+        ->orderBy('groups.updated_at', 'DESC')
+        ->get()
+        ;
+
         return view('group.index', compact('groups'));
     }
 

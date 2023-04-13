@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\DB;
 class TalkController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * トーク一覧を取得する処理.
      *
      * @return \Illuminate\Http\Response
      */
