@@ -28,7 +28,7 @@ class GroupController extends Controller
         ->where('user_id', auth()->user()->id)
         ;
 
-        // グループ一覧の取得
+        // グループ情報の取得.
         $groups = DB::table('groups')
         ->select(
             'groups.id',
@@ -124,19 +124,42 @@ class GroupController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * グループ詳細を取得する処理.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  $id : グループID
+     * @return $group_members : グループメンバー
+     * @return $group_info : グループ情報
      */
-    public function show($id)
+    public function getGroupDetail($id)
     {
-        $group = Group::find($id);
-        return view('group.show', compact('group'));
+        // グループメンバーの取得.
+        $group_members = DB::table('groups')
+        ->select(
+            'groups.id AS group_id',
+            'groups.name AS group_name',
+            'groups.icon AS group_icon',
+            'users.id AS user_id',
+            'users.name AS user_name',
+            'users.icon AS user_icon'
+        )
+        ->join('members', 'members.group_id', '=', 'groups.id')
+        ->join('users', 'users.id', '=', 'members.user_id')
+        ->where('groups.id', $id)
+        ->whereNull('users.deleted_at')
+        ->get()
+        ;
+
+        // グループ情報を格納.
+        $group_info = $group_members[0];
+
+        return view('group.show', [
+            'group_members' => $group_members,
+            'group_info'    => $group_info
+        ]);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * グループメンバー編集時に既存メンバー以外を追加できるように取得(表示)する処理.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response

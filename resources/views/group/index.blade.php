@@ -49,7 +49,7 @@
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg flex">
                     {{-- 画像 --}}
                     <div class="p-6 bg-white my-auto">
-                        <a href="{{ route('group.show', $group->id) }}">
+                        <a href="{{ route('group.getGroupDetail', $group->id) }}">
                             <img src="{{ asset('icon/' . $group->icon) }}" style="max-height:70px;"
                                 class="rounded-full">
                         </a>

@@ -17,7 +17,7 @@
                 </a>
             @else
                 {{-- グループトーク --}}
-                <a href="{{ route('group.show', $group->id) }}" class=" flex">
+                <a href="{{ route('group.getGroupDetail', $group->id) }}" class=" flex">
                     <div class="bg-white">
                         <img src="{{ asset('icon/' . $group->icon) }}" style="max-height:50px;" class="rounded-full">
                     </div>
