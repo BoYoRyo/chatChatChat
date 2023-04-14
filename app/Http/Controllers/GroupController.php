@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\friend;
-use App\Models\Group;
+use App\Models\group;
 use App\Models\Member;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
@@ -172,21 +172,61 @@ class GroupController extends Controller
     }
 
     /**
-     * グループメンバー編集時に既存メンバー以外を追加できるように取得(表示)する処理.
+     * 既存メンバー以外を追加できるように取得(表示)する処理.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  $id : グループID
+     * @return $group_info : グループ情報
+     * @return $adding_friends : 既存メンバー以外のフレンド
      */
     public function edit($id)
     {
-        // グループメンバー以外のフレンズを表示
-        $group = Group::find($id);
-        $wantAddFriends = Friend::where('user_id', auth()->user()->id)
-        ->whereNotIn('follow_id',Member::where('group_id',$id)->pluck('user_id'))
-        ->where('blocked', 0)
-        ->get();
+        // グループ情報の取得.
+        $group_info = DB::table('groups')
+        ->select(
+            'id',
+            'name',
+            'icon'
+        )
+        ->where('id', $id)
+        ->first()
+        ;
+        
+        // ログインユーザーのフレンドを取得
+        $user_friends = DB::table('friends')
+        ->select('follow_id')
+        ->where('user_id', ':user_id')
+        ->where('blocked', ':blocked_type')
+        ->toSql()
+        ;
 
-        return view('group.edit', compact('wantAddFriends','group'));
+        // グループのメンバーを取得
+        $group_members = DB::table('members')
+        ->select('user_id')
+        ->where('group_id', $id)
+        ;
+
+        // 既にグループに追加されているフレンド以外のフレンド情報を取得
+        $adding_friends = DB::table(DB::raw('('.$user_friends .') AS user_friends'))
+        ->setBindings([
+            ':user_id'      => auth()->user()->id,
+            ':blocked_type' => friend::BLOCK_FLAG['非ブロック']
+            ])
+        ->select(
+            'users.id AS user_id',
+            'users.name AS user_name',
+            'users.icon AS user_icon'
+        )
+        ->leftJoin('users', function ($join) {
+            $join->on('users.id', '=', 'user_friends.follow_id');
+        })
+        ->whereNotIn('users.id', $group_members)
+        ->get()
+        ;
+
+        return view('group.edit', [
+            'group_info'     => $group_info,
+            'adding_friends' => $adding_friends
+        ]);
     }
 
     /**

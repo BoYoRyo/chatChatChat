@@ -33,14 +33,14 @@ class group extends Model
         return $this->hasMany(Conversation::class);
     }
     
-    public function member() {
-        // グループテーブルが従
-        // メンバーテーブルが主
-        return $this->belongsTo(Member::class);
-    }
+    // public function member() {
+    //     // グループテーブルが従
+    //     // メンバーテーブルが主
+    //     return $this->belongsTo(Member::class);
+    // }
 
-    public function members() {
-        // グループテーブルが主
-        return $this->hasMany(Member::class);
-    }
+    // public function members() {
+    //     // グループテーブルが主
+    //     return $this->hasMany(Member::class);
+    // }
 }
