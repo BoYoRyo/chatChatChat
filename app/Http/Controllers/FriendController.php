@@ -35,20 +35,7 @@ class FriendController extends Controller
     public function index()
     {
         // フォローしているフレンドの情報を取得.
-        $friends = DB::table('friends')
-         ->select(
-            'users.id AS user_id',
-            'users.name AS user_name',
-            'users.icon  AS user_icon',
-            'users.introduction AS user_introduction'
-         )
-         ->join('users', 'users.id', '=', 'friends.follow_id')
-         ->where('friends.user_id', auth()->user()->id)
-        //  TODO const.phpで管理したい
-         ->where('friends.blocked', Friend::BLOCK_FLAG['非ブロック'])
-         ->whereNull('users.deleted_at')
-         ->get()
-         ;
+        $friends = $this->friend->getMyFriend(auth()->user()->id)->get();
 
         return view('friend.index', ['friends' => $friends]);
     }
@@ -112,7 +99,7 @@ class FriendController extends Controller
         }
 
         // フレンドのプロフィール情報を取得.
-        $friend_detail = DB::table('users')
+        $friend_detail = DB::table('friends')
         ->select(
             'users.id',
             'users.name',
@@ -121,7 +108,7 @@ class FriendController extends Controller
             'users.account_id',
             'friends.blocked',
         )
-        ->join('friends', 'friends.follow_id', '=', 'users.id')
+        ->join('users', 'users.id', '=', 'friends.follow_id')
         ->where('friends.user_id', auth()->user()->id)
         ->where('friends.follow_id', $id)
         ->first()

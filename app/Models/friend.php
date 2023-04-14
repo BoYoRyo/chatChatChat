@@ -57,6 +57,30 @@ class friend extends Model
     }
 
     /**
+     * マイフレンドを取得する処理.
+     *
+     * @param  $id : ログインユーザーID
+     * @return $friends : フレンド一覧
+     */
+    public function getMyFriend($id)
+    {
+        $friends = DB::table('friends')
+        ->select(
+            'users.id AS user_id',
+            'users.name AS user_name',
+            'users.icon AS user_icon',
+            'users.introduction AS user_introduction',
+        )
+        ->join('users', 'users.id', '=', 'friends.follow_id')
+        ->where('friends.user_id', auth()->user()->id)
+        ->where('friends.blocked', self::BLOCK_FLAG['非ブロック'])
+        ->whereNull('users.deleted_at')
+        ;
+
+        return $friends;
+    }
+
+    /**
      * フレンドをブロックする処理.
      *
      * @param  $id : ブロック対象となるユーザーのID.

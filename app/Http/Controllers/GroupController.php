@@ -63,7 +63,7 @@ class GroupController extends Controller
          ->join('users', 'users.id', '=', 'friends.follow_id')
          ->where('friends.user_id', auth()->user()->id)
         //  TODO const.phpで管理したい
-         ->where('friends.blocked', Friend::BLOCK_FLAG['非ブロック'])
+         ->where('friends.blocked', friend::BLOCK_FLAG['非ブロック'])
          ->whereNull('users.deleted_at')
          ->get()
          ;
