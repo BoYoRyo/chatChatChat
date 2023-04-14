@@ -20,12 +20,10 @@
                             <input type="text" placeholder="アカウントIDまたは名前" aria-label="Full name"
                                 name="search" value="{{ $search ? $search : '' }}"
                                 class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none placeholder-gray-400">
-                            <button type="submit"
-                                class="flex-shrink-0 bg-fuchsia-600 hover:bg-fuchsia-700 border-fuchsia-600 hover:border-fuchsia-700 text-sm border-4 text-white py-1 px-2 rounded">
-                                検索
-                            </button>
-                            <input type="reset" value="×"
-                                class="flex-shrink-0 border-transparent border-4 text-fuchsia-600 hover:text-fuchsia-800 text-sm py-1 px-2 rounded">
+                            <input type="submit" value="検索"
+                                class="flex-shrink-0 bg-fuchsia-600 hover:bg-fuchsia-700 border-fuchsia-600 hover:border-fuchsia-700 text-sm border-4 text-white py-1 px-2 rounded" />
+                            <input type="reset" value="クリア"
+                                class="flex-shrink-0 border-transparent border-4 text-fuchsia-600 hover:text-fuchsia-800 text-sm py-1 px-2 rounded" />
                         </div>
                     </form>
                 </div>

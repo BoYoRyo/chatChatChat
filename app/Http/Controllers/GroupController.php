@@ -15,6 +15,15 @@ use Illuminate\Support\Facades\Validator;
 
 class GroupController extends Controller
 {
+    protected $friend;
+
+    public function __construct(
+        friend $friend
+    )
+    {
+        $this->friend = $friend;
+    }
+    
     /**
      * グループ一覧を取得する処理.
      *
@@ -39,7 +48,7 @@ class GroupController extends Controller
             $join->on('login_user_group_ids.group_id', '=', 'groups.id');
         })
         // TODO const.phpでできれば管理したい
-        ->where('groups.type', Group::GROUP_TYPE['グループ'])
+        ->where('groups.type', group::GROUP_TYPE['グループ'])
         ->orderBy('groups.updated_at', 'DESC')
         ->get()
         ;
@@ -54,19 +63,7 @@ class GroupController extends Controller
      */
     public function create()
     {
-         $friends = DB::table('friends')
-         ->select(
-            'users.id AS user_id',
-            'users.name AS user_name',
-            'users.icon  AS user_icon'
-         )
-         ->join('users', 'users.id', '=', 'friends.follow_id')
-         ->where('friends.user_id', auth()->user()->id)
-        //  TODO const.phpで管理したい
-         ->where('friends.blocked', friend::BLOCK_FLAG['非ブロック'])
-         ->whereNull('users.deleted_at')
-         ->get()
-         ;
+        $friends = $this->friend->getMyFriend(auth()->user()->id)->get();
 
         return view('group.create', ['friends' => $friends]);
     }
@@ -192,6 +189,7 @@ class GroupController extends Controller
         ;
         
         // ログインユーザーのフレンドを取得
+        // TODO getMyFriend()を使用できるか試してみる
         $user_friends = DB::table('friends')
         ->select('follow_id')
         ->where('user_id', ':user_id')

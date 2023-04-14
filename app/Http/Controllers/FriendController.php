@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Friend;
-use App\Models\Group;
+use App\Models\friend;
+use App\Models\group;
 use App\Models\Member;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
@@ -37,7 +37,10 @@ class FriendController extends Controller
         // フォローしているフレンドの情報を取得.
         $friends = $this->friend->getMyFriend(auth()->user()->id)->get();
 
-        return view('friend.index', ['friends' => $friends]);
+        return view('friend.index', [
+            'friends' => $friends,
+            'search' => null
+        ]);
     }
 
     /**
@@ -65,13 +68,26 @@ class FriendController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * マイフレンドを検索する処理.
+     * @param $request : 検索条件
+     * @return フレンド一覧画面
      */
-    public function create()
+    public function searchMyFriend(Request $request)
     {
-        //
+        //　マイフレンドを取得.
+        $friends = $this->friend->getMyFriend(auth()->user()->id);
+
+        $friends = $friends
+        ->where(function ($query) use ($request) {
+            $query->where('name', 'like', "%$request->search%");
+        })
+        ->get()
+        ;
+
+        return view('friend.index', [
+            'friends' => $friends,
+            'search' => $request['search']
+        ]);
     }
 
     /**

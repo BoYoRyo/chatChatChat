@@ -37,6 +37,8 @@ require __DIR__ . '/auth.php';
 Route::group(['middleware' => 'auth'], function () {
     // 友達一覧画面に遷移
     Route::get('/friend/index', [FriendController::class, 'index'])->name('friend.index');
+    // マイフレンド検索
+    Route::post('/friend/searchMyFriend', [FriendController::class, 'searchMyFriend'])->name('friend.searchMyFriend');
     // ブロック一覧画面に遷移
     Route::get('/friend/blocked/index', [FriendController::class, 'blockedIndex'])->name('friend.blockedIndex');
     // 友達詳細画面に遷移
@@ -45,7 +47,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/friend/blockingFriend/{id}', [FriendController::class, 'blockingFriend'])->name('friend.blockingFriend');
     //フレンドブロック解除
     Route::get('/friend/cancelingBlockFriend/{id}', [FriendController::class, 'cancelingBlockFriend'])->name('friend.cancelingBlockFriend');
-
+    
 
     // プロフィール画面に遷移
     Route::get('/user/edit', [UserController::class, 'edit'])->name('user.edit');
