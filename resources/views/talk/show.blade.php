@@ -17,7 +17,7 @@
                 </a>
             @else
                 {{-- グループトーク --}}
-                <a href="{{ route('group.show', $group->id) }}" class=" flex">
+                <a href="{{ route('group.getGroupDetail', $group->id) }}" class=" flex">
                     <div class="bg-white">
                         <img src="{{ asset('icon/' . $group->icon) }}" style="max-height:50px;" class="rounded-full">
                     </div>
@@ -214,7 +214,7 @@
         @endforeach
     @endif
     {{-- トーク投稿 --}}
-    <form method="POST" action={{ route('conversation.store', ['group_id' => $group->id]) }}
+    <form method="POST" action={{ route('conversation.postConversation', ['group_id' => $group->id]) }}
         enctype="multipart/form-data">
         @csrf
         <div id="container">

@@ -2,24 +2,116 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use Illuminate\Http\Request;
 use App\Models\friend;
-use Illuminate\Routing\Route;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
-//友達を追加するための処理をまとめたコントローラー
 class AddFriendsController extends Controller
 {
-    /**
-     * 友達追加画面を表示
+    protected $friend;
+
+    public function __construct(
+        friend $friend
+    )
+    {
+        $this->friend = $friend;
+    }
+    
+    /** 
+     * フレンド追加画面を表示.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $friends = null;
-        return view('addFriends.index', compact('friends'));
+        $results = $this->getAddingFriend()->get();
+
+        return view('addFriends.index', [
+            'results' => $results,
+            'addFriendName' => null,
+            'search' => null
+        ]);
+    }
+
+    /**
+     * フレンドを検索する処理.
+     *
+     * @param  $request : アカウントIDまたは名前
+     * @return フレンド検索画面
+     */
+    public function searchFriend(Request $request)
+    {
+        $adding_friends = $this->getAddingFriend();
+
+        $results = $adding_friends
+        ->where(function ($query) use ($request) {
+            $query->where('name', 'like', "%$request->search%")
+            ->orWhere('account_id', 'like', "%$request->search%");
+        })
+        ->get()
+        ;
+
+        return view('addFriends.index', [
+            'results' => $results,
+            'addFriendName' => null,
+            'search' => $request['search']
+        ]);
+    }
+
+    /**
+     * マイフレンドに追加.
+     *
+     * @param  $id : 追加したいフレンドのユーザーID.
+     * @return 
+     */
+    public function addMyFriend($id)
+    {
+        // マイフレンドに追加.
+        $this->friend->insertFriend($id);
+        
+        // マイフレンドに追加したユーザの名前を取得.
+        $addFriendName = DB::table('users')
+        ->select('name')
+        ->where('id', $id)
+        ->first()
+        ;
+
+        $results = $this->getAddingFriend()->get();
+
+        return view('addFriends.index', [
+            'results' => $results,
+            'addFriendName' => $addFriendName,
+            'search' => null
+        ]);
+
+    }
+
+    /**
+     * 追加対象となるフレンドの取得.
+     *
+     * @return 追加対象となるフレンド
+     */
+    private function getAddingFriend()
+    {
+        // ログインユーザーが既にフォローしているフレンドのIDを取得.
+        $following_friend_ids = DB::table('friends')
+        ->select('follow_id')
+        ->where('user_id', auth()->user()->id)
+        ;
+
+        // 追加対象となるフレンドの取得.
+        $result = DB::table('users')
+        ->select(
+            'id',
+            'name',
+            'icon',
+            'account_id',
+        )
+        ->whereNot('id',auth()->user()->id) // ログインユーザーは除く
+        ->whereNotIn('id',$following_friend_ids)
+        ;
+
+        return $result;
     }
 
     /**
@@ -41,22 +133,6 @@ class AddFriendsController extends Controller
     public function store(Request $request)
     {
         //
-    }
-
-    /**
-     * 名前かIDで友達を検索し一覧表示する
-     *
-     * @param  int  $id
-     * @return フレンド一覧
-     */
-    public function show(Request $request)
-    {
-        $friends = User::whereNotIn('id', friend::where('user_id', Auth::id())->get('follow_id'))
-        // ->orWhere('name', 'like', '%' . $request->friendSerchWord . '%')
-        ->where('account_id','like','%'.$request->friendSerchWord.'%')
-        ->get();
-
-        return view('addFriends.index', compact('friends'));
     }
 
     /**
@@ -91,36 +167,5 @@ class AddFriendsController extends Controller
     public function destroy($id)
     {
         //
-    }
-    /**
-     * 検索された友達を追加するメソッド
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function connect($id)
-    {
-        //ユーザー一覧から指定ID（今回友達にしたい人の名前を検索）
-        $addFriendName = User::find($id)->name;
-
-        //authのidと$idを使ってfriendテーブルを検索してなければ登録実行。
-        //あればその友達の詳細画面に遷移
-        $friendOrNot = friend::where('user_id', '=', Auth::id())->where('follow_id', '=', $id)->get();
-
-        //isEmpty()は空ならtrue
-        // if ($friendOrNot->isEmpty()) {
-            $friend = new friend();
-            $friend->create([
-                'user_id' => Auth::id(),
-                'follow_id' => $id,
-            ]);
-
-        //     return view('addFriends.finished', compact('addFriendName'));
-        // } else {
-
-        //     return view('addFriends.connected', compact('addFriendName'));
-        // }
-        return redirect()->route('friend.show', $id);
-
     }
 }

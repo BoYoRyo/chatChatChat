@@ -37,15 +37,17 @@ require __DIR__ . '/auth.php';
 Route::group(['middleware' => 'auth'], function () {
     // 友達一覧画面に遷移
     Route::get('/friend/index', [FriendController::class, 'index'])->name('friend.index');
+    // マイフレンド検索
+    Route::post('/friend/searchMyFriend', [FriendController::class, 'searchMyFriend'])->name('friend.searchMyFriend');
     // ブロック一覧画面に遷移
     Route::get('/friend/blocked/index', [FriendController::class, 'blockedIndex'])->name('friend.blockedIndex');
     // 友達詳細画面に遷移
     Route::get('/friend/show/{id}', [FriendController::class, 'show'])->name('friend.show');
     //フレンドブロック
-    Route::get('/friend/destroy/{id}', [FriendController::class, 'destroy'])->name('friend.destroy');
+    Route::get('/friend/blockingFriend/{id}', [FriendController::class, 'blockingFriend'])->name('friend.blockingFriend');
     //フレンドブロック解除
-    Route::get('/friend/cancel/{id}', [FriendController::class, 'cancelDestroy'])->name('friend.cancelDestroy');
-
+    Route::get('/friend/cancelingBlockFriend/{id}', [FriendController::class, 'cancelingBlockFriend'])->name('friend.cancelingBlockFriend');
+    
 
     // プロフィール画面に遷移
     Route::get('/user/edit', [UserController::class, 'edit'])->name('user.edit');
@@ -54,22 +56,20 @@ Route::group(['middleware' => 'auth'], function () {
     // アカウント削除
     Route::post('/user/softDelete', [UserController::class, 'softDelete'])->name('user.softDelete');
 
-
     //フレンド検索画面に遷移
-    Route::get('add/index', [AddFriendsController::class, 'index'])->name('add.index');
+    Route::get('add/friend', [AddFriendsController::class, 'index'])->name('add.friend');
     //フレンド検索
-    Route::post('add/show', [AddFriendsController::class, 'show'])->name('add.show');
+    Route::post('add/searchFriend', [AddFriendsController::class, 'searchFriend'])->name('add.searchFriend');
     //フレンド追加
-    Route::get('add/connect/{id}', [AddFriendsController::class, 'connect'])->name('add.connect');
+    Route::get('add/myfriend/{id}', [AddFriendsController::class, 'addMyFriend'])->name('add.myFriend');
     //フレンド登録完了画面に遷移
     Route::get('add/finished', [AddFriendsController::class, 'finished'])->name('add.finished');
-
 
     // トーク一覧を表示する
     Route::get('/talk/index', [App\Http\Controllers\TalkController::class, "index"])->name('talk.index');
     // トークを開始する
     Route::get('/talk/store/{id}', [App\Http\Controllers\TalkController::class, "store"])->name('talk.store');
-    Route::post('/conversation/store', [App\Http\Controllers\ConversationController::class, "store"])->name('conversation.store');
+    Route::post('/conversation/postConversation', [App\Http\Controllers\ConversationController::class, "postConversation"])->name('conversation.postConversation');
     // トーク画面を表示する
     Route::get('/talk/show/{id}', [App\Http\Controllers\TalkController::class, "show"])->name('talk.show');
     // トークを非表示にする
@@ -84,7 +84,7 @@ Route::group(['middleware' => 'auth'], function () {
     // グループ作成する
     Route::get('/group/store', [App\Http\Controllers\GroupController::class, 'store'])->name('group.store');
     // グループ詳細画面へ遷移
-    Route::get('/group/show/{id}', [App\Http\Controllers\GroupController::class, 'show'])->name('group.show');
+    Route::get('/group/detail/{id}', [App\Http\Controllers\GroupController::class, 'getGroupDetail'])->name('group.getGroupDetail');
     // グループ一覧画面に遷移
     Route::get('/group/index', [App\Http\Controllers\GroupController::class, 'index'])->name('group.index');
     // グループにメンバーを追加する画面へ遷移

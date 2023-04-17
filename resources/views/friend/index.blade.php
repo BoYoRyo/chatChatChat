@@ -13,24 +13,17 @@
                     </svg>
                 </div>
                 <div class="my-auto">
-                    <form class="w-full max-w-sm">
+                    <form class="w-full max-w-sm" action="{{ url('/friend/searchMyFriend') }}" method="POST" >
+                        @csrf
                         <div class="flex items-center border-b border-fuchsia-600 py-2">
                             <input
                                 class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none  placeholder-gray-400"
-                                type="text" placeholder="アカウントID  名前" aria-label="Full name">
-                            <button
-                                class="flex-shrink-0 bg-fuchsia-600 hover:bg-fuchsia-700 border-fuchsia-600 hover:border-fuchsia-700 text-sm border-4 text-white py-1 px-2 rounded"
-                                type="button">
-                                検索
-                            </button>
-                            <input type="reset" value="キャンセル"
-                                class="flex-shrink-0 border-transparent border-4 text-fuchsia-600 hover:text-fuchsia-800 text-sm py-1 px-2 rounded"
-                            >
-                            <!-- <button
-                                class="flex-shrink-0 border-transparent border-4 text-fuchsia-600 hover:text-fuchsia-800 text-sm py-1 px-2 rounded"
-                                type="button">
-                                キャンセル
-                            </button> -->
+                                type="text" placeholder="名前" aria-label="Full name" 
+                                name="search" value="{{ $search ? $search : '' }}" />
+                            <input type="submit" value="検索"
+                                class="flex-shrink-0 bg-fuchsia-600 hover:bg-fuchsia-700 border-fuchsia-600 hover:border-fuchsia-700 text-sm border-4 text-white py-1 px-2 rounded" />
+                            <input type="reset" value="クリア"
+                                class="flex-shrink-0 border-transparent border-4 text-fuchsia-600 hover:text-fuchsia-800 text-sm py-1 px-2 rounded" />
                         </div>
                     </form>
                 </div>
@@ -54,20 +47,20 @@
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg flex">
                     {{-- 画像 --}}
                     <div class="p-6 bg-white my-auto">
-                        <a href="{{ route('friend.show', $friend->follow_id) }}"><img
-                                src="{{ asset('icon/' . $friend->user->icon) }}" style="max-height:70px;"></a>
+                        <a href="{{ route('friend.show', $friend->user_id) }}"><img
+                                src="{{ asset('icon/' . $friend->user_icon) }}" style="max-height:70px;"></a>
                     </div>
                     {{-- 名前 --}}
                     <div class="ml-1 bg-white flex-initial text: left; text-xl my-auto">
-                        {{ $friend->user->name }}
+                        {{ $friend->user_name }}
                     </div>
                     {{-- ひとこと --}}
                     <div class="ml-20 bg-white flex-initial text: left; text-xl text-gray-500 my-auto overflow-hidden max-w-2xl text-ellipsis">
-                        {{ $friend->user->introduction }}
+                        {{ $friend->user_introduction }}
                     </div>
                     {{-- トークする --}}
                     <div class="my-auto ml-auto mr-10">
-                        <form method="GET" action={{ route('talk.store', $friend->follow_id) }} >
+                        <form method="GET" action={{ route('talk.store', $friend->user_id) }} >
                             <button class="bg-amber-300 hover:bg-amber-500 text-white font-semibold hover:text-slate-700 p-3 border border-slate-700 hover:border-transparent rounded">
                                 トークする
                             </button>

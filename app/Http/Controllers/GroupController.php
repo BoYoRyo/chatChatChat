@@ -2,39 +2,70 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Group;
 use App\Models\friend;
+use App\Models\group;
 use App\Models\Member;
-use App\Models\User;
+use Illuminate\Database\Query\JoinClause;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
 
 
 class GroupController extends Controller
 {
+    protected $friend;
+
+    public function __construct(
+        friend $friend
+    )
+    {
+        $this->friend = $friend;
+    }
+    
     /**
-     * Display a listing of the resource.
+     * グループ一覧を取得する処理.
      *
-     * @return \Illuminate\Http\Response
+     * @return グループ一覧
      */
     public function index()
     {
-        $groups = Group::where('type', 1)->whereIn('id', Member::where('user_id', auth()->user()->id)->get('group_id'))->orderBy('id','DESC')->get();
+        // ログインユーザーが所属しているグループIDを取得.
+        $login_user_group_ids = DB::table('members')
+        ->select('group_id')
+        ->where('user_id', auth()->user()->id)
+        ;
+
+        // グループ情報の取得.
+        $groups = DB::table('groups')
+        ->select(
+            'groups.id',
+            'groups.name',
+            'groups.icon'
+        )
+        ->joinSub($login_user_group_ids, 'login_user_group_ids', function (JoinClause $join) {
+            $join->on('login_user_group_ids.group_id', '=', 'groups.id');
+        })
+        // TODO const.phpでできれば管理したい
+        ->where('groups.type', group::GROUP_TYPE['グループ'])
+        ->orderBy('groups.updated_at', 'DESC')
+        ->get()
+        ;
+
         return view('group.index', compact('groups'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * グループ作成時にフレンドを取得（表示）する処理.
      *
-     * @return \Illuminate\Http\Response
+     * @return $friend : フレンド一覧
      */
     public function create()
     {
-        $friends = Friend::where('user_id', auth()->user()->id)->where('blocked', 0)->get();
-        return view('group.create', compact('friends'));
+        $friends = $this->friend->getMyFriend(auth()->user()->id)->get();
+
+        return view('group.create', ['friends' => $friends]);
     }
 
     /**
@@ -103,33 +134,97 @@ class GroupController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * グループ詳細を取得する処理.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  $id : グループID
+     * @return $group_members : グループメンバー
+     * @return $group_info : グループ情報
      */
-    public function show($id)
+    public function getGroupDetail($id)
     {
-        $group = Group::find($id);
-        return view('group.show', compact('group'));
+        // グループメンバーの取得.
+        $group_members = DB::table('groups')
+        ->select(
+            'groups.id AS group_id',
+            'groups.name AS group_name',
+            'groups.icon AS group_icon',
+            'users.id AS user_id',
+            'users.name AS user_name',
+            'users.icon AS user_icon'
+        )
+        ->join('members', 'members.group_id', '=', 'groups.id')
+        ->join('users', 'users.id', '=', 'members.user_id')
+        ->where('groups.id', $id)
+        ->whereNull('users.deleted_at')
+        ->get()
+        ;
+
+        // グループ情報を格納.
+        $group_info = $group_members[0];
+
+        return view('group.show', [
+            'group_members' => $group_members,
+            'group_info'    => $group_info
+        ]);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * 既存メンバー以外を追加できるように取得(表示)する処理.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  $id : グループID
+     * @return $group_info : グループ情報
+     * @return $adding_friends : 既存メンバー以外のフレンド
      */
     public function edit($id)
     {
-        // グループメンバー以外のフレンズを表示
-        $group = Group::find($id);
-        $wantAddFriends = Friend::where('user_id', auth()->user()->id)
-        ->whereNotIn('follow_id',Member::where('group_id',$id)->pluck('user_id'))
-        ->where('blocked', 0)
-        ->get();
+        // グループ情報の取得.
+        $group_info = DB::table('groups')
+        ->select(
+            'id',
+            'name',
+            'icon'
+        )
+        ->where('id', $id)
+        ->first()
+        ;
+        
+        // ログインユーザーのフレンドを取得
+        // TODO getMyFriend()を使用できるか試してみる
+        $user_friends = DB::table('friends')
+        ->select('follow_id')
+        ->where('user_id', ':user_id')
+        ->where('blocked', ':blocked_type')
+        ->toSql()
+        ;
 
-        return view('group.edit', compact('wantAddFriends','group'));
+        // グループのメンバーを取得
+        $group_members = DB::table('members')
+        ->select('user_id')
+        ->where('group_id', $id)
+        ;
+
+        // 既にグループに追加されているフレンド以外のフレンド情報を取得
+        $adding_friends = DB::table(DB::raw('('.$user_friends .') AS user_friends'))
+        ->setBindings([
+            ':user_id'      => auth()->user()->id,
+            ':blocked_type' => friend::BLOCK_FLAG['非ブロック']
+            ])
+        ->select(
+            'users.id AS user_id',
+            'users.name AS user_name',
+            'users.icon AS user_icon'
+        )
+        ->leftJoin('users', function ($join) {
+            $join->on('users.id', '=', 'user_friends.follow_id');
+        })
+        ->whereNotIn('users.id', $group_members)
+        ->get()
+        ;
+
+        return view('group.edit', [
+            'group_info'     => $group_info,
+            'adding_friends' => $adding_friends
+        ]);
     }
 
     /**

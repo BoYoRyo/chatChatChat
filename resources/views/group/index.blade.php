@@ -12,35 +12,31 @@
                             d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
                     </svg>
                 </div>
-                {{-- <div class="my-auto">
-                    <form class="w-full max-w-sm">
-                        <div class="flex items-center border-b border-fuchsia-600 py-2">
-                            <input
-                                class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none  placeholder-gray-400"
-                                type="text" placeholder="アカウントID  名前" aria-label="Full name">
-                            <button
-                                class="flex-shrink-0 bg-fuchsia-600 hover:bg-fuchsia-700 border-fuchsia-600 hover:border-fuchsia-700 text-sm border-4 text-white py-1 px-2 rounded"
-                                type="button">
-                                検索
-                            </button>
-                            <input type="reset" value="キャンセル"
-                                class="flex-shrink-0 border-transparent border-4 text-fuchsia-600 hover:text-fuchsia-800 text-sm py-1 px-2 rounded">
-                            <!-- <button
-                                class="flex-shrink-0 border-transparent border-4 text-fuchsia-600 hover:text-fuchsia-800 text-sm py-1 px-2 rounded"
-                                type="button">
-                                キャンセル
-                            </button> -->
-                        </div>
-                    </form>
-                </div> --}}
                 <div class="px-2 my-auto">
                     <a href="{{ route('group.create') }}">
-                        <button
-                            class="bg-amber-300 hover:bg-amber-500 border-amber-300 hover:border-slate-700 text-base border text-white p-2 my-auto rounded"
-                            type="button">
-                            グループ作成
+                        <button class="bg-amber-300 hover:bg-amber-500 border-amber-300 hover:border-slate-700 text-base border text-white p-2 my-auto rounded"
+                            type="button" id="modal-open">
+                                グループ作成
                         </button>
                     </a>
+                    {{-- <div id="faq_csv_modal_window">
+                        モーダルウィンドウ(未完)
+                        @include('components.modal')
+                        @section('modal')
+                            <div id="modal_open">
+                                <header id="modal_header">
+                                    モーダルヘッダーです。
+                                </header>
+                                <main id="modal_main">
+                        
+                                </main>
+                                <footer id="modal_footer">
+                                    <p><a id="modal-close" class="button-link">閉じる</a></p>
+                                </footer>
+                            </div>
+                        @endsection
+                        @yield('modal_window')
+                    </div> --}}
                 </div>
             </div>
         </h2>
@@ -53,7 +49,7 @@
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg flex">
                     {{-- 画像 --}}
                     <div class="p-6 bg-white my-auto">
-                        <a href="{{ route('group.show', $group->id) }}">
+                        <a href="{{ route('group.getGroupDetail', $group->id) }}">
                             <img src="{{ asset('icon/' . $group->icon) }}" style="max-height:70px;"
                                 class="rounded-full">
                         </a>
